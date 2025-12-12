@@ -1,0 +1,135 @@
+.hero {
+  min-height: 60vh;
+  margin-top: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(18, 18, 18, 0.9));
+}
+
+.hero::before {
+  content: '★';
+  position: absolute;
+  font-size: 30rem;
+  color: rgba(212, 175, 55, 0.03);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.content {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.content h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  color: var(--primary-gold);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.prize {
+  font-size: clamp(3rem, 6vw, 5rem);
+  color: var(--accent-white);
+  font-weight: 700;
+  margin: 1.5rem 0;
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+}
+
+.content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.timer {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  min-width: 100px;
+}
+
+.number {
+  font-size: 3rem;
+  color: var(--primary-gold);
+  font-weight: 700;
+  display: block;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--primary-silver);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.bonus {
+  margin-top: 2rem;
+  color: var(--primary-gold);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+
+/* Code Input Section */
+.codeBox {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.codeInput {
+  padding: 0.9rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-white);
+  font-size: 1rem;
+  min-width: 250px;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.codeInput:focus {
+  border-color: var(--primary-gold);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.submitBtn {
+  padding: 0.9rem 1.5rem;
+  background: var(--primary-gold);
+  border: none;
+  border-radius: 10px;
+  color: #000;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.submitBtn:hover {
+  background: #f1d97c;
+}
