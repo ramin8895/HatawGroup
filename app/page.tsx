@@ -72,14 +72,13 @@ console.log(session);
       <HomeSection />
       {/* About */}
       <AboutComponents />
-      {/* Services */}
       <ServiceComponents/>
       {/* Portfolio */}
       <motion.section
         id="portfolio"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.4 }}
       >
         <div className="section-header">
           <h2>Featured Projects</h2>
