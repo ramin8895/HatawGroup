@@ -1,11 +1,11 @@
 import axios from "axios";
 import http from "../HttpServices";
 
-export const LoginUser = async (body) => {
+export const LoginByUsername = async (body) => {
   try {
-    console.log("sdsd");
+    console.log("Url ====>" + process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD);
     const response = await http.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Account/LoginRegister`,
+      `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Account/LoginRegisterUsername`,
       body
     );
     return response;

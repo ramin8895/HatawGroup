@@ -5,4 +5,4 @@ export * as serviceListAPI from "./serviceListService/useRequest";
 export * as definecategoryAPI from "./defineCategoryService/useRequest";
 export * as ProfileAPI from "./profile/useRequest";
 export * as personelAPI from "./personelService/useRequest";
-export * as brandsAPI from "./brandsService";
+export * as eventAPI from "./EventService";

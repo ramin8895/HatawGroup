@@ -1,15 +1,20 @@
 "use client";
-
 import React, { useState } from "react";
 import { Form, Input, Button, DatePicker, message, Card } from "antd";
 import moment from "moment";
+import { useCreateEvents } from "@/api/EventService/useRequest";
 
 const { TextArea } = Input;
 
 const AddEvent = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+  const {
+    mutate: PostEventService,
+    isPending: isPendingEventService,
+    status,
+  } = useCreateEvents();
+  console.log(cookieStore.getAll());
   const onFinish = (values: any) => {
     setLoading(true);
 
@@ -19,16 +24,13 @@ const AddEvent = () => {
       startTime: values.startTime.format("YYYY-MM-DD HH:mm"),
       endTime: values.endTime.format("YYYY-MM-DD HH:mm"),
     };
-
+    ``;
     console.log("Submitted Event:", formattedValues);
-
-    setTimeout(() => {
+    PostEventService(formattedValues);
+    if (status == "success") {
       message.success("Event added successfully ✅");
-      form.resetFields();
-      setLoading(false);
-    }, 1500);
+    }
   };
-
   return (
     <div className="h-full bg-gray-100 p-4! flex flex-col justify-center items-center">
       <Card className="shadow-lg rounded-xl p-4! w-full md:w-2/3 bg-white  ">
@@ -127,7 +129,7 @@ const AddEvent = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              loading={loading}
+              loading={isPendingEventService}
               className="bg-blue-600 hover:bg-blue-700"
             >
               Save Event

@@ -45,7 +45,6 @@ const LayoutComponents = ({
                 </li>
               </ul>
               <a
-                href="#award"
                 className="cta-button"
                 onClick={() => route.push("/login")}
               >

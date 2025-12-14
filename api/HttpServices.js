@@ -25,7 +25,7 @@ axios.interceptors.request.use(
 
         if (session) {
             // JWT token
-            request.headers["x-auth-token-dist"] = `${session.accessToken}`;
+            request.headers["x-auth-token"] = `bearer${" "}${session.backendToken}`;
 
             // Add license key (if available in session, localStorage, etc.)
             const licenseKey = localStorage.getItem("licenseKey");
