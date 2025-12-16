@@ -16,30 +16,30 @@ axios.defaults.headers.post["Access-Control-Expose-Headers"] = "*";
 let cachedSession = null;
 
 axios.interceptors.request.use(
-    async (request) => {
-        const session = await getSession();
+  async (request) => {
+    const session = await getSession();
 
-        if (!cachedSession) {
-            cachedSession = await getSession();
-        }
-
-        if (session) {
-            // JWT token
-            request.headers["x-auth-token"] = `bearer${" "}${session.backendToken}`;
-
-            // Add license key (if available in session, localStorage, etc.)
-            const licenseKey = localStorage.getItem("licenseKey");
-            if (licenseKey) {
-                request.headers["x-license-key"] = licenseKey;
-            }
-        }
-
-        return request;
-    },
-    (error) => {
-        console.log(error);
-        return Promise.reject(error);
+    if (!cachedSession) {
+      cachedSession = await getSession();
     }
+
+    if (session) {
+      // JWT token
+      request.headers["Authorization"] = `Bearer ${session.backendToken}`;
+
+      // Add license key (if available in session, localStorage, etc.)
+      const licenseKey = localStorage.getItem("licenseKey");
+      if (licenseKey) {
+        request.headers["x-license-key"] = licenseKey;
+      }
+    }
+
+    return request;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
 );
 
 axios.interceptors.response.use(

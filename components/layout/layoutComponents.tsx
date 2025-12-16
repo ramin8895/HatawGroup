@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 const LayoutComponents = ({
@@ -11,9 +12,13 @@ const LayoutComponents = ({
   const isDashboardUser = pathname.startsWith("/userDashboard");
 
   const route = useRouter();
+
+  const { data: Session } = useSession();
+  console.log(Session, "user Session");
+
   return (
     <>
-      {!isDashboard  && (
+      {!isDashboard && (
         <div className="user">
           <header id="header">
             <nav>
@@ -22,34 +27,37 @@ const LayoutComponents = ({
                 alt="Hataw Group"
                 className="logo"
               />
+
               <ul className="nav-links" id="navLinks">
                 <li>
-                  <a href="#home">Home</a>
+                  <a href="#home">سەرەتا</a>
                 </li>
                 <li>
-                  <a href="#services">Services</a>
+                  <a href="#services">خزمەتگوزارییەکان</a>
                 </li>
                 <li>
-                  <a href="#portfolio">Portfolio</a>
+                  <a href="#portfolio">پۆرتفۆلیۆ</a>
                 </li>
                 <li>
-                  <a href="#blog">Blog</a>
+                  <a href="#blog">بلۆگ</a>
                 </li>
                 <li>
                   <a href="#award" className="award-link">
-                    Hataw Award <span className="new-badge">NEW</span>
+                    خەڵاتی Hataw <span className="new-badge">نوێ</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#about">About</a>
+                  <a href="#about">دەربارەی ئێمە</a>
                 </li>
               </ul>
+
               <a
                 className="cta-button"
                 onClick={() => route.push("/login")}
               >
-                Join Award
+                {!Session?.backendToken ? "بەشداری خەڵات بکە" : "داشبۆرد"}
               </a>
+
               <button className="mobile-menu-btn" id="mobileMenuBtn">
                 <span></span>
                 <span></span>
@@ -57,14 +65,16 @@ const LayoutComponents = ({
               </button>
             </nav>
           </header>
+
           {children}
+
           <footer>
             <div className="footer-content">
               <div className="footer-section">
                 <h3>Hataw Group</h3>
                 <p>
-                  Transforming businesses into legendary brands through
-                  strategic positioning and creative excellence.
+                  گۆڕینی بازرگانییەکان بۆ براندی ئەفسانەیی بە
+                  شوێنپێدانی ستراتیژی و داهێنانی پیشەیی.
                 </p>
                 <div className="social-links">
                   <a href="#">📘</a>
@@ -75,68 +85,49 @@ const LayoutComponents = ({
               </div>
 
               <div className="footer-section">
-                <h3>Services</h3>
+                <h3>خزمەتگوزارییەکان</h3>
                 <ul>
-                  <li>
-                    <a href="#">Brand Identity Design</a>
-                  </li>
-                  <li>
-                    <a href="#">Brand Strategy</a>
-                  </li>
-                  <li>
-                    <a href="#">Brand Consulting</a>
-                  </li>
-                  <li>
-                    <a href="#">Digital Branding</a>
-                  </li>
-                  <li>
-                    <a href="#">Rebranding</a>
-                  </li>
+                  <li><a href="#">دیزاینی ناسنامەی براند</a></li>
+                  <li><a href="#">ستراتیژی براند</a></li>
+                  <li><a href="#">ڕاوێژکاری براند</a></li>
+                  <li><a href="#">براندی دیجیتاڵ</a></li>
+                  <li><a href="#">نوێکردنەوەی براند</a></li>
                 </ul>
               </div>
 
               <div className="footer-section">
-                <h3>Company</h3>
+                <h3>کۆمپانیا</h3>
                 <ul>
-                  <li>
-                    <a href="#">About Us</a>
-                  </li>
-                  <li>
-                    <a href="#">Portfolio</a>
-                  </li>
-                  <li>
-                    <a href="#">Blog</a>
-                  </li>
-                  <li>
-                    <a href="#">Hataw Award</a>
-                  </li>
-                  <li>
-                    <a href="#">Contact</a>
-                  </li>
+                  <li><a href="#">دەربارەی ئێمە</a></li>
+                  <li><a href="#">پۆرتفۆلیۆ</a></li>
+                  <li><a href="#">بلۆگ</a></li>
+                  <li><a href="#">خەڵاتی Hataw</a></li>
+                  <li><a href="#">پەیوەندی</a></li>
                 </ul>
               </div>
 
               <div className="footer-section">
-                <h3>Contact</h3>
+                <h3>پەیوەندی</h3>
                 <ul>
                   <li>📧 info@hatawgroup.com</li>
                   <li>📞 +1 (234) 567-890</li>
-                  <li>📍 Erbil, Kurdistan Region</li>
-                  <li>🕐 Mon-Fri: 9AM - 6PM</li>
+                  <li>📍 هەولێر، هەرێمی کوردستان</li>
+                  <li>🕐 دووشەممە – هەینی: ٩ی بەیانی – ٦ی ئێوارە</li>
                 </ul>
               </div>
             </div>
 
             <div className="footer-bottom">
               <p>
-                © 2025 Hataw Group. All rights reserved. |{" "}
-                <a href="#">Privacy Policy</a> |{" "}
-                <a href="#">Terms of Service</a>
+                © 2025 Hataw Group. هەموو مافەکان پارێزراون |
+                <a href="#"> سیاسەتی تایبەتمەندی </a> |
+                <a href="#"> مەرجەکانی خزمەتگوزاری </a>
               </p>
             </div>
           </footer>
         </div>
       )}
+
       {isDashboard && children}
     </>
   );

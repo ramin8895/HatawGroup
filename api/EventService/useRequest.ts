@@ -13,6 +13,6 @@ export const useGetEvents = () =>
 export const useCreateEvents = () =>
   useMutation({
     mutationKey: [cashKey.createevent],
-    mutationFn: (data) => services.CreateEvents(data),
+    mutationFn: (data:EventType) => services.CreateEvents(data),
     retry: false,
   });

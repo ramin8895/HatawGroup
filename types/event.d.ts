@@ -12,6 +12,7 @@
 // }
 
 interface EventType {
+  id?:number
   titleDefaultIsEn: boolean;
   duplicateEventAllow: boolean;
   titleEnglish: string;

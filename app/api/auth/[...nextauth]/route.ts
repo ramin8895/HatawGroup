@@ -60,6 +60,7 @@ const handler = NextAuth({
 
         const data = await res.data;
         console.log(res.data);
+        
         return {
           id: data.userId || data.id,
           name: data.name,
@@ -98,7 +99,6 @@ const handler = NextAuth({
 
         const data = await res.json();
         user.backendToken = data.token;
-
         return true;
       } catch (err) {
         console.log("Google login backend error:", err);

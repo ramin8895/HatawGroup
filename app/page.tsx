@@ -74,269 +74,281 @@ console.log(session);
       <AboutComponents />
       <ServiceComponents/>
       {/* Portfolio */}
-      <motion.section
-        id="portfolio"
+<motion.section
+  id="portfolio"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.4 }}
+>
+  <div className="section-header">
+    <h2>پڕۆژە دیارەکان</h2>
+    <p>چیرۆکەکانی سەرکەوتن لە براندەکان کە گۆڕمانیان کردووە</p>
+  </div>
+
+  <div className="portfolio-grid">
+    {[
+      [
+        "نوێکردنەوەی براندی ستارتاپی تەکنەلۆژیا",
+        "گۆڕانکاریی تەواوی براند بۆ کۆمپانیای تەکنەلۆژیای نوێ",
+      ],
+      [
+        "براندی فاشیۆنی لوکس",
+        "دیزاینی ناسنامەی پێشکەوتوو بۆ فرۆشگای فاشیۆنی پلە بەرز",
+      ],
+      [
+        "زنجیرەی چێشتخانە",
+        "سیستەمی براند بۆ چەند شوێنێک لەگەڵ ڕێنمایی تەواو",
+      ],
+      [
+        "خزمەتگوزارییە دارایییەکان",
+        "ستراتیژی براندی دروستکردنی متمانە بۆ ستارتاپی فینتێک",
+      ],
+      [
+        "تەندروستی و خۆباشی",
+        "ئەزموونی براندی تەواو بۆ ناوەندی تەندروستی",
+      ],
+      [
+        "پلاتفۆرمی ئەلیکترۆنی فرۆشتن",
+        "ناسنامەی براندی دیجیتاڵ بۆ بازاڕی ئۆنلاین",
+      ],
+    ].map(([title, desc]) => (
+      <motion.div
+        key={title}
+        className="portfolio-item"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        whileHover={{ scale: 1.03 }}
       >
-        <div className="section-header">
-          <h2>Featured Projects</h2>
-          <p>Success stories from brands we've transformed</p>
+        <div className="portfolio-content">
+          <h3>{title}</h3>
+          <p>{desc}</p>
         </div>
-        <div className="portfolio-grid">
-          {[
-            [
-              "Tech Startup Rebrand",
-              "Complete brand transformation for emerging technology company",
-            ],
-            [
-              "Luxury Fashion Brand",
-              "Premium identity design for high-end fashion retailer",
-            ],
-            [
-              "Restaurant Chain",
-              "Multi-location brand system with comprehensive guidelines",
-            ],
-            [
-              "Financial Services",
-              "Trust-building brand strategy for fintech startup",
-            ],
-            [
-              "Health & Wellness",
-              "Holistic brand experience for wellness center",
-            ],
-            [
-              "E-commerce Platform",
-              "Digital-first brand identity for online marketplace",
-            ],
-          ].map(([title, desc]) => (
-            <motion.div
-              key={title}
-              className="portfolio-item"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeInUp}
-              whileHover={{ scale: 1.03 }}
-            >
-              <div className="portfolio-content">
-                <h3>{title}</h3>
-                <p>{desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+      </motion.div>
+    ))}
+  </div>
+</motion.section>
 
       {/* Stats */}
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
+{/* Stats */}
+<motion.section
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.3 }}
+  variants={fadeInUp}
+>
+  <div className="stats">
+    <div className="stats-grid">
+      {[
+        ["500+", "پڕۆژە تەواوکراوەکان"],
+        ["250+", "کڕیاری دڵخۆش"],
+        ["15+", "ساڵان ئەزموون"],
+        ["98%", "ڕەزامەندی کڕیاران"],
+      ].map(([num, label]) => (
+        <motion.div
+          key={label}
+          className="stat-item"
+          whileHover={{ scale: 1.05 }}
+        >
+          <h4>{num}</h4>
+          <p>{label}</p>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</motion.section>
+
+{/* Hataw Award */}
+<motion.section
+  id="award"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.3 }}
+  variants={fadeInUp}
+>
+  <div className="award-teaser">
+    <h2>🏆 پێشبڕکێی خەڵاتی Hataw</h2>
+
+    <p style={{ fontSize: "1.3rem", marginBottom: "2rem" }}>
+      سەیر بکە • فێربە • ببەزە • دووبارە بکە
+    </p>
+
+    <div className="prize">900$ کۆی خەڵات</div>
+
+    <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
+      180 ڤیدیۆی فێرکاری • 30 ڕۆژ • کۆدی نهێنی
+    </p>
+
+    <p style={{ maxWidth: "700px", margin: "0 auto 2rem" }}>
+      فێرکارییە تایبەتەکانی براندکردن لە YouTube سەیر بکە، کۆدی نهێنی
+      کۆبکەرەوە، خاڵ بەدەست بهێنە و بۆ خەڵاتی پارەیی پێشبڕکێ بکە.
+      500 بەشداربووی سەرەتا 3,000 خاڵی زیادە وەردەگرن!
+    </p>
+
+    <a
+      href="#"
+      className="btn-primary"
+      style={{ display: "inline-block", fontSize: "1.2rem" }}
+    >
+      بەشداری پێشبڕکێ بکە
+    </a>
+
+    <p
+      style={{
+        marginTop: "1.5rem",
+        fontSize: "0.9rem",
+        color: "var(--primary-silver)",
+      }}
+    >
+      دەوری داهاتوو دەست پێدەکات لە:
+      <span style={{ color: "var(--primary-gold)", fontWeight: 700 }}>
+        {" "}12 ڕۆژ
+      </span>
+    </p>
+  </div>
+</motion.section>
+
+{/* Testimonials */}
+<motion.section
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.3 }}
+  variants={fadeInUp}
+>
+  <div className="section-header">
+    <h2>چیرۆکەکانی سەرکەوتنی کڕیاران</h2>
+    <p>هاوبەشەکانمان چی دەڵێن دەربارەی کارکردن لەگەڵ ئێمە</p>
+  </div>
+
+  <div className="testimonials-slider">
+    {[
+      [
+        "JD",
+        "John Davidson",
+        "CEO، TechVision Inc",
+        "Hataw Group ناسنامەی براندەکەمان بە تەواوی گۆڕی. ڕێبازی ستراتیژی و وردبینییان زۆر لە چاوەڕوانییەکانمان بەرزتر بوو. بەشداریکردنمان 300% زیاد بوو.",
+      ],
+      [
+        "SM",
+        "Sarah Martinez",
+        "دامەزرێنەری Bloom Wellness",
+        "کارکردن لەگەڵ Hataw گۆڕانکارییەکی گەورە بوو. تەنها لۆگۆیان دیزاین نەکرد، بەڵکو ستراتیژییەکی تەواوی براندیان پێدان کە وەک پێشەنگ دامەزراندیان.",
+      ],
+      [
+        "MK",
+        "Michael Kim",
+        "بەڕێوەبەری Urban Eats",
+        "گەڕانەوەی پارە (ROI) لە نوێکردنەوەی براند زۆر سەرسوڕهێنەر بوو. بیرۆکەکانی Hataw Group یارمەتیمان دا لە یەک ساڵدا داهاتمان سێهێنابکەین.",
+      ],
+    ].map(([avatar, name, title, text]) => (
+      <motion.div
+        key={name}
+        className="testimonial-card"
+        whileHover={{ y: -5 }}
       >
-        <div className="stats">
-          <div className="stats-grid">
-            {[
-              ["500+", "Projects Completed"],
-              ["250+", "Happy Clients"],
-              ["15+", "Years Experience"],
-              ["98%", "Client Satisfaction"],
-            ].map(([num, label]) => (
-              <motion.div
-                key={label}
-                className="stat-item"
-                whileHover={{ scale: 1.05 }}
-              >
-                <h4>{num}</h4>
-                <p>{label}</p>
-              </motion.div>
-            ))}
+        <div className="testimonial-text">"{text}"</div>
+        <div className="testimonial-author">
+          <div className="author-avatar">{avatar}</div>
+          <div className="author-info">
+            <h4>{name}</h4>
+            <p>{title}</p>
           </div>
         </div>
-      </motion.section>
+      </motion.div>
+    ))}
+  </div>
+</motion.section>
 
-      {/* Hataw Award */}
-      <motion.section
-        id="award"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
-      >
-        <div className="award-teaser">
-          <h2>🏆 Hataw Award Challenge</h2>
-          <p style={{ fontSize: "1.3rem", marginBottom: "2rem" }}>
-            Watch. Learn. Win. Repeat.
-          </p>
-          <div className="prize">$900 Prize Pool</div>
-          <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
-            180 Educational Videos • 30 Days • Hidden Codes
-          </p>
-          <p style={{ maxWidth: "700px", margin: "0 auto 2rem" }}>
-            Watch our exclusive branding tutorials on YouTube, collect secret
-            codes, earn points, and compete for cash prizes. First 500
-            participants get 3,000 bonus points!
-          </p>
-          <a
-            href="#"
-            className="btn-primary"
-            style={{ display: "inline-block", fontSize: "1.2rem" }}
-          >
-            Join the Challenge
-          </a>
-          <p
-            style={{
-              marginTop: "1.5rem",
-              fontSize: "0.9rem",
-              color: "var(--primary-silver)",
-            }}
-          >
-            Next round starts in:{" "}
-            <span style={{ color: "var(--primary-gold)", fontWeight: 700 }}>
-              12 days
-            </span>
-          </p>
-        </div>
-      </motion.section>
+{/* Blog */}
+<motion.section
+  id="blog"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.3 }}
+  variants={fadeInUp}
+>
+  <div className="section-header">
+    <h2>نوێترین بیرۆکەکان</h2>
+    <p>بۆچوونی پسپۆڕانە لەسەر براند و ستراتیژی</p>
+  </div>
 
-      {/* Testimonials */}
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
+  <div className="blog-grid">
+    {[
+      [
+        "📝",
+        "20ی تشرینی یەکەم، 2025",
+        "ستراتیژی براند",
+        "5 نیشانە کە براندەکەت پێویستی بە نوێکردنەوەیە",
+        "ناسینی ئەو نیشانانەی کە پێویستە لە ناسنامەی براندەکەت وەبەرهێنیت و چۆن بە شێوەی ستراتیژی گۆڕانکاری بکەیت.",
+      ],
+      [
+        "🎨",
+        "18ی تشرینی یەکەم، 2025",
+        "دیزاین",
+        "دەروونناسی ڕەنگ لە براندکردندا",
+        "تێگەیشتن لە کاریگەری هەڵبژاردنی ڕەنگ لەسەر هەست و بڕیارەکانی کڕیار.",
+      ],
+      [
+        "💡",
+        "15ی تشرینی یەکەم، 2025",
+        "بازرگانی",
+        "دروستکردنی براندێک کە بەردەوام بێت",
+        "ستراتیژییە درێژخایەنەکان بۆ دروستکردنی بەهای براند و پاراستنی گرنگی.",
+      ],
+    ].map(([icon, date, category, title, desc]) => (
+      <motion.div
+        key={title}
+        className="blog-card"
+        whileHover={{ y: -10 }}
       >
-        <div className="section-header">
-          <h2>Client Success Stories</h2>
-          <p>What our partners say about working with us</p>
+        <div className="blog-image">{icon}</div>
+        <div className="blog-content">
+          <div className="blog-meta">
+            <span>{date}</span>
+            <span>•</span>
+            <span>{category}</span>
+          </div>
+          <h3>{title}</h3>
+          <p>{desc}</p>
         </div>
-        <div className="testimonials-slider">
-          {[
-            [
-              "JD",
-              "John Davidson",
-              "CEO, TechVision Inc",
-              "Hataw Group completely transformed our brand identity. The strategic approach and attention to detail exceeded expectations. Our engagement increased by 300%.",
-            ],
-            [
-              "SM",
-              "Sarah Martinez",
-              "Founder, Bloom Wellness",
-              "Working with Hataw was a game-changer. They didn't just design a logo – they gave us a complete brand strategy that positioned us as leaders.",
-            ],
-            [
-              "MK",
-              "Michael Kim",
-              "Director, Urban Eats",
-              "The ROI on our rebranding investment was phenomenal. Hataw Group's insights helped us triple our revenue within the first year.",
-            ],
-          ].map(([avatar, name, title, text]) => (
-            <motion.div
-              key={name}
-              className="testimonial-card"
-              whileHover={{ y: -5 }}
-            >
-              <div className="testimonial-text">"{text}"</div>
-              <div className="testimonial-author">
-                <div className="author-avatar">{avatar}</div>
-                <div className="author-info">
-                  <h4>{name}</h4>
-                  <p>{title}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+      </motion.div>
+    ))}
+  </div>
+</motion.section>
 
-      {/* Blog */}
-      <motion.section
-        id="blog"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
-      >
-        <div className="section-header">
-          <h2>Latest Insights</h2>
-          <p>Expert perspectives on branding and strategy</p>
-        </div>
-        <div className="blog-grid">
-          {[
-            [
-              "📝",
-              "Oct 20, 2025",
-              "Brand Strategy",
-              "5 Signs Your Brand Needs a Refresh",
-              "Discover the key indicators that it's time to invest in your brand identity and how to approach the transformation process strategically.",
-            ],
-            [
-              "🎨",
-              "Oct 18, 2025",
-              "Design",
-              "The Psychology of Color in Branding",
-              "Understanding how color choices impact consumer perception and decision-making.",
-            ],
-            [
-              "💡",
-              "Oct 15, 2025",
-              "Business",
-              "Building a Brand That Lasts",
-              "Long-term strategies for creating sustainable brand equity and maintaining relevance.",
-            ],
-          ].map(([icon, date, category, title, desc]) => (
-            <motion.div
-              key={title}
-              className="blog-card"
-              whileHover={{ y: -10 }}
-            >
-              <div className="blog-image">{icon}</div>
-              <div className="blog-content">
-                <div className="blog-meta">
-                  <span>{date}</span>
-                  <span>•</span>
-                  <span>{category}</span>
-                </div>
-                <h3>{title}</h3>
-                <p>{desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+{/* Contact */}
+<motion.section
+  id="contact"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.3 }}
+  variants={fadeInUp}
+>
+  <div className="contact-cta">
+    <h2>ئامادەی بۆ دروستکردنی براندەکەت؟</h2>
+    <p>ئەمڕۆ گەشتی گۆڕانکارییەکەت دەست پێبکە</p>
 
-      {/* Contact */}
-      <motion.section
-        id="contact"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
+    <form className="contact-form">
+      <input
+        type="email"
+        placeholder="ئیمەیڵەکەت بنووسە"
+        required
+      />
+      <button type="submit">دەست پێبکە</button>
+    </form>
+
+    <p style={{ marginTop: "1.5rem", fontSize: "0.9rem" }}>
+      یان پەیوەندیمان پێوە بکە لە ڕێگەی:
+      <a
+        href="tel:+1234567890"
+        style={{ color: "var(--primary-gold)", textDecoration: "none" }}
       >
-        <div className="contact-cta">
-          <h2>Ready to Build Your Brand?</h2>
-          <p>Let's start your transformation journey today</p>
-          <form className="contact-form">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              required
-            />
-            <button type="submit">Get Started</button>
-          </form>
-          <p style={{ marginTop: "1.5rem", fontSize: "0.9rem" }}>
-            Or call us at:{" "}
-            <a
-              href="tel:+1234567890"
-              style={{ color: "var(--primary-gold)", textDecoration: "none" }}
-            >
-              +1 (234) 567-890
-            </a>
-          </p>
-        </div>
-      </motion.section>
+        {" "} +1 (234) 567-890
+      </a>
+    </p>
+  </div>
+</motion.section>
 
 
     </main>

@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 import { motion } from "framer-motion";
 
 const HomeSection = () => {
-     const fadeInUp = {
+  const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
   };
@@ -16,13 +16,15 @@ const HomeSection = () => {
         variants={fadeInUp}
       >
         <h1>
-          Transform Your Business Into a{" "}
-          <span className="highlight">Legendary Brand</span>
+          بازرگانییەکەت بگۆڕە بۆ{" "}
+          <span className="highlight">براندێکی ئەفسانەیی</span>
         </h1>
+
         <p>
-          Strategic brand identity & positioning that makes you unforgettable.
-          We don't just design logos — we build empires.
+          ناسنامە و شوێنپێدانی ستراتیژیی براند کە تۆ لە بیرناچێت.
+          ئێمە تەنها لۆگۆ دیزاین ناکەین — ئیمپراتۆریەکان دروست دەکەین.
         </p>
+
         <div className="hero-buttons">
           <motion.a
             href="#award"
@@ -30,15 +32,16 @@ const HomeSection = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            🏆 Join Hataw Award
+            🏆 بەشداری خەڵاتی Hataw بکە
           </motion.a>
+
           <motion.a
             href="#services"
             className="btn-secondary"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Explore Services
+            خزمەتگوزارییەکان ببینە
           </motion.a>
         </div>
       </motion.div>

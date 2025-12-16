@@ -15,8 +15,10 @@ import {
   Settings,
   Video,
 } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -35,75 +37,105 @@ const LayoutComponentDashbord = ({
   const siderWidth = collapsed ? 80 : 200;
 
   const menuItems = [
-    { key: "dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
+    {
+      key: "dashboard",
+      icon: <LayoutDashboard />,
+      label: "داشبۆرد",
+    },
 
     {
-      key: "Event",
+      key: "event",
       icon: <Video />,
-      label: "Event",
+      label: "چالاکیەکان",
       children: [
         {
-          key: "dashboard/event/add-Video",
+          key: "dashboard/event/add-event",
           icon: <PackagePlus />,
-          label: "Add event",
+          label: "زیادکردنی چالاکی",
         },
         {
           key: "dashboard/event/event-list",
           icon: <ListOrdered />,
-          label: "Event list",
+          label: "لیستی چالاکیەکان",
         },
         {
           key: "dashboard/event/event-lottery",
           icon: <ListOrdered />,
-          label: "Event lottery",
+          label: "قرعەکێشی چالاکی",
         },
       ],
     },
+
     {
       key: "customers",
       icon: <Users />,
-      label: "Customers",
+      label: "کڕیارەکان",
       children: [
-        { key: "dashboard/customers", label: "Customer List" },
-        { key: "customers/groups", icon: <UserCog />, label: "Groups" },
-        { key: "customers/vip", icon: <Crown />, label: "VIP Customers" },
+        {
+          key: "dashboard/customers",
+          label: "لیستی کڕیارەکان",
+        },
+        {
+          key: "customers/groups",
+          icon: <UserCog />,
+          label: "گرووپەکان",
+        },
+        {
+          key: "customers/vip",
+          icon: <Crown />,
+          label: "کڕیارە VIP ـەکان",
+        },
       ],
     },
+
     {
       key: "content",
       icon: <Newspaper />,
-      label: "Blog / Content",
+      label: "بلاگ / ناوەڕۆک",
       children: [
-        { key: "blog", label: "Posts" },
-        { key: "blog/add", label: "Add Post" },
-        { key: "blog/categories", label: "Categories" },
-        { key: "blog/tags", label: "Tags" },
-        { key: "blog/comments", label: "Comments" },
+        { key: "blog", label: "بابەتەکان" },
+        { key: "blog/add", label: "زیادکردنی بابەت" },
+        { key: "blog/categories", label: "هاوپۆلەکان" },
+        { key: "blog/tags", label: "تاگەکان" },
+        { key: "blog/comments", label: "کۆمێنتەکان" },
       ],
     },
+
     {
       key: "support",
       icon: <LifeBuoy />,
-      label: "Support",
+      label: "پاڵپشتی",
       children: [
-        { key: "tickets", icon: <MessageSquareDot />, label: "Tickets" },
-        { key: "faq", label: "FAQ" },
+        {
+          key: "tickets",
+          icon: <MessageSquareDot />,
+          label: "تیکەتەکان",
+        },
+        {
+          key: "faq",
+          label: "پرسیارە باوەکان",
+        },
       ],
     },
 
     {
       key: "admins",
-      label: "Users & Roles",
+      label: "بەکارهێنەران و ڕۆڵەکان",
       children: [
-        { key: "admins", label: "Admins" },
-        { key: "roles", label: "Roles" },
+        { key: "admins", label: "ئەدمینەکان" },
+        { key: "roles", label: "ڕۆڵەکان" },
       ],
     },
 
     {
       key: "settings",
       icon: <Settings />,
-      label: "Settings",
+      label: "ڕێکخستنەکان",
+    },
+    {
+      key: "logout",
+      icon: <LogOut />,
+      label: "چوونەدەرەوە",
     },
   ];
 
@@ -132,7 +164,13 @@ const LayoutComponentDashbord = ({
             defaultOpenKeys={["products"]}
             defaultSelectedKeys={["dashboard"]}
             items={menuItems}
-            onClick={(info) => router.push("/" + info.key)}
+            onClick={({ key }) => {
+              if (key === "logout") {
+                signOut();
+              } else {
+                router.push(`/${key}`);
+              }
+            }}
             className="[&_.ant-menu-item-selected]:bg-blue-50 [&_.ant-menu-item-selected]:text-blue-600"
             style={{ height: "100%", borderRight: 0 }}
           />
