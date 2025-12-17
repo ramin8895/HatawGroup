@@ -4,6 +4,7 @@ import "./globals.css";
 import LayoutComponents from "../components/layout/layoutComponents";
 import SessionProvider from "@/components/SessionProvider";
 import QueryProvider from "@/components/QueryProvider";
+import { ToastProvider } from "@/components/Dashbord/TostComponents";
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
@@ -27,11 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="name">
       <QueryProvider>
-        <SessionProvider>
-          <body className={`antialiased main-root`}>
-            <LayoutComponents>{children}</LayoutComponents>
-          </body>
-        </SessionProvider>
+        <ToastProvider>
+          <SessionProvider>
+            <body className={`antialiased main-root`}>
+              <LayoutComponents>{children}</LayoutComponents>
+            </body>
+          </SessionProvider>
+        </ToastProvider>
       </QueryProvider>
     </html>
   );

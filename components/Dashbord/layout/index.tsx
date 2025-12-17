@@ -93,11 +93,11 @@ const LayoutComponentDashbord = ({
       icon: <Newspaper />,
       label: "بلاگ / ناوەڕۆک",
       children: [
-        { key: "blog", label: "بابەتەکان" },
-        { key: "blog/add", label: "زیادکردنی بابەت" },
-        { key: "blog/categories", label: "هاوپۆلەکان" },
-        { key: "blog/tags", label: "تاگەکان" },
-        { key: "blog/comments", label: "کۆمێنتەکان" },
+        { key: "dashboard/blog", label: "بابەتەکان" },
+        { key: "dashboard/blog/add-blog", label: "زیادکردنی بابەت" },
+        { key: "dashboard/blog/categories-blog", label: "هاوپۆلەکان" },
+        { key: "dashboard/blog/tags-blog", label: "تاگەکان" },
+        { key: "dashboard/blog/comments", label: "کۆمێنتەکان" },
       ],
     },
 
@@ -147,7 +147,7 @@ const LayoutComponentDashbord = ({
         collapsed={collapsed}
         trigger={null}
         breakpoint="lg"
-        className="!fixed right-0 top-0 h-screen flex flex-col border-l border-gray-200 shadow-md"
+        className="fixed! right-0 top-0 h-screen flex flex-col border-l border-gray-200 shadow-md"
         reverseArrow
         dir="rtl"
       >
