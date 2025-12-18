@@ -4,7 +4,7 @@ import { services, cashKey } from ".";
 
 export const useGetCurrentReservations = (data: { id_dist: any; date?: any }) =>
   useQuery({
-    queryKey: [cashKey.getCurrentReservations],
+    queryKey: [cashKey.getblog],
     queryFn: () => services.GetCurrentReservations(data),
     refetchOnWindowFocus: false,
     enabled: !!data.id_dist || false,
@@ -16,6 +16,6 @@ export const useUpdateCurrentReservation = (data: {
   id: any;
 }) =>
   useMutation({
-    mutationKey: [cashKey.updateCurrentReservations],
+    mutationKey: [cashKey.updateblog],
     mutationFn: () => services.PutCurrentReservations(data),
   });
