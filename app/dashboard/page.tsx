@@ -22,10 +22,11 @@ import {
   TrendingUp,
   Activity,
   CreditCard,
+  Bell,
+  ArrowUpRight,
 } from "lucide-react";
-import { useGetEventActiveEventsBymode } from "@/api/EventService/useRequest";
 
-// --- Data (هەمان داتای پێشوو) ---
+// --- Data ---
 const activityData = [
   { day: "شەممە", users: 120 },
   { day: "یەکشەممە", users: 200 },
@@ -37,23 +38,20 @@ const activityData = [
 ];
 
 const pieData = [
-  { name: "تۆمارکردنی کۆد", value: 864 },
+  { name: "کۆدی ڕاستەوخۆ", value: 864 },
   { name: "تۆمارکردنی ئاسایی", value: 416 },
 ];
 
-const COLORS = ["#8b5cf6", "#e2e8f0"];
+const COLORS = ["#6366f1", "#e2e8f0"];
 
-// --- Components (پێکهاتەکان) ---
+// --- Components ---
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div
-        className="bg-white/95 backdrop-blur-md p-3! border border-indigo-100 shadow-xl rounded-xl text-xs font-medium text-slate-700 z-50"
-        dir="rtl"
-      >
-        <p className="mb-1 text-slate-500">{label}</p>
-        <p className="text-indigo-600 font-bold">
-          {payload[0].value} بەکارهێنەر
+      <div className="bg-[#030712]/90 backdrop-blur-xl p-3! border border-white/10 shadow-2xl rounded-2xl text-[10px] text-white z-50">
+        <p className="opacity-60 mb-1!">{label}</p>
+        <p className="text-indigo-400 font-black">
+          {payload[0].value.toLocaleString()} بەکارهێنەر
         </p>
       </div>
     );
@@ -64,337 +62,217 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function ModernDashboard() {
   const [search, setSearch] = useState("");
 
-  const eventCode = "EV2025-AX19";
-  const eventEnd = "20 کانوونی دووەمی 2026";
-  const eventPrize = "$50,000";
-
   const stats = [
-    {
-      label: "بەکارهێنەرانی نوێ",
-      value: 1280,
-      icon: Users,
-      color: "text-violet-600",
-      bg: "bg-violet-100",
-      gradient: "from-violet-500 to-purple-600",
-    },
-    {
-      label: "تۆمارکردنی کۆد",
-      value: 864,
-      icon: Activity,
-      color: "text-emerald-600",
-      bg: "bg-emerald-100",
-      gradient: "from-emerald-400 to-teal-500",
-    },
-    {
-      label: "بەشداربووان",
-      value: 432,
-      icon: Trophy,
-      color: "text-amber-600",
-      bg: "bg-amber-100",
-      gradient: "from-amber-400 to-orange-500",
-    },
+    { label: "کۆدی ڕووداو", value: "EV2025-AX19", icon: CreditCard, color: "text-blue-500", bg: "bg-blue-500/10" },
+    { label: "کۆتایی وادە", value: "20 Jan 2026", icon: Calendar, color: "text-rose-500", bg: "bg-rose-500/10" },
+    { label: "کۆی خەڵاتەکان", value: "$50,000", icon: Trophy, color: "text-amber-500", bg: "bg-amber-500/10" },
+  ];
+
+  const mainStats = [
+    { label: "بەکارهێنەرانی نوێ", value: 1280, trend: "+12.5%", icon: Users, color: "text-indigo-500", bg: "bg-indigo-500/10" },
+    { label: "تۆمارکردنی کۆد", value: 864, trend: "+8.2%", icon: Activity, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+    { label: "پلەی بەشداربووان", value: 432, trend: "+5.1%", icon: Trophy, color: "text-purple-500", bg: "bg-purple-500/10" },
   ];
 
   const topUsers = [
-    { name: "عەلی ڕەزایی", score: 980, rank: 1, avatar: "bg-blue-200" },
-    { name: "مەهدی کازم", score: 920, rank: 2, avatar: "bg-emerald-200" },
-    { name: "نەگار ئەحمەدی", score: 885, rank: 3, avatar: "bg-rose-200" },
-    { name: "ڕەزا ئیسماعیلی", score: 870, rank: 4, avatar: "bg-slate-200" },
-    { name: "زەهرا محەممەدی", score: 860, rank: 5, avatar: "bg-indigo-200" },
+    { name: "عەلی ڕەزایی", score: 980, rank: 1, avatar: "bg-blue-500/20 text-blue-400" },
+    { name: "مەهدی کازم", score: 920, rank: 2, avatar: "bg-emerald-500/20 text-emerald-400" },
+    { name: "نەگار ئەحمەدی", score: 885, rank: 3, avatar: "bg-rose-500/20 text-rose-400" },
+    { name: "ڕەزا ئیسماعیلی", score: 870, rank: 4, avatar: "bg-slate-500/20 text-slate-400" },
   ];
 
-  // تەنها بەکارهێنەران دەگەرێنێتەوە کە ناوی گەڕانی تێدایە (بە فارسی/کوردی بگونجێنرێت)
-  const filteredUsers = topUsers.filter((u) => u.name.includes(search.trim()));
-
-  const {
-    data: useGetEventActiveEventsBymodeData,
-    isFetching: useGetEventActiveEventsBymodeIsFeching,
-    isPending: useGetEventActiveEventsBymodeIspending,
-  } = useGetEventActiveEventsBymode();
-console.log(useGetEventActiveEventsBymodeData)
   return (
-    // داشبۆردی سەرەکی دەکەین بە RTL
-    <div
-      className="w-full h-full bg-slate-50/50 p-4 md:p-6 lg:p-8 font-sans"
-      dir="rtl"
-    >
-      <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] rounded-full bg-indigo-200/30 blur-[80px]" />
-        <div className="absolute top-[20%] -left-[5%] w-[30%] h-[30%] rounded-full bg-purple-200/30 blur-[60px]" />
-      </div>
+    <div className="min-h-screen! bg-[#030712] text-slate-300 p-4 md:p-8 lg:p-12 font-sans relative overflow-hidden" dir="rtl">
+      
+      {/* هاله‌های نوری پس‌زمینه (Ambient Glow) */}
+      <div className="absolute top-0! right-0! w-[500px]! h-[500px]! bg-indigo-600/10! blur-[150px]! rounded-full! pointer-events-none"></div>
+      <div className="absolute bottom-0! left-0! w-[400px]! h-[400px]! bg-purple-600/10! blur-[120px]! rounded-full! pointer-events-none"></div>
 
-      <div className="max-w-[1600px] mx-auto space-y-8">
-        {/* Header (سەرەوە) */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+      <div className="max-w-7xl! mx-auto! space-y-10!">
+        
+        {/* --- Top Header Section --- */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6!">
           <div>
-            <h1 className="text-2xl! md:text-3xl! font-black text-slate-800">
-              داشبۆردی <span className="text-indigo-600">هەڵمەت</span>
+            <h1 className="text-3xl! md:text-4xl! font-black text-white tracking-tight!">
+              داشبۆردی <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">کۆنترۆڵ</span>
             </h1>
-            <p className="text-slate-500 text-sm mt-1!">
-              ڕاپۆرتی کارایی ڕاستەوخۆ
-            </p>
+            <p className="text-slate-500 text-sm! mt-2!">چاودێری و شیکردنەوەی داتاکان لە کاتی ڕاستەقینەدا</p>
           </div>
-
-          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-            {/* گۆشەی زیندووی سەوز */}
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="text-xs font-bold text-slate-600">
-              سیستەم چالاکە
-            </span>
-          </div>
-        </div>
-
-        {/* Info Cards (کارتی زانیارییەکان) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {[
-            {
-              label: "کۆدی ڕووداو",
-              val: eventCode,
-              icon: CreditCard,
-              color: "text-blue-500",
-            },
-            {
-              label: "کۆتایی وادە",
-              val: eventEnd,
-              icon: Calendar,
-              color: "text-pink-500",
-            },
-            {
-              label: "خەڵات",
-              val: eventPrize,
-              icon: Trophy,
-              color: "text-amber-500",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-white/80! backdrop-blur rounded-2xl! p-5! border border-white/60 shadow-sm hover:shadow-md transition-all flex items-center justify-between"
-            >
-              <div>
-                <p className="text-xs text-slate-400 font-medium mb-1!">
-                  {item.label}
-                </p>
-                {/* بۆ ژمارە و کۆدەکان LTR بەکاردەهێنین */}
-                <p className="text-lg font-bold text-slate-800 font-mono dir-ltr">
-                  {item.val}
-                </p>
-              </div>
-              <div className={`p-3! rounded-xl bg-slate-50 ${item.color}`}>
-                <item.icon size={20} />
-              </div>
+          
+          <div className="flex items-center gap-4!">
+            <div className="bg-white/5! p-2! rounded-xl! border border-white/10! text-slate-400 cursor-pointer hover:text-white transition-colors relative">
+              <Bell size={20} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-[#030712]"></span>
             </div>
-          ))}
+            <div className="flex items-center gap-2 bg-emerald-500/10! px-4! py-2! rounded-full! border border-emerald-500/20!">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Live System</span>
+            </div>
+          </div>
         </div>
 
-        {/* Quick Stats (ئامارە خێراکان) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4! m-4!">
-          {stats.map((stat, idx) => (
+        {/* --- Quick Info Row --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6!">
+          {stats.map((item, i) => (
             <motion.div
-              key={idx}
-              whileHover={{ scale: 1.01 }}
-              className="relative overflow-hidden bg-white rounded-2xl p-5! border border-slate-100 shadow-sm"
+              key={i}
+              whileHover={{ y: -5 }}
+              className="bg-white/[0.03] backdrop-blur-xl rounded-[2rem]! p-6! border border-white/5! flex items-center justify-between"
             >
-              <div className="flex justify-between items-start mb-4!">
-                <div className={`p-2.5! rounded-xl ${stat.bg} ${stat.color}`}>
-                  <stat.icon size={20} />
-                </div>
-                {/* بۆ ژمارەی لەسەدی، LTR گونجاوترە */}
-                <span
-                  className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2! py-1! rounded-lg"
-                  dir="ltr"
-                >
-                  +12% گەشە
-                </span>
-              </div>
               <div>
-                <p className="text-2xl font-black text-slate-800">
-                  {stat.value.toLocaleString()}
-                </p>
-                <p className="text-xs text-slate-400 font-bold mt-1!">
-                  {stat.label}
-                </p>
+                <p className="text-xs text-slate-500 font-bold mb-2! uppercase tracking-wider">{item.label}</p>
+                <p className="text-lg font-black text-white font-mono">{item.value}</p>
+              </div>
+              <div className={`w-12! h-12! rounded-2xl! ${item.bg} ${item.color} flex items-center justify-center`}>
+                <item.icon size={22} />
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Charts Section (بەشی چارتەکان/گرافیکەکان) */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6!">
-          {/* Main Chart (چارتی سەرەکی) */}
-          <div className="xl:col-span-2 bg-white rounded-3xl p-6! shadow-sm border border-slate-100">
-            <h2 className="text-lg font-bold text-slate-800 mb-6! flex items-center gap-2">
-              <TrendingUp size={18} className="text-indigo-500" />
-              چالاکی هەفتانە
-            </h2>
-            {/* چارتەکە بە LTR دەهێڵرێتەوە بۆ خوێندنەوەی ئاسانی ڕۆژەکان و ژمارەکان */}
-            <div className="h-[250px] w-full" dir="ltr">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={activityData}>
-                  <defs>
-                    <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    vertical={false}
-                    stroke="#f1f5f9"
-                  />
-                  <XAxis
-                    dataKey="day"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: 11 }}
-                    dy={10}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: 11 }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="users"
-                    stroke="#8b5cf6"
-                    strokeWidth={3}
-                    fill="url(#colorUsers)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+        {/* --- Main Stats & Charts --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8!">
+          
+          {/* Main Activity Chart */}
+          <div className="lg:col-span-2 bg-white/[0.02] border border-white/5! rounded-[2.5rem]! p-8! relative overflow-hidden">
+             <div className="flex justify-between items-center mb-8!">
+                <h2 className="text-xl! font-black text-white flex items-center gap-3!">
+                  <TrendingUp className="text-indigo-500" /> چالاکی هەفتانە
+                </h2>
+                <select className="bg-white/5! border-none rounded-lg text-xs! px-3! py-1! text-slate-400 outline-none">
+                  <option>7 ڕۆژی ڕابردوو</option>
+                  <option>30 ڕۆژی ڕابردوو</option>
+                </select>
+             </div>
+             
+             <div className="h-[300px]! w-full!" dir="ltr">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={activityData}>
+                    <defs>
+                      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff05" />
+                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 10}} dy={15} />
+                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 10}} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area type="monotone" dataKey="users" stroke="#6366f1" strokeWidth={4} fill="url(#chartGradient)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+             </div>
           </div>
 
-          {/* Pie Chart (چارتی بازنەیی) */}
-          <div className="bg-white rounded-3xl! p-1! shadow-sm border border-slate-100 flex flex-col justify-center items-center">
-            <h2 className="text-lg font-bold! text-slate-800! text-center w-full ">
-              سەرچاوەی تۆمارکردن
-            </h2>
-            {/* چارتەکە بە LTR دەهێڵرێتەوە بۆ دیزاین و خوێندنەوەی ژمارەکان */}
-            <div className="w-full h-[200px] relative" dir="ltr">
+          {/* Registration Source (Pie) */}
+          <div className="bg-white/[0.02] border border-white/5! rounded-[2.5rem]! p-8! flex flex-col! items-center! justify-center!">
+            <h2 className="text-lg! font-black text-white mb-6!">سەرچاوەی تۆمارکردن</h2>
+            <div className="w-full h-[240px]! relative" dir="ltr">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={55}
-                    outerRadius={75}
-                    paddingAngle={53}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
+                  <Pie data={pieData} innerRadius={70} outerRadius={90} paddingAngle={8} dataKey="value" stroke="none">
+                    {pieData.map((_, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
-              {/* ژمارەی ناوەڕاستی چارتەکە */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                <p className="text-xl font-black text-slate-800">68%</p>
+              <div className="absolute inset-0! flex flex-col! items-center! justify-center! pointer-events-none">
+                <span className="text-3xl! font-black text-white">68%</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">کۆدی چالاک</span>
               </div>
             </div>
-            {/* ناوی بەشەکانی چارتەکە (بۆ RTL دەگونجێندرێت) */}
-            <div className="flex gap-4 mt-2" dir="rtl">
-              {pieData.map((e, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-1.5 text-xs text-slate-500"
-                >
-                  <span
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: COLORS[i] }}
-                  ></span>
-                  {e.name}
+            <div className="w-full grid grid-cols-2 gap-4! mt-6!">
+              {pieData.map((item, i) => (
+                <div key={i} className="bg-white/5! p-3! rounded-2xl! text-center">
+                  <p className="text-[10px] text-slate-500 mb-1!">{item.name}</p>
+                  <p className="text-sm! font-bold text-white">{item.value}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Top Users Table (خشتەی باشترین بەکارهێنەران) */}
-        <div className="bg-white rounded-3xl p-6! shadow-sm border border-slate-100 overflow-hidden  mt-10!">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6! gap-4!">
-            <h2 className="text-lg font-bold text-slate-800">
-              بەکارهێنەرە سەرەکییەکان
-            </h2>
-            {/* بۆشی گەڕان */}
-            <div className="relative w-full sm:w-64!">
-              {/* ئاڕاستەی گەڕان بۆ RTL دەگۆڕدرێت */}
-              <Search
-                className="absolute left-3 top-2.5 text-slate-400"
-                size={18}
-              />
-              <input
-                type="text"
-                placeholder="گەڕان..."
-                className="w-full pr-4 pl-10 py-2 bg-slate-50 rounded-xl text-sm border-none focus:ring-2 focus:ring-indigo-100 outline-none"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+        {/* --- Bottom Row: Stats & Users --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8!">
+          
+          {/* Mini Stat Cards */}
+          <div className="lg:col-span-1 space-y-4!">
+            {mainStats.map((stat, i) => (
+              <div key={i} className="bg-white/[0.02] p-5! rounded-[2rem]! border border-white/5! flex items-center gap-4!">
+                <div className={`w-12! h-12! rounded-2xl! ${stat.bg} ${stat.color} flex items-center justify-center`}>
+                  <stat.icon size={20} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2!">
+                    <p className="text-xl! font-black text-white">{stat.value.toLocaleString()}</p>
+                    <span className="text-[10px] text-emerald-400 font-bold">{stat.trend}</span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-bold">{stat.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* User Table Card */}
+          <div className="lg:col-span-3 bg-white/[0.02] border border-white/5! rounded-[2.5rem]! p-8!">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-8! gap-4!">
+              <h2 className="text-xl! font-black text-white">باشترین بەکارهێنەران</h2>
+              <div className="relative w-full sm:w-72!">
+                <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                <input 
+                  type="text" 
+                  placeholder="گەڕان بۆ ناو..." 
+                  className="w-full bg-white/5! border border-white/10! rounded-2xl! py-3! pr-12! pl-4! text-sm! outline-none focus:border-indigo-500 transition-all text-white"
+                />
+              </div>
+            </div>
+
+            <div className="overflow-x-auto!">
+              <table className="w-full text-right!">
+                <thead>
+                  <tr className="text-slate-500 text-xs! border-b border-white/5!">
+                    <th className="pb-4! font-bold">پلە</th>
+                    <th className="pb-4! font-bold">بەکارهێنەر</th>
+                    <th className="pb-4! font-bold text-left!">نمرەی کۆتایی</th>
+                    <th className="pb-4! font-bold text-left!">کارەکان</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.02]">
+                  {topUsers.map((user, idx) => (
+                    <tr key={idx} className="group hover:bg-white/[0.02] transition-colors">
+                      <td className="py-5!">
+                        <span className={`w-8! h-8! rounded-lg flex items-center justify-center text-xs font-black ${idx === 0 ? 'bg-amber-500/20 text-amber-500' : 'bg-white/5 text-slate-400'}`}>
+                          {user.rank}
+                        </span>
+                      </td>
+                      <td className="py-5!">
+                        <div className="flex items-center gap-3!">
+                          <div className={`w-10! h-10! rounded-full flex items-center justify-center font-black text-xs ${user.avatar}`}>
+                            {user.name.charAt(0)}
+                          </div>
+                          <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{user.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-5! text-left font-mono font-black text-indigo-400">
+                        {user.score}
+                      </td>
+                      <td className="py-5! text-left!">
+                        <button className="p-2! bg-white/5 rounded-lg! hover:bg-indigo-600 transition-all">
+                          <ArrowUpRight size={16} className="text-white" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-slate-50/50">
-                <tr>
-                  {/* بۆ RTL ڕێکخراوە */}
-                  <th className="px-4! py-3! text-right text-xs font-bold text-slate-400">
-                    #
-                  </th>
-                  <th className="px-4! py-3! text-right text-xs font-bold text-slate-400">
-                    بەکارهێنەر
-                  </th>
-                  <th className="px-4! py-3! text-left text-xs font-bold text-slate-400">
-                    نمرە
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {filteredUsers.map((user, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                    {/* پلە (ڕانک) */}
-                    <td className="px-4! py-3! text-sm">
-                      <span
-                        className={`inline-flex items-center justify-center w-6! h-6! rounded-lg text-xs font-bold ${
-                          idx < 3
-                            ? "bg-amber-100 text-amber-600"
-                            : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
-                        {user.rank}
-                      </span>
-                    </td>
-                    {/* ناوی بەکارهێنەر */}
-                    <td className="px-4! py-3! flex items-center gap-3">
-                      <div
-                        className={`w-8! h-8! rounded-full ${user.avatar} flex items-center justify-center text-xs font-bold text-slate-600`}
-                      >
-                        {user.name.charAt(0)}
-                      </div>
-                      <span className="text-sm font-bold text-slate-700">
-                        {user.name}
-                      </span>
-                    </td>
-                    {/* نمرە (Score) - بۆ ژمارە لای چەپ باشترە */}
-                    <td className="px-4! py-3! text-left text-sm font-black text-indigo-600">
-                      {user.score}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         </div>
       </div>
     </div>

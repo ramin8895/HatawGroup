@@ -3,251 +3,214 @@
 import React, { useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { Upload, Tag, Layout, Type, Send } from "lucide-react"; // Optional: Install lucide-react
+import { 
+  Upload, Tag, Layout, Send, Image as ImageIcon, 
+  ChevronRight, Sparkles, Eye, Save, 
+  Type
+} from "lucide-react";
 import { useToast } from "@/components/Dashbord/TostComponents";
 import { blogAPI } from "@/api";
+import { motion } from "framer-motion";
 
 const AddBlog = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillInstance = useRef<Quill | null>(null);
-
-  // const [title, setTitle] = useState("");
-  const [featuredImage, setFeaturedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [tags, setTags] = useState("");
-  const [category, setCategory] = useState("");
-  const [content, setContent] = useState("");
   const { addToast } = useToast();
-  const [BlogData, setBlogData] = useState<Blog>({
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [content, setContent] = useState("");
+  const [BlogData, setBlogData] = useState<any>({
     titleBlog: "",
-    featured_image: "",
     categoryId: 0,
-    contentBlog: "",
-    excerpt: "",
-    featured_imagename: "",
-    languageId: 0,
     slug: "",
     statusblog: 0,
   });
+
+  const { mutate: BlogPostData, isPending: isPendingBlogPostData } = blogAPI.useBlogCreate();
+
   useEffect(() => {
     let isMounted = true;
-
     const initQuill = async () => {
       if (!editorRef.current || quillInstance.current) return;
-
-      // ۱. ایمپورت داینامیک Quill و ماژول تغییر سایز
-      const Quill = (await import("quill")).default;
-
+      const QuillModule = (await import("quill")).default;
       if (!isMounted) return;
-      // ۲. ثبت ماژول در هسته Quill
 
-      quillInstance.current = new Quill(editorRef.current, {
+      quillInstance.current = new QuillModule(editorRef.current, {
         theme: "snow",
-        placeholder: "نوشتن را شروع کنید...",
-        readOnly: false,
+        placeholder: "لێرەدا دەست بکە بە نووسین...",
         modules: {
-          // ۳. فعال‌سازی ماژول تغییر سایز در تنظیمات
-          imageResize: {
-            parchment: Quill.import("parchment"),
-            modules: ["Resize", "DisplaySize", "Toolbar"], // قابلیت تغییر اندازه، نمایش ابعاد و تولبار شناور برای تراز
-          },
           toolbar: [
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            [{ font: [] }],
-            [{ size: ["small", false, "large", "huge"] }],
+            [{ header: [1, 2, 3, false] }],
             ["bold", "italic", "underline", "strike"],
-            ["blockquote", "code-block"],
-            [{ color: [] }, { background: [] }],
-            [{ script: "sub" }, { script: "super" }],
-            [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-            [{ indent: "-1" }, { indent: "+1" }],
-            [{ direction: "rtl" }],
-            [{ align: [] }],
-            ["link", "image", "video", "formula"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ direction: "rtl" }, { align: [] }],
+            ["link", "image", "video"],
             ["clean"],
           ],
-          clipboard: {
-            matchVisual: false,
-          },
-          keyboard: {
-            bindings: {
-              tab: {
-                key: 9,
-                handler: function (range: any, context: any) {
-                  return true;
-                },
-              },
-            },
-          },
-          history: {
-            delay: 2000,
-            maxStack: 500,
-            userOnly: true,
-          },
         },
       });
 
-      // تنظیم جهت راست‌به‌چپ برای محتوا
       quillInstance.current.root.setAttribute("dir", "rtl");
-      quillInstance.current.format("direction", "rtl");
-      quillInstance.current.format("align", "right");
-
       quillInstance.current.on("text-change", () => {
         setContent(quillInstance.current!.root.innerHTML);
       });
     };
-
     initQuill();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setFeaturedImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+    if (file) setImagePreview(URL.createObjectURL(file));
   };
-  const { mutate: BlogPostData, isPending: isPendingBlogPostData } =
-    blogAPI.useBlogCreate(BlogData);
+
   const handleSubmit = () => {
-    addToast("مقاله با موفقیت منتشر شد!", "success");
-    BlogPostData();
+    const finalData = { ...BlogData, contentBlog: content };
+    addToast("خەریکی ناردنی بابەتەکەین...");
+    BlogPostData(finalData, {
+      onSuccess: () => addToast("بابەتەکە بە سەرکەوتوویی بڵاوکرایەوە!", "success"),
+      onError: () => addToast("هەڵەیەک ڕوویدا لە بڵاوکردنەوە", "error"),
+    });
   };
 
   return (
-    <div
-      className="min-h-screen bg-[#F8FAFC]  text-slate-900 font-sans pb-20!"
-      dir="rtl"
-    >
+    <div className=" bg-[#020617]! text-white! p-4! md:p-8!" dir="rtl">
       {/* Header Section */}
-      <div className="bg-white border-b border-slate-200 sticky top-0! z-10! py-4! mb-8!">
-        <div className="max-w-5xl! mx-auto px-6! flex justify-between items-center">
-          <h1 className="text-xl font-extrabold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            پنل نویسندگان
-          </h1>
+      <div className="max-w-7xl! mx-auto! flex! flex-col! md:flex-row! justify-between! items-center! gap-4! bg-white/[0.02]! border! border-white/10 p-6! rounded-[2rem]! backdrop-blur-xl!">
+        <div className="flex! items-center! gap-4!">
+          <div className="p-3! bg-indigo-500/10! rounded-2xl! border! border-indigo-500/20">
+            <Sparkles className="text-indigo-400" size={28} />
+          </div>
+          <div>
+            <h1 className="text-2xl! font-black! m-0!">زیادکردنی بابەتێکی نوێ</h1>
+            <p className="text-slate-500! text-sm! mt-1">ناوەڕۆک و زانیارییەکانی بلۆگ لێرەدا بنووسە</p>
+          </div>
+        </div>
+        
+        <div className="flex! items-center! gap-3!">
+          <button className="flex! items-center! gap-2! px-5! py-2.5! rounded-xl! bg-white/5! border! border-white/10 text-slate-300 hover:bg-white/10 transition-all">
+            <Eye size={18} /> پێشاندانی پێشوەختە
+          </button>
           <button
             onClick={handleSubmit}
-            className="flex items-center gap-2! bg-indigo-600 hover:bg-indigo-700 text-white px-6! py-2.5! rounded-full font-medium transition-all shadow-md hover:shadow-indigo-200 active:scale-95"
+            disabled={isPendingBlogPostData}
+            className="flex! items-center! gap-2! bg-indigo-600! hover:bg-indigo-500! text-white! px-8! py-2.5! rounded-xl! font-bold! transition-all shadow-xl shadow-indigo-600/20 active:scale-95"
           >
-            <span>انتشار مقاله</span>
+            {isPendingBlogPostData ? "خەریکی ناردنە..." : <>بڵاوکردنەوە <Send size={18} /></>}
           </button>
         </div>
       </div>
-      <div className="grid  md:grid-cols-12  ">
-        <div className=" md:col-span-10! mx-auto md:px-2! grid grid-cols-1 gap-4!">
-          {/* Main Content Area */}
-          <div className="space-y-4!">
-            {/* Title Input */}
-            <div className="group">
-              <input
-                type="text"
-                placeholder="عنوان جذاب مقاله شما..."
-                className="w-full bg-transparent text-xl! font-black border-none focus:ring-0 placeholder:text-slate-300 transition-colors"
-                value={BlogData.titleBlog}
-                onChange={(e) =>
-                  setBlogData({ ...BlogData, titleBlog: e.target.value })
-                }
-              />
-              <div className="h-0.5! w-20! bg-indigo-500 group-focus-within:w-full transition-all duration-500 mt-2"></div>
-            </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="p-4! border-b border-slate-100 bg-slate-50 text-slate-700 font-medium">
-                متن مقاله
-              </div>
-
-              <div
-                ref={editorRef}
-                className="text-lg"
-                style={{ height: "450px" }}
-              />
-            </div>
+      <div className="max-w-7xl! mx-auto! grid grid-cols-1! lg:grid-cols-12! gap-8!">
+        {/* Main Editor Area */}
+        <div className="lg:col-span-8! space-y-6!">
+          {/* Title Input */}
+          <div className="relative group">
+            <input
+              type="text"
+              placeholder="ناونیشانی بابەتەکە لێرە بنووسە..."
+              className="w-full! bg-transparent! text-3xl! font-black! border-none! focus:ring-0! placeholder:text-slate-700! text-white! transition-all"
+              value={BlogData.titleBlog}
+              onChange={(e) => setBlogData({ ...BlogData, titleBlog: e.target.value })}
+            />
+            <div className="h-1! w-24! bg-indigo-500! rounded-full! group-focus-within:w-full! transition-all duration-500 mt-2" />
           </div>
 
-          {/* Settings Bar */}
+          {/* Quill Editor Container */}
+          <div className="bg-white/[0.02]! border! border-white/10 rounded-[2.5rem]! overflow-hidden! shadow-2xl! backdrop-blur-md!">
+            <div className="p-4! border-b! border-white/5 bg-white/[0.02]! flex! items-center! gap-2! text-slate-400">
+              <Type size={18} /> ناوەڕۆکی سەرەکی
+            </div>
+            <div ref={editorRef} className="min-h-[500px]! text-white! text-lg!" />
+          </div>
         </div>
 
-        <div className="col-span-2 md:grid-cols-1 flex flex-col gap-2! ">
-          <div className="bg-white p-2! rounded-2xl border border-slate-200 shadow-sm space-y-2! h-40">
-            <div className="flex items-center gap-2 text-indigo-600 font-semibold mb-2!">
-              <Layout size={18} />
-              <span>دسته بندی</span>
+        {/* Sidebar Settings */}
+        <div className="lg:col-span-4! space-y-6!">
+          {/* Category Card */}
+          <div className="bg-white/[0.02]! border! border-white/10 p-6! rounded-[2rem]! backdrop-blur-xl!">
+            <div className="flex! items-center! gap-2! text-indigo-400! font-bold! mb-4!">
+              <Layout size={18} /> پۆلێنکردن
             </div>
             <select
-              className="w-full rounded-xl border-slate-200 bg-slate-50 px-4! py-3! outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none"
+              className="w-full! bg-white/5! border! border-white/10! rounded-xl! p-3! text-slate-300! outline-none! focus:border-indigo-500/50 transition-all"
               value={BlogData.categoryId}
-              onChange={(e) =>
-                setBlogData({ ...BlogData, categoryId: +e.target.value })
-              }
+              onChange={(e) => setBlogData({ ...BlogData, categoryId: Number(e.target.value) })}
             >
-              <option value="">انتخاب کنید</option>
-              <option value="programming">برنامه‌نویسی</option>
-              <option value="design">طراحی</option>
-              <option value="tech">تکنولوژی</option>
+              <option value="0" className="bg-[#0f172a]">هەڵبژێرە</option>
+              <option value="1" className="bg-[#0f172a]">تەکنەلۆژیا</option>
+              <option value="2" className="bg-[#0f172a]">دیزاین</option>
             </select>
           </div>
 
-          <div className="bg-white p-2! rounded-2xl border border-slate-200 shadow-sm space-y-2! h-40">
-            <div className="flex items-center gap-2! text-indigo-600 font-semibold mb-2!">
-              <Tag size={18} />
-              <span>تگ‌ها</span>
+          {/* Tags/Slug Card */}
+          <div className="bg-white/[0.02]! border! border-white/10 p-6! rounded-[2rem]! backdrop-blur-xl!">
+            <div className="flex! items-center! gap-2! text-indigo-400! font-bold! mb-4!">
+              <Tag size={18} /> ناسناو (Slug)
             </div>
             <input
               type="text"
-              className="w-full rounded-xl border-slate-200 bg-slate-50 px-4! py-3! outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-              placeholder="مثلا: react, js, web"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
+              className="w-full! bg-white/5! border! border-white/10! rounded-xl! p-3! text-slate-300! outline-none! focus:border-indigo-500/50 transition-all"
+              placeholder="وەک: my-new-article"
+              value={BlogData.slug}
+              onChange={(e) => setBlogData({ ...BlogData, slug: e.target.value })}
             />
           </div>
-          <div className="relative group">
-            <label className="flex flex-col items-center justify-center w-full h-64! border-2 border-dashed border-slate-200 rounded-3xl bg-white hover:bg-slate-50 hover:border-indigo-300 transition-all cursor-pointer overflow-hidden">
+
+          {/* Featured Image Card */}
+          <div className="bg-white/[0.02]! border! border-white/10 p-2! rounded-[2.5rem]! backdrop-blur-xl!">
+            <label className="relative! flex! flex-col! items-center! justify-center! w-full! h-72! border-2! border-dashed! border-white/10 rounded-[2.3rem]! hover:bg-white/[0.03]! hover:border-indigo-500/50 transition-all cursor-pointer overflow-hidden group">
               {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
+                <>
+                  <img src={imagePreview} alt="Preview" className="w-full! h-full! object-cover!" />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                    <Upload className="text-white" />
+                  </div>
+                </>
               ) : (
-                <div className="flex flex-col items-center justify-center pt-5! pb-6!">
-                  <Upload className="w-10! h-10! text-slate-400 mb-3!" />
-                  <p className="text-sm text-slate-500">
-                    تصویر شاخص را انتخاب کنید
-                  </p>
+                <div className="flex! flex-col! items-center! gap-3!">
+                  <div className="p-4! bg-white/5! rounded-full! text-slate-400">
+                    <ImageIcon size={32} />
+                  </div>
+                  <p className="text-sm! text-slate-500! font-medium">وێنەی سەرەکی بابەت</p>
                 </div>
               )}
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
+              <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
             </label>
           </div>
         </div>
       </div>
-      {/* Global CSS Overrides for Quill */}
+
+      {/* Custom Styling for Dark Quill */}
       <style jsx global>{`
         .ql-toolbar.ql-snow {
           border: none !important;
-          padding: 12px !important;
+          background: rgba(255, 255, 255, 0.02) !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+          padding: 15px !important;
         }
-        .ql-container.ql-snow {
-          border: none !important;
-          font-family: inherit !important;
-        }
-        .ql-editor {
-          padding: 24px !important;
-          line-height: 1.8 !important;
+        .ql-snow .ql-stroke { stroke: #94a3b8 !important; }
+        .ql-snow .ql-fill { fill: #94a3b8 !important; }
+        .ql-snow .ql-picker { color: #94a3b8 !important; }
+        .ql-container.ql-snow { border: none !important; font-family: inherit !important; }
+        .ql-editor { 
+          min-height: 450px !important; 
+          padding: 30px !important; 
+          line-height: 2 !important; 
+          color: #e2e8f0 !important;
         }
         .ql-editor.ql-blank::before {
-          right: 24px !important;
+          right: 30px !important;
           left: auto !important;
+          color: #334155 !important;
           font-style: normal !important;
-          color: #cbd5e1 !important;
+        }
+        .ql-snow .ql-tooltip {
+          background-color: #0f172a !important;
+          color: white !important;
+          border: 1px solid rgba(255,255,255,0.1) !important;
+          border-radius: 8px !important;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
         }
       `}</style>
     </div>

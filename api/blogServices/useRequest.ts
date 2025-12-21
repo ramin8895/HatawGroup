@@ -2,16 +2,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { services, cashKey } from ".";
 
-export const useGetBlogList= (data: { id_dist: any; date?: any }) =>
+export const useGetBlogList= () =>
   useQuery({
     queryKey: [cashKey.getblog],
-    queryFn: () => services.GetBlogList(data),
+    queryFn: () => services.GetBlogList(),
     refetchOnWindowFocus: false,
-    enabled: !!data.id_dist || false,
+    enabled: true,
   });
 
-export const useBlogCreate = (data:Blog) =>
+export const useBlogCreate = () =>
   useMutation({
     mutationKey: [cashKey.updateblog],
-    mutationFn: () => services.CreateBlog(data),
+    mutationFn: (data:Blog) => services.CreateBlog(data),
   });

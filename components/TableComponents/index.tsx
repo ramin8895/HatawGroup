@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, useMemo, useCallback } from "react";
-import { Button } from "antd";
-import { Edit3, Trash2, Search, ChevronRight, ChevronLeft } from "lucide-react"; // آیکون‌های مدرن
+import { Button, ConfigProvider, theme } from "antd";
+import { Edit3, Trash2, Search, ChevronRight, ChevronLeft, Columns, LayoutList } from "lucide-react";
 
 export interface Column<T> {
   label: string;
@@ -68,7 +70,6 @@ const TableComponents = <T,>({
     [rowKeyAccessor]
   );
 
-  // منطق Resizing
   const startResizing = useCallback((e: React.MouseEvent, key: string) => {
     e.stopPropagation();
     setIsResizing(true);
@@ -79,7 +80,7 @@ const TableComponents = <T,>({
 
   const onResizing = useCallback((e: MouseEvent) => {
     if (!isResizing || !resizingColumnKey) return;
-    const deltaX = startX - e.clientX; // معکوس برای RTL
+    const deltaX = startX - e.clientX; 
     setColumnWidths((prev) => ({
       ...prev,
       [resizingColumnKey]: Math.max(80, (prev[resizingColumnKey] || 150) + deltaX),
@@ -91,7 +92,7 @@ const TableComponents = <T,>({
     setIsResizing(false);
     setResizingColumnKey(null);
     document.body.style.cursor = "default";
-  }, [isResizing]);
+  }, []);
 
   React.useEffect(() => {
     document.addEventListener("mousemove", onResizing);
@@ -104,199 +105,197 @@ const TableComponents = <T,>({
 
   const visibleColumnAccessors = columns.filter((col) => visibleColumns[col.accessor as string]);
   const hasActionsColumn = onEdit || onDelete;
-  const selectedRowData = filteredData.find((row) => row[rowKeyAccessor] === selectedRowKey);
+  const selectedRowData = data.find((row) => row[rowKeyAccessor] === selectedRowKey);
 
   return (
-    <div className="p-6! bg-slate-50/50 rounded-[2.5rem]! border border-slate-200/60 shadow-2xl shadow-slate-200/50" dir="rtl">
-      
-      {/* Header Toolbar */}
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-6! mb-8!">
-        {/* Modern Search */}
-        <div className="relative w-full lg:max-w-md group">
-          <div className="absolute inset-y-0 right-0 pr-4! flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
-          </div>
-          <input
-            type="text"
-            placeholder="جستجو در اطلاعات جدول..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white border-0 ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 rounded-2xl! p-4! pr-12! shadow-sm transition-all outline-none text-slate-600 placeholder:text-slate-400"
-          />
-        </div>
-
-        {/* Global Actions */}
-        <div className="flex items-center gap-3! w-full lg:w-auto justify-center">
-          {hasActionsColumn && (
-            <>
-              <Button
-                type="primary"
-                danger
-                icon={<Trash2 size={16} />}
-                disabled={!selectedRowKey || !onDelete}
-                onClick={() => onDelete && selectedRowData && onDelete(selectedRowData)}
-                className="h-12! px-6! rounded-xl! border-0! shadow-lg shadow-red-100! flex items-center gap-2!"
-              >
-                حذف انتخاب شده
-              </Button>
-              <Button
-                icon={<Edit3 size={16} />}
-                disabled={!selectedRowKey || !onEdit}
-                onClick={() => onEdit && selectedRowData && onEdit(selectedRowData)}
-                className="h-12! px-6! rounded-xl! border-slate-200! shadow-sm flex items-center gap-2!"
-              >
-                ویرایش
-              </Button>
-            </>
-          )}
+    <ConfigProvider theme={{ algorithm: theme.darkAlgorithm, token: { colorPrimary: "#6366f1" } }}>
+      <div className="p-4! bg-[#020617]! min-h-screen!" dir="rtl">
+        <div className="max-w-[1600px]! mx-auto!">
           
-          <select
-            value={pageSize}
-            onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
-            className="h-12! px-4! bg-white border border-slate-200 rounded-xl! text-slate-600 outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-          >
-            {[10, 20, 50].map(size => <option key={size} value={size}>{size} ردیف</option>)}
-          </select>
-        </div>
-      </div>
+          {/* Top Toolbar */}
+          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-4! mb-6! p-4! bg-white/[0.02]! border! border-white/10 rounded-2xl! backdrop-blur-md">
+            
+            {/* Search Input */}
+            <div className="relative w-full lg:max-w-md group">
+              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <input
+                type="text"
+                placeholder="گەڕان لەناو زانیارییەکان..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-black/40! border! border-white/10 focus:border-indigo-500/50 rounded-xl! py-2.5! pr-11! pl-4! outline-none text-sm text-slate-200 transition-all shadow-inner"
+              />
+            </div>
 
-      {/* Column Chips */}
-      <div className="flex flex-wrap gap-2! mb-6! p-2! bg-slate-100/50 rounded-2xl!">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3! py-2!">نمایش ستون‌ها:</span>
-        {columns.map((col) => (
-          <button
-            key={String(col.accessor)}
-            onClick={() => toggleColumn(col.accessor)}
-            className={`px-4! py-1.5! rounded-xl! text-xs font-semibold transition-all duration-300 ${
-              visibleColumns[col.accessor as string]
-                ? "bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100"
-                : "text-slate-400 hover:text-slate-600"
-            }`}
-          >
-            {col.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Table Container */}
-      <div className="bg-white rounded-[1.5rem]! border border-slate-200 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200">
-                {visibleColumnAccessors.map((col) => (
-                  <th
-                    key={String(col.accessor)}
-                    style={{ width: columnWidths[String(col.accessor)] || 'auto' }}
-                    className="p-5! text-right text-sm font-bold text-slate-600 relative group"
+            {/* Actions & Pagination Controls */}
+            <div className="flex! items-center! gap-3! w-full lg:w-auto">
+              {hasActionsColumn && (
+                <div className="flex! gap-2! border-l! border-white/10 pl-4!">
+                  <Button
+                    danger
+                    icon={<Trash2 size={16} />}
+                    disabled={!selectedRowKey}
+                    onClick={() => onDelete && selectedRowData && onDelete(selectedRowData)}
+                    className="h-10! rounded-lg! border-red-500/20! bg-red-500/10! hover:bg-red-500/20!"
                   >
-                    {col.label}
-                    <div
-                      onMouseDown={(e) => startResizing(e, String(col.accessor))}
-                      className="resizer absolute left-0 top-0 bottom-0 w-1! cursor-col-resize hover:bg-indigo-400 transition-colors"
-                    />
-                  </th>
-                ))}
-                {hasActionsColumn && (
-                  <th className="p-5! text-center text-sm font-bold text-slate-600 bg-slate-50/80 sticky left-0 border-r border-slate-200">
-                    عملیات
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {paginatedData.length > 0 ? (
-                paginatedData.map((row) => {
-                  const isSelected = row[rowKeyAccessor] === selectedRowKey;
-                  return (
-                    <tr
-                      key={row[rowKeyAccessor] as string}
-                      onClick={() => handleRowClick(row)}
-                      className={`group transition-all duration-200 cursor-pointer ${
-                        isSelected ? "bg-indigo-50/40" : "hover:bg-slate-50/80"
-                      }`}
-                    >
-                      {visibleColumnAccessors.map((col) => (
-                        <td key={String(col.accessor)} className="p-5! text-sm text-slate-600 whitespace-nowrap">
-                          {String(row[col.accessor])}
-                        </td>
-                      ))}
-                      {hasActionsColumn && (
-                        <td className="p-3! text-center sticky left-0 bg-white group-hover:bg-slate-50 transition-colors border-r border-slate-100">
-                          <div className="flex gap-1! justify-center">
-                            {onEdit && (
-                              <Button 
-                                type="text" 
-                                icon={<Edit3 size={16} className="text-indigo-500" />} 
-                                onClick={(e) => { e.stopPropagation(); onEdit(row); }}
-                                className="hover:bg-indigo-50! rounded-lg!"
-                              />
-                            )}
-                            {onDelete && (
-                              <Button 
-                                type="text" 
-                                danger
-                                icon={<Trash2 size={16} />} 
-                                onClick={(e) => { e.stopPropagation(); onDelete(row); }}
-                                className="hover:bg-red-50! rounded-lg!"
-                              />
-                            )}
-                          </div>
-                        </td>
-                      )}
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={100} className="p-20! text-center">
-                    <div className="flex flex-col items-center gap-2!">
-                      <span className="text-slate-400 font-medium text-lg!">هیچ اطلاعاتی یافت نشد</span>
-                      <span className="text-slate-300 text-sm!">دوباره جستجو کنید یا فیلترها را تغییر دهید</span>
-                    </div>
-                  </td>
-                </tr>
+                    حذف
+                  </Button>
+                  <Button
+                    icon={<Edit3 size={16} />}
+                    disabled={!selectedRowKey}
+                    onClick={() => onEdit && selectedRowData && onEdit(selectedRowData)}
+                    className="h-10! rounded-lg! border-indigo-500/20! bg-indigo-500/10!"
+                  >
+                    دەستکاری
+                  </Button>
+                </div>
               )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4! mt-8! px-2!">
-        <div className="text-sm text-slate-400 font-medium">
-          نمایش <span className="text-slate-700">{(currentPage - 1) * pageSize + 1}</span> تا <span className="text-slate-700">{Math.min(currentPage * pageSize, filteredData.length)}</span> از <span className="text-slate-700">{filteredData.length}</span> مورد
-        </div>
-        
-        <div className="flex items-center gap-2!">
-          <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="p-2.5! rounded-xl! border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-          >
-            <ChevronRight size={20} className="text-slate-600" />
-          </button>
-          
-          <div className="flex items-center gap-1!">
-            <span className="bg-indigo-600 text-white px-4! py-2! rounded-xl! font-bold shadow-md shadow-indigo-100">
-              {currentPage}
-            </span>
-            <span className="px-2! text-slate-400 font-bold">از</span>
-            <span className="bg-white border border-slate-200 text-slate-600 px-4! py-2! rounded-xl! font-bold">
-              {totalPages}
-            </span>
+              
+              <select
+                value={pageSize}
+                onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
+                className="h-10! px-3! bg-black/40! border! border-white/10 rounded-lg! text-xs text-slate-300 outline-none cursor-pointer"
+              >
+                {[10, 20, 50].map(size => <option key={size} value={size}>{size} دانە</option>)}
+              </select>
+            </div>
           </div>
 
-          <button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="p-2.5! rounded-xl! border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-          >
-            <ChevronLeft size={20} className="text-slate-600" />
-          </button>
+          {/* Column Toggle Area */}
+          <div className="flex! flex-wrap! gap-2! mb-4! px-1!">
+             <div className="flex! items-center! gap-2! text-slate-500! text-[10px]! font-bold! uppercase! ml-2!">
+                <Columns size={12} /> ستونەکان:
+             </div>
+            {columns.map((col) => (
+              <button
+                key={String(col.accessor)}
+                onClick={() => toggleColumn(col.accessor)}
+                className={`px-3! py-1! rounded-lg! text-[11px] font-medium transition-all ${
+                  visibleColumns[col.accessor as string]
+                    ? "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30"
+                    : "bg-white/5 text-slate-500 border border-white/5 hover:bg-white/10"
+                }`}
+              >
+                {col.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Main Table */}
+          <div className="bg-white/[0.02]! border! border-white/10 rounded-2xl! overflow-hidden shadow-2xl backdrop-blur-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full! border-collapse!">
+                <thead>
+                  <tr className="bg-white/[0.03]! border-b! border-white/10">
+                    {visibleColumnAccessors.map((col) => (
+                      <th
+                        key={String(col.accessor)}
+                        style={{ width: columnWidths[String(col.accessor)] || 'auto' }}
+                        className="p-4! text-right text-xs font-bold text-slate-400 uppercase tracking-wider relative group"
+                      >
+                        {col.label}
+                        <div
+                          onMouseDown={(e) => startResizing(e, String(col.accessor))}
+                          className="absolute left-0 top-1/4 bottom-1/4 w-0.5! bg-indigo-500/0 group-hover:bg-indigo-500/40 cursor-col-resize transition-all"
+                        />
+                      </th>
+                    ))}
+                    {hasActionsColumn && (
+                      <th className="p-4! text-center text-xs font-bold text-slate-400 bg-black/40! border-r! border-white/10 sticky left-0 shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.5)]">
+                        کردارەکان
+                      </th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody className="divide-y! divide-white/5">
+                  {paginatedData.length > 0 ? (
+                    paginatedData.map((row) => {
+                      const isSelected = row[rowKeyAccessor] === selectedRowKey;
+                      return (
+                        <tr
+                          key={String(row[rowKeyAccessor])}
+                          onClick={() => handleRowClick(row)}
+                          className={`group transition-colors cursor-pointer ${
+                            isSelected ? "bg-indigo-500/10" : "hover:bg-white/[0.02]"
+                          }`}
+                        >
+                          {visibleColumnAccessors.map((col) => (
+                            <td key={String(col.accessor)} className="p-4! text-sm text-slate-300 whitespace-nowrap">
+                              {String(row[col.accessor])}
+                            </td>
+                          ))}
+                          {hasActionsColumn && (
+                            <td className="p-2! text-center sticky left-0 bg-[#0a0f1e]! border-r! border-white/10 shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.5)]">
+                              <div className="flex! gap-1! justify-center">
+                                <Button 
+                                  type="text" 
+                                  size="small"
+                                  icon={<Edit3 size={14} className="text-indigo-400" />} 
+                                  onClick={(e) => { e.stopPropagation(); onEdit?.(row); }}
+                                  className="hover:bg-indigo-500/20!"
+                                />
+                                <Button 
+                                  type="text" 
+                                  size="small"
+                                  danger
+                                  icon={<Trash2 size={14} />} 
+                                  onClick={(e) => { e.stopPropagation(); onDelete?.(row); }}
+                                  className="hover:bg-red-500/20!"
+                                />
+                              </div>
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan={100} className="p-20! text-center">
+                        <LayoutList className="mx-auto! mb-4! text-slate-700" size={48} />
+                        <div className="text-slate-500 font-medium">هیچ داتایەک نەدۆزرایەوە</div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Pagination Footer */}
+          <div className="flex! flex-col! sm:flex-row! justify-between! items-center! gap-4! mt-6! px-2!">
+            <div className="text-xs! text-slate-500! font-medium">
+              نیشاندان <span className="text-indigo-400">{(currentPage - 1) * pageSize + 1}</span> بۆ <span className="text-indigo-400">{Math.min(currentPage * pageSize, filteredData.length)}</span> لە <span className="text-indigo-400">{filteredData.length}</span> تۆمار
+            </div>
+            
+            <div className="flex! items-center! gap-2!">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-2! rounded-lg! border! border-white/10 bg-white/5 text-slate-400 hover:text-white disabled:opacity-20 transition-all"
+              >
+                <ChevronRight size={18} />
+              </button>
+              
+              <div className="flex! items-center! gap-1!">
+                <span className="bg-indigo-600! text-white! px-3! py-1! rounded-lg! text-xs font-bold">
+                  {currentPage}
+                </span>
+                <span className="text-slate-600 px-1">/</span>
+                <span className="text-slate-400 text-xs">{totalPages}</span>
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-2! rounded-lg! border! border-white/10 bg-white/5 text-slate-400 hover:text-white disabled:opacity-20 transition-all"
+              >
+                <ChevronLeft size={18} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ConfigProvider>
   );
 };
 
