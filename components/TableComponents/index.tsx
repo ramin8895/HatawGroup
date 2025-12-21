@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { Button } from "antd"; // اضافه کردن Button از Ant Design برای Actions
+import { Button } from "antd";
+import { Edit3, Trash2, Search, ChevronRight, ChevronLeft } from "lucide-react"; // آیکون‌های مدرن
 
-// Fully typed column model
 export interface Column<T> {
   label: string;
   accessor: keyof T;
@@ -10,8 +10,7 @@ export interface Column<T> {
 interface TableComponentsProps<T> {
   data: T[];
   columns: Column<T>[];
-  // --- New Props for Selection & Actions ---
-  rowKeyAccessor: keyof T; // کلید منحصر به فرد سطر (مثلاً 'key' یا 'id')
+  rowKeyAccessor: keyof T;
   onEdit?: (rowData: T) => void;
   onDelete?: (rowData: T) => void;
 }
@@ -26,20 +25,10 @@ const TableComponents = <T,>({
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
-  // State for row selection (New)
-  const [selectedRowKey, setSelectedRowKey] = useState<string | number | null>(
-    null
-  );
-
-  // State for column resizing
-  const [columnWidths, setColumnWidths] = useState<
-    Record<string, number | undefined>
-  >({});
+  const [selectedRowKey, setSelectedRowKey] = useState<string | number | null>(null);
+  const [columnWidths, setColumnWidths] = useState<Record<string, number | undefined>>({});
   const [isResizing, setIsResizing] = useState(false);
-  const [resizingColumnKey, setResizingColumnKey] = useState<string | null>(
-    null
-  );
+  const [resizingColumnKey, setResizingColumnKey] = useState<string | null>(null);
   const [startX, setStartX] = useState(0);
 
   const [visibleColumns, setVisibleColumns] = useState(() =>
@@ -49,7 +38,6 @@ const TableComponents = <T,>({
     }, {} as Record<string, boolean>)
   );
 
-  // Search filter
   const filteredData = useMemo(() => {
     setCurrentPage(1);
     return data.filter((row: any) =>
@@ -59,8 +47,7 @@ const TableComponents = <T,>({
     );
   }, [data, search]);
 
-  // Pagination
-  const totalPages = Math.ceil(filteredData.length / pageSize);
+  const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     return filteredData.slice(start, start + pageSize);
@@ -73,359 +60,244 @@ const TableComponents = <T,>({
     }));
   };
 
-  // --- Row Selection Handler ---
   const handleRowClick = useCallback(
     (row: T) => {
       const currentKey = row[rowKeyAccessor] as string | number;
-      setSelectedRowKey((prevKey) =>
-        prevKey === currentKey ? null : currentKey
-      );
+      setSelectedRowKey((prevKey) => (prevKey === currentKey ? null : currentKey));
     },
     [rowKeyAccessor]
   );
 
-  // --- Resizing Handlers ---
+  // منطق Resizing
   const startResizing = useCallback((e: React.MouseEvent, key: string) => {
     e.stopPropagation();
-    if (!(e.target as HTMLElement).classList.contains("resizer")) return;
-
     setIsResizing(true);
     setResizingColumnKey(key);
     setStartX(e.clientX);
     document.body.style.cursor = "col-resize";
   }, []);
 
-  const onResizing = useCallback(
-    (e: MouseEvent) => {
-      if (!isResizing || !resizingColumnKey) return;
-
-      const deltaX = e.clientX - startX;
-
-      setColumnWidths((prev) => {
-        const currentWidth = prev[resizingColumnKey] || 150;
-        const newWidth = Math.max(50, currentWidth + deltaX);
-
-        return {
-          ...prev,
-          [resizingColumnKey]: newWidth,
-        };
-      });
-      setStartX(e.clientX);
-    },
-    [isResizing, resizingColumnKey, startX]
-  );
+  const onResizing = useCallback((e: MouseEvent) => {
+    if (!isResizing || !resizingColumnKey) return;
+    const deltaX = startX - e.clientX; // معکوس برای RTL
+    setColumnWidths((prev) => ({
+      ...prev,
+      [resizingColumnKey]: Math.max(80, (prev[resizingColumnKey] || 150) + deltaX),
+    }));
+    setStartX(e.clientX);
+  }, [isResizing, resizingColumnKey, startX]);
 
   const stopResizing = useCallback(() => {
-    if (isResizing) {
-      setIsResizing(false);
-      setResizingColumnKey(null);
-      document.body.style.cursor = "default";
-    }
+    setIsResizing(false);
+    setResizingColumnKey(null);
+    document.body.style.cursor = "default";
   }, [isResizing]);
 
   React.useEffect(() => {
     document.addEventListener("mousemove", onResizing);
     document.addEventListener("mouseup", stopResizing);
-
     return () => {
       document.removeEventListener("mousemove", onResizing);
       document.removeEventListener("mouseup", stopResizing);
     };
   }, [onResizing, stopResizing]);
 
-  // پیدا کردن کلید آخرین ستون قابل مشاهده
-  const visibleColumnAccessors = columns
-    .filter((col) => visibleColumns[col.accessor as string])
-    .map((col) => String(col.accessor));
-
-  const lastVisibleColumnAccessor =
-    visibleColumnAccessors[visibleColumnAccessors.length - 1];
-
-  // بررسی وجود ستون عملیات
+  const visibleColumnAccessors = columns.filter((col) => visibleColumns[col.accessor as string]);
   const hasActionsColumn = onEdit || onDelete;
+  const selectedRowData = filteredData.find((row) => row[rowKeyAccessor] === selectedRowKey);
 
-  // سطر انتخاب شده برای استفاده در Actions
-  const selectedRowData = filteredData.find(
-    (row) => row[rowKeyAccessor] === selectedRowKey
-  );
-
-return (
-  <div className="p-8! bg-white rounded-3xl shadow-lg" dir="rtl">
-    {/* Search + Actions + PageSize */}
-    <div className="flex flex-col md:flex-row justify-between gap-4 mb-8!">
-      {/* Search Input */}
-      <div className="relative w-full md:w-1/3">
-        <input
-          type="text"
-          placeholder="گەڕان لە نێوان هەموو ستوونەکان..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
-                     rounded-xl p-3! pl-10 w-full transition outline-none bg-gray-50/70"
-        />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+  return (
+    <div className="p-6! bg-slate-50/50 rounded-[2.5rem]! border border-slate-200/60 shadow-2xl shadow-slate-200/50" dir="rtl">
+      
+      {/* Header Toolbar */}
+      <div className="flex flex-col lg:flex-row justify-between items-center gap-6! mb-8!">
+        {/* Modern Search */}
+        <div className="relative w-full lg:max-w-md group">
+          <div className="absolute inset-y-0 right-0 pr-4! flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+          </div>
+          <input
+            type="text"
+            placeholder="جستجو در اطلاعات جدول..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full bg-white border-0 ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 rounded-2xl! p-4! pr-12! shadow-sm transition-all outline-none text-slate-600 placeholder:text-slate-400"
           />
-        </svg>
+        </div>
+
+        {/* Global Actions */}
+        <div className="flex items-center gap-3! w-full lg:w-auto justify-center">
+          {hasActionsColumn && (
+            <>
+              <Button
+                type="primary"
+                danger
+                icon={<Trash2 size={16} />}
+                disabled={!selectedRowKey || !onDelete}
+                onClick={() => onDelete && selectedRowData && onDelete(selectedRowData)}
+                className="h-12! px-6! rounded-xl! border-0! shadow-lg shadow-red-100! flex items-center gap-2!"
+              >
+                حذف انتخاب شده
+              </Button>
+              <Button
+                icon={<Edit3 size={16} />}
+                disabled={!selectedRowKey || !onEdit}
+                onClick={() => onEdit && selectedRowData && onEdit(selectedRowData)}
+                className="h-12! px-6! rounded-xl! border-slate-200! shadow-sm flex items-center gap-2!"
+              >
+                ویرایش
+              </Button>
+            </>
+          )}
+          
+          <select
+            value={pageSize}
+            onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
+            className="h-12! px-4! bg-white border border-slate-200 rounded-xl! text-slate-600 outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          >
+            {[10, 20, 50].map(size => <option key={size} value={size}>{size} ردیف</option>)}
+          </select>
+        </div>
       </div>
 
-      {/* Actions */}
-      {hasActionsColumn && (
-        <div className="flex gap-3 items-center">
-          <Button
-            type="primary"
-            danger
-            ghost
-            disabled={!selectedRowKey || !onDelete}
-            onClick={() =>
-              onDelete && selectedRowData && onDelete(selectedRowData)
-            }
-            className="font-medium rounded-xl border-red-500 hover:border-red-600! hover:text-red-600! transition"
-          >
-            سڕینەوە
-          </Button>
-
-          <Button
-            type="primary"
-            ghost
-            disabled={!selectedRowKey || !onEdit}
-            onClick={() =>
-              onEdit && selectedRowData && onEdit(selectedRowData)
-            }
-            className="border-indigo-500 text-indigo-500 hover:border-indigo-600! hover:text-indigo-600! font-medium rounded-xl transition"
-          >
-            دەستکاری
-          </Button>
-
-          {selectedRowKey && (
-            <span className="text-sm text-indigo-500 mr-2! font-semibold">
-              یەک ڕیز هەڵبژێردراوە
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* PageSize */}
-      <select
-        value={pageSize}
-        onChange={(e) => {
-          setPageSize(Number(e.target.value));
-          setCurrentPage(1);
-        }}
-        className="border border-gray-300 rounded-xl p-3! bg-gray-50/70
-                   focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition outline-none w-full md:w-auto"
-      >
-        {[5, 10, 20, 50].map((size) => (
-          <option key={size} value={size}>
-            {size} ئایتم لە پەڕەیەک
-          </option>
-        ))}
-      </select>
-    </div>
-
-    {/* Column toggles */}
-    <div className="flex flex-wrap gap-3 !mb-8 !p-4 bg-gray-50 rounded-xl border border-gray-200">
-      <span className="text-sm font-semibold text-gray-700 self-center !ml-2">
-        پیشاندانی ستوونەکان:
-      </span>
-      {columns.map((col) => (
-        <label
-          key={String(col.accessor)}
-          className={`flex items-center gap-2 !px-4 !py-2 rounded-full text-sm font-medium transition duration-200 cursor-pointer 
-            ${
+      {/* Column Chips */}
+      <div className="flex flex-wrap gap-2! mb-6! p-2! bg-slate-100/50 rounded-2xl!">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3! py-2!">نمایش ستون‌ها:</span>
+        {columns.map((col) => (
+          <button
+            key={String(col.accessor)}
+            onClick={() => toggleColumn(col.accessor)}
+            className={`px-4! py-1.5! rounded-xl! text-xs font-semibold transition-all duration-300 ${
               visibleColumns[col.accessor as string]
-                ? "bg-indigo-600 text-white shadow-md"
-                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                ? "bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100"
+                : "text-slate-400 hover:text-slate-600"
             }`}
-        >
-          <input
-            type="checkbox"
-            checked={visibleColumns[col.accessor as string]}
-            onChange={() => toggleColumn(col.accessor)}
-            className="hidden"
-          />
-          {col.label}
-        </label>
-      ))}
-    </div>
+          >
+            {col.label}
+          </button>
+        ))}
+      </div>
 
-    {/* Table */}
-    <div className="overflow-x-auto rounded-xl">
-      <table className="w-full border-collapse table-fixed">
-        <thead className="bg-white sticky top-0 z-10 border-b border-gray-300 shadow-sm">
-          <tr>
-            {columns.map(
-              (col) =>
-                visibleColumns[col.accessor as string] && (
+      {/* Table Container */}
+      <div className="bg-white rounded-[1.5rem]! border border-slate-200 overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-slate-50/80 border-b border-slate-200">
+                {visibleColumnAccessors.map((col) => (
                   <th
                     key={String(col.accessor)}
-                    style={{
-                      width: columnWidths[String(col.accessor)],
-                      minWidth: "100px",
-                      borderLeft: "1px solid #E5E7EB",
-                    }}
-                    className="!p-3 text-right font-semibold text-gray-700 tracking-wider relative group text-sm"
+                    style={{ width: columnWidths[String(col.accessor)] || 'auto' }}
+                    className="p-5! text-right text-sm font-bold text-slate-600 relative group"
                   >
                     {col.label}
-                    {String(col.accessor) !== lastVisibleColumnAccessor && (
-                      <div
-                        onMouseDown={(e) =>
-                          startResizing(e, String(col.accessor))
-                        }
-                        className={`resizer absolute top-0 bottom-0 left-0 w-[3px] transition-colors z-20 
-                          ${
-                            isResizing &&
-                            resizingColumnKey === String(col.accessor)
-                              ? "bg-gray-400"
-                              : "bg-transparent hover:bg-gray-300"
-                          }`}
-                      />
-                    )}
+                    <div
+                      onMouseDown={(e) => startResizing(e, String(col.accessor))}
+                      className="resizer absolute left-0 top-0 bottom-0 w-1! cursor-col-resize hover:bg-indigo-400 transition-colors"
+                    />
                   </th>
-                )
-            )}
-
-            {hasActionsColumn && (
-              <th
-                className="!p-3 text-center font-semibold text-gray-700 sticky right-0 bg-white shadow-sm border-b border-gray-300"
-                style={{ width: "150px" }}
-              >
-                کردارەکان
-              </th>
-            )}
-          </tr>
-        </thead>
-
-        <tbody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row, i) => {
-              const rowKey = row[rowKeyAccessor] as string | number;
-              const isSelected = rowKey === selectedRowKey;
-
-              return (
-                <tr
-                  key={i}
-                  onClick={() => handleRowClick(row)}
-                  className={`cursor-pointer transition-colors border-b border-gray-100
-                    ${
-                      isSelected
-                        ? "bg-indigo-50/70"
-                        : "bg-white hover:bg-gray-50"
-                    }`}
-                >
-                  {columns.map(
-                    (col) =>
-                      visibleColumns[col.accessor as string] && (
-                        <td
-                          key={String(col.accessor)}
-                          className="!p-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis border-r border-gray-100 text-sm"
-                          style={{
-                            width: columnWidths[String(col.accessor)],
-                            minWidth: "100px",
-                          }}
-                        >
+                ))}
+                {hasActionsColumn && (
+                  <th className="p-5! text-center text-sm font-bold text-slate-600 bg-slate-50/80 sticky left-0 border-r border-slate-200">
+                    عملیات
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {paginatedData.length > 0 ? (
+                paginatedData.map((row) => {
+                  const isSelected = row[rowKeyAccessor] === selectedRowKey;
+                  return (
+                    <tr
+                      key={row[rowKeyAccessor] as string}
+                      onClick={() => handleRowClick(row)}
+                      className={`group transition-all duration-200 cursor-pointer ${
+                        isSelected ? "bg-indigo-50/40" : "hover:bg-slate-50/80"
+                      }`}
+                    >
+                      {visibleColumnAccessors.map((col) => (
+                        <td key={String(col.accessor)} className="p-5! text-sm text-slate-600 whitespace-nowrap">
                           {String(row[col.accessor])}
                         </td>
-                      )
-                  )}
-
-                  {hasActionsColumn && (
-                    <td className="p-2! text-center sticky right-0 bg-white/70 border-b border-gray-100">
-                      <div className="flex gap-2 justify-center">
-                        {onEdit && (
-                          <Button
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onEdit(row);
-                            }}
-                            type="default"
-                            className="border-indigo-400! text-indigo-600 hover:bg-indigo-50! transition"
-                          >
-                            دەستکاری
-                          </Button>
-                        )}
-
-                        {onDelete && (
-                          <Button
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDelete(row);
-                            }}
-                            type="default"
-                            danger
-                            ghost
-                            className="border-red-400! text-red-600 hover:bg-red-50! transition"
-                          >
-                            سڕینەوە
-                          </Button>
-                        )}
-                      </div>
-                    </td>
-                  )}
+                      ))}
+                      {hasActionsColumn && (
+                        <td className="p-3! text-center sticky left-0 bg-white group-hover:bg-slate-50 transition-colors border-r border-slate-100">
+                          <div className="flex gap-1! justify-center">
+                            {onEdit && (
+                              <Button 
+                                type="text" 
+                                icon={<Edit3 size={16} className="text-indigo-500" />} 
+                                onClick={(e) => { e.stopPropagation(); onEdit(row); }}
+                                className="hover:bg-indigo-50! rounded-lg!"
+                              />
+                            )}
+                            {onDelete && (
+                              <Button 
+                                type="text" 
+                                danger
+                                icon={<Trash2 size={16} />} 
+                                onClick={(e) => { e.stopPropagation(); onDelete(row); }}
+                                className="hover:bg-red-50! rounded-lg!"
+                              />
+                            )}
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={100} className="p-20! text-center">
+                    <div className="flex flex-col items-center gap-2!">
+                      <span className="text-slate-400 font-medium text-lg!">هیچ اطلاعاتی یافت نشد</span>
+                      <span className="text-slate-300 text-sm!">دوباره جستجو کنید یا فیلترها را تغییر دهید</span>
+                    </div>
+                  </td>
                 </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td
-                colSpan={
-                  visibleColumnAccessors.length + (hasActionsColumn ? 1 : 0)
-                }
-                className="!p-4 text-center text-gray-500"
-              >
-                هیچ داتایەک نییە بۆ پیشاندان
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4! mt-8! px-2!">
+        <div className="text-sm text-slate-400 font-medium">
+          نمایش <span className="text-slate-700">{(currentPage - 1) * pageSize + 1}</span> تا <span className="text-slate-700">{Math.min(currentPage * pageSize, filteredData.length)}</span> از <span className="text-slate-700">{filteredData.length}</span> مورد
+        </div>
+        
+        <div className="flex items-center gap-2!">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="p-2.5! rounded-xl! border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronRight size={20} className="text-slate-600" />
+          </button>
+          
+          <div className="flex items-center gap-1!">
+            <span className="bg-indigo-600 text-white px-4! py-2! rounded-xl! font-bold shadow-md shadow-indigo-100">
+              {currentPage}
+            </span>
+            <span className="px-2! text-slate-400 font-bold">از</span>
+            <span className="bg-white border border-slate-200 text-slate-600 px-4! py-2! rounded-xl! font-bold">
+              {totalPages}
+            </span>
+          </div>
+
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="p-2.5! rounded-xl! border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronLeft size={20} className="text-slate-600" />
+          </button>
+        </div>
+      </div>
     </div>
-
-    {/* Pagination */}
-    <div className="flex flex-col md:flex-row justify-center items-center gap-4 !mt-8">
-      <button
-        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-        className="flex items-center gap-2 !px-5 !py-2 rounded-xl border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-100
-                   disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
-      >
-        پێشوو
-      </button>
-
-      <span className="text-gray-600 font-medium text-lg">
-        پەڕە {currentPage} لە {totalPages}
-      </span>
-
-      <span className="text-sm text-gray-500 hidden sm:block">
-        ({filteredData.length} تۆمار)
-      </span>
-
-      <button
-        onClick={() =>
-          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-        }
-        disabled={currentPage === totalPages}
-        className="flex items-center gap-2 !px-5 !py-2 rounded-xl border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-100
-                   disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
-      >
-        دواتر
-      </button>
-    </div>
-  </div>
-);
-
+  );
 };
 
 export default TableComponents;

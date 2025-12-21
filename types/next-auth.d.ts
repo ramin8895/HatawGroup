@@ -6,6 +6,7 @@ declare module "next-auth" {
     username?: string;
     avatar?: string;
     backendToken?: string;
+    data?: any;
   }
 
   interface Session {
@@ -24,5 +25,6 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     backendToken?: string;
+    data?: any;
   }
 }

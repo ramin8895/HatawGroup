@@ -6,10 +6,10 @@ import axios from "axios";
 // import { apiurl } from "../Config";
 import http from "../HttpServices";
 
-export const GetCurrentReservations = async (data) => {
+export const GetBlogList = async (data) => {
   console.log(data);
   return await http.get(
-    `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/takeTurn`,
+    `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/HatawBlog/HatawBlogList`,
     {
       params: {
         id_dist: data.id_dist,
@@ -18,10 +18,10 @@ export const GetCurrentReservations = async (data) => {
     }
   );
 };
-export const PutCurrentReservations = async (data) => {
+export const CreateBlog = async (data) => {
   console.log(data, "data");
   return await http.put(
-    `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/takeTurn`,
+    `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/HatawBlog/BlogAdd`,
     data
   );
 };

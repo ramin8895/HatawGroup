@@ -60,13 +60,14 @@ const handler = NextAuth({
 
         const data = await res.data;
         console.log(res.data);
-        
+
         return {
           id: data.userId || data.id,
           name: data.name,
           email: data.email,
           phonenumber: data.phonenumber,
           backendToken: data.userToken,
+          data: data,
         };
       },
     }),
@@ -109,13 +110,16 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user?.backendToken) {
         token.backendToken = user.backendToken;
+        token.data = user.data;
       }
       return token;
     },
 
     async session({ session, token }) {
+      console.log(session.user + "++++" + token)
       if (token?.backendToken) {
         session.backendToken = token.backendToken;
+        
       }
       return session;
     },

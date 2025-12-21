@@ -95,7 +95,7 @@ const LayoutComponentDashbord = ({
       children: [
         { key: "dashboard/blog", label: "بابەتەکان" },
         { key: "dashboard/blog/add-blog", label: "زیادکردنی بابەت" },
-        { key: "dashboard/blog/categories-blog", label: "هاوپۆلەکان" },
+        { key: "dashboard/blog/category", label: "هاوپۆلەکان" },
         { key: "dashboard/blog/tags-blog", label: "تاگەکان" },
         { key: "dashboard/blog/comments", label: "کۆمێنتەکان" },
       ],

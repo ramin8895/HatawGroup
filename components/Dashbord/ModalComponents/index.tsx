@@ -9,12 +9,17 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const ModalComponents: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const ModalComponents: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+}) => {
   return (
-    <AnimatePresence >
+    <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 w-full z-50 flex items-center justify-center"
+          className="fixed inset-0 w-full z-50 flex items-center justify-center p-4" // Added p-4 to prevent touching edges on mobile
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -27,29 +32,32 @@ const ModalComponents: React.FC<ModalProps> = ({ isOpen, onClose, title, childre
 
           {/* Modal Box */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
+            dir="rtl" // Enforces Persian Right-to-Left Layout
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="relative z-10 w-full max-w-6xl rounded-2xl bg-white p-6 shadow-xl"
+            className="relative z-10 w-full max-w-2xl rounded-xl bg-white shadow-2xl overflow-hidden" // Changed max-w-6xl to max-w-2xl for better form aesthetic
           >
             {/* Header */}
-            <div className="mb-4! w-full flex items-center justify-between">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
               {title && (
-                <h2 className="text-lg font-semibold text-gray-800">
+                <h2 className="text-lg font-bold text-gray-800">
                   {title}
                 </h2>
               )}
               <button
                 onClick={onClose}
-                className="rounded-full p-1 text-gray-500 hover:bg-gray-100"
+                className="rounded-full p-2 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors duration-200"
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* Content */}
-            <div className="text-sm text-gray-700">{children}</div>
+            <div className="p-6 text-sm text-gray-700">
+                {children}
+            </div>
           </motion.div>
         </motion.div>
       )}
