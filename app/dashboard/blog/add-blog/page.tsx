@@ -5,19 +5,30 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { Upload, Tag, Layout, Type, Send } from "lucide-react"; // Optional: Install lucide-react
 import { useToast } from "@/components/Dashbord/TostComponents";
+import { blogAPI } from "@/api";
 
 const AddBlog = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillInstance = useRef<Quill | null>(null);
 
-  const [title, setTitle] = useState("");
+  // const [title, setTitle] = useState("");
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [tags, setTags] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const { addToast } = useToast();
-
+  const [BlogData, setBlogData] = useState<Blog>({
+    titleBlog: "",
+    featured_image: "",
+    categoryId: 0,
+    contentBlog: "",
+    excerpt: "",
+    featured_imagename: "",
+    languageId: 0,
+    slug: "",
+    statusblog: 0,
+  });
   useEffect(() => {
     let isMounted = true;
 
@@ -99,17 +110,11 @@ const AddBlog = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
-
+  const { mutate: BlogPostData, isPending: isPendingBlogPostData } =
+    blogAPI.useBlogCreate(BlogData);
   const handleSubmit = () => {
-    const blogData = {
-      title,
-      featuredImage,
-      content,
-      category,
-      tags: tags.split(","),
-    };
     addToast("مقاله با موفقیت منتشر شد!", "success");
-    console.log(blogData);
+    BlogPostData();
   };
 
   return (
@@ -141,8 +146,10 @@ const AddBlog = () => {
                 type="text"
                 placeholder="عنوان جذاب مقاله شما..."
                 className="w-full bg-transparent text-xl! font-black border-none focus:ring-0 placeholder:text-slate-300 transition-colors"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={BlogData.titleBlog}
+                onChange={(e) =>
+                  setBlogData({ ...BlogData, titleBlog: e.target.value })
+                }
               />
               <div className="h-0.5! w-20! bg-indigo-500 group-focus-within:w-full transition-all duration-500 mt-2"></div>
             </div>
@@ -171,8 +178,10 @@ const AddBlog = () => {
             </div>
             <select
               className="w-full rounded-xl border-slate-200 bg-slate-50 px-4! py-3! outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              value={BlogData.categoryId}
+              onChange={(e) =>
+                setBlogData({ ...BlogData, categoryId: +e.target.value })
+              }
             >
               <option value="">انتخاب کنید</option>
               <option value="programming">برنامه‌نویسی</option>

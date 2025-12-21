@@ -121,7 +121,7 @@ const CategoryPage = () => {
         data={tableData}
         rowKeyAccessor="key"
         onEdit={handleEdit}
-        onDelete={handleDelete} // پاس دادن تابع حذف به جدول
+        onDelete={handleDelete} 
       />
 
       <ModalComponents

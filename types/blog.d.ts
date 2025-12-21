@@ -1,14 +1,16 @@
-//   "id": 0,
-//   "languageId": 0,
-//   "titleBlog": "string",
-//   "slug": "string",
-//   "contentBlog": "string",
-//   "featured_image": "string",
-//   "excerpt": "string",
-//   "statusblog": 0
+// "id": 0,
+// "categoryId": 0,
+// "languageId": 0,
+// "titleBlog": "string",
+// "slug": "string",
+// "contentBlog": "string",
+// "featured_image": "string",
+// "featured_imagename": "string",
+// "excerpt": "string",
+// "statusblog": 0
 
 interface Blog {
-  id: number;
+  id?: number;
   languageId: number;
   titleBlog: string;
   slug: string;
@@ -16,8 +18,9 @@ interface Blog {
   featured_image: string;
   excerpt: string;
   statusblog: number;
+  categoryId: number;
+  featured_imagename: string;
 }
-
 
 interface BlogResponse {
   data: Blog[];
