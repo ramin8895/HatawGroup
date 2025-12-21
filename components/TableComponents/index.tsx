@@ -4,9 +4,11 @@ import React, { useState, useMemo, useCallback } from "react";
 import { Button, ConfigProvider, theme } from "antd";
 import { Edit3, Trash2, Search, ChevronRight, ChevronLeft, Columns, LayoutList } from "lucide-react";
 
+// ۱. اصلاح اینترفیس برای پذیرش تابع رندر سفارشی
 export interface Column<T> {
   label: string;
   accessor: keyof T;
+  render?: (value: any, record: T) => React.ReactNode; // تابع رندر اختیاری
 }
 
 interface TableComponentsProps<T> {
@@ -15,6 +17,7 @@ interface TableComponentsProps<T> {
   rowKeyAccessor: keyof T;
   onEdit?: (rowData: T) => void;
   onDelete?: (rowData: T) => void;
+  isLoading?: boolean; // اضافه کردن لودینگ برای تجربه کاربری بهتر
 }
 
 const TableComponents = <T,>({
@@ -41,7 +44,6 @@ const TableComponents = <T,>({
   );
 
   const filteredData = useMemo(() => {
-    setCurrentPage(1);
     return data.filter((row: any) =>
       Object.values(row).some((val) =>
         String(val).toLowerCase().includes(search.toLowerCase())
@@ -104,7 +106,7 @@ const TableComponents = <T,>({
   }, [onResizing, stopResizing]);
 
   const visibleColumnAccessors = columns.filter((col) => visibleColumns[col.accessor as string]);
-  const hasActionsColumn = onEdit || onDelete;
+  const hasActionsColumn = !!onEdit || !!onDelete;
   const selectedRowData = data.find((row) => row[rowKeyAccessor] === selectedRowKey);
 
   return (
@@ -114,20 +116,17 @@ const TableComponents = <T,>({
           
           {/* Top Toolbar */}
           <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-4! mb-6! p-4! bg-white/[0.02]! border! border-white/10 rounded-2xl! backdrop-blur-md">
-            
-            {/* Search Input */}
             <div className="relative w-full lg:max-w-md group">
               <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
               <input
                 type="text"
-                placeholder="گەڕان لەناو زانیارییەکان..."
+                placeholder="گەڕان..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full bg-black/40! border! border-white/10 focus:border-indigo-500/50 rounded-xl! py-2.5! pr-11! pl-4! outline-none text-sm text-slate-200 transition-all shadow-inner"
               />
             </div>
 
-            {/* Actions & Pagination Controls */}
             <div className="flex! items-center! gap-3! w-full lg:w-auto">
               {hasActionsColumn && (
                 <div className="flex! gap-2! border-l! border-white/10 pl-4!">
@@ -161,7 +160,7 @@ const TableComponents = <T,>({
             </div>
           </div>
 
-          {/* Column Toggle Area */}
+          {/* Column Toggle */}
           <div className="flex! flex-wrap! gap-2! mb-4! px-1!">
              <div className="flex! items-center! gap-2! text-slate-500! text-[10px]! font-bold! uppercase! ml-2!">
                 <Columns size={12} /> ستونەکان:
@@ -181,7 +180,7 @@ const TableComponents = <T,>({
             ))}
           </div>
 
-          {/* Main Table */}
+          {/* Table Container */}
           <div className="bg-white/[0.02]! border! border-white/10 rounded-2xl! overflow-hidden shadow-2xl backdrop-blur-sm">
             <div className="overflow-x-auto">
               <table className="w-full! border-collapse!">
@@ -201,7 +200,7 @@ const TableComponents = <T,>({
                       </th>
                     ))}
                     {hasActionsColumn && (
-                      <th className="p-4! text-center text-xs font-bold text-slate-400 bg-black/40! border-r! border-white/10 sticky left-0 shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.5)]">
+                      <th className="p-4! text-center text-xs font-bold text-slate-400 bg-black/40! border-r! border-white/10 sticky left-0 z-10">
                         کردارەکان
                       </th>
                     )}
@@ -221,7 +220,10 @@ const TableComponents = <T,>({
                         >
                           {visibleColumnAccessors.map((col) => (
                             <td key={String(col.accessor)} className="p-4! text-sm text-slate-300 whitespace-nowrap">
-                              {String(row[col.accessor])}
+                              {/* ۲. بخش اصلاح شده: بررسی وجود تابع رندر */}
+                              {col.render 
+                                ? col.render(row[col.accessor], row) 
+                                : String(row[col.accessor] ?? '')}
                             </td>
                           ))}
                           {hasActionsColumn && (
@@ -261,7 +263,7 @@ const TableComponents = <T,>({
             </div>
           </div>
 
-          {/* Pagination Footer */}
+          {/* Pagination */}
           <div className="flex! flex-col! sm:flex-row! justify-between! items-center! gap-4! mt-6! px-2!">
             <div className="text-xs! text-slate-500! font-medium">
               نیشاندان <span className="text-indigo-400">{(currentPage - 1) * pageSize + 1}</span> بۆ <span className="text-indigo-400">{Math.min(currentPage * pageSize, filteredData.length)}</span> لە <span className="text-indigo-400">{filteredData.length}</span> تۆمار
@@ -275,15 +277,11 @@ const TableComponents = <T,>({
               >
                 <ChevronRight size={18} />
               </button>
-              
               <div className="flex! items-center! gap-1!">
-                <span className="bg-indigo-600! text-white! px-3! py-1! rounded-lg! text-xs font-bold">
-                  {currentPage}
-                </span>
+                <span className="bg-indigo-600! text-white! px-3! py-1! rounded-lg! text-xs font-bold">{currentPage}</span>
                 <span className="text-slate-600 px-1">/</span>
                 <span className="text-slate-400 text-xs">{totalPages}</span>
               </div>
-
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}

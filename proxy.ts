@@ -3,15 +3,11 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function proxy(req: NextRequest) {
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
   const { pathname } = req.nextUrl;
 
-  // صفحات عمومی و فایل‌های next.js
+  // 1️⃣ مسیرهای عمومی و سیستمی (خیلی مهم: قبل از getToken)
   if (
+    pathname === "/" ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico"
@@ -19,20 +15,56 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // صفحه /dashboard نیاز به login دارد
-  if (pathname.startsWith("/dashboard") && !token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  // 2️⃣ فقط اینجا توکن رو بگیر
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const url = req.nextUrl.clone();
+
+  // 3️⃣ مسیرهای محافظت‌شده
+  const isAdminDashboard = pathname.startsWith("/dashboard");
+  const isUserDashboard = pathname.startsWith("/userDashboard");
+
+  // کاربر لاگین نکرده
+  if ((isAdminDashboard || isUserDashboard) && !token) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
   }
 
-  // اگر لاگین هست و رفت login → هدایت به /dashboard یا / (می‌تونی تنظیم کنی)
+  // 4️⃣ جلوگیری از ورود دوباره به لاگین
   if (token && pathname === "/login") {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    url.pathname =
+      token.userRoleCaption === "adminRole"
+        ? "/dashboard"
+        : "/userDashboard";
+    return NextResponse.redirect(url);
   }
 
-  // صفحه اصلی / بدون توکن دسترسی دارد
+  // 5️⃣ RBAC (کنترل نقش)
+  if (token) {
+    if (
+      token.userRoleCaption === "adminRole" &&
+      isUserDashboard
+    ) {
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+
+    if (
+      token.userRoleCaption === "userRole" &&
+      isAdminDashboard
+    ) {
+      url.pathname = "/userDashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
   return NextResponse.next();
 }
 
+// 6️⃣ matcher تمیز
 export const config = {
-  matcher: ["/((?!_next|favicon.ico).*)"], // همه صفحات غیر از فایل‌های next
+  matcher: ["/((?!api|_next|favicon.ico).*)"],
 };

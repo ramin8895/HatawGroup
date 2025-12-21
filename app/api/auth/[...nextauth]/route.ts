@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { LoginByUsername } from "../../../../api/authServices/authServices";
+import { use } from "react";
 const handler = NextAuth({
   providers: [
     // 🔹 Google Login
@@ -67,6 +68,8 @@ const handler = NextAuth({
           email: data.email,
           phonenumber: data.phonenumber,
           backendToken: data.userToken,
+          userRoleId: data.userRoleId,
+          userRoleCaption: data.userRoleCaption,
           data: data,
         };
       },
@@ -100,6 +103,8 @@ const handler = NextAuth({
 
         const data = await res.json();
         user.backendToken = data.token;
+        user.userRoleId = data.userRoleId;
+        user.userRoleCaption = data.userRoleCaption;
         return true;
       } catch (err) {
         console.log("Google login backend error:", err);
@@ -110,16 +115,18 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user?.backendToken) {
         token.backendToken = user.backendToken;
-        token.data = user.data;
+        token.userRoleId = user.userRoleId;
+        token.userRoleCaption = user.userRoleCaption;
       }
       return token;
     },
 
     async session({ session, token }) {
-      console.log(session.user + "++++" + token)
+      console.log(session.user + "++++" + token);
       if (token?.backendToken) {
         session.backendToken = token.backendToken;
-        
+        session.userRoleId = token.userRoleId;
+        session.userRoleCaption = token.userRoleCaption;
       }
       return session;
     },

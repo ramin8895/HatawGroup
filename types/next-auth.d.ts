@@ -7,11 +7,16 @@ declare module "next-auth" {
     avatar?: string;
     backendToken?: string;
     data?: any;
+    userRoleId?: string;
+    userRoleCaption?: string;
   }
 
   interface Session {
     backendToken?: string;
+    userRoleId?: string;
+    userRoleCaption?: string;
     user: {
+      id?: string | null;
       name?: string | null;
       username?: string | null;
       email?: string | null;
@@ -25,6 +30,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     backendToken?: string;
-    data?: any;
+    userRoleId?: string;
+    userRoleCaption?: string;
   }
 }
