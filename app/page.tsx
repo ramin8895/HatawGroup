@@ -16,10 +16,8 @@ import LotterySection from "@/components/LotterySection.tsx";
 export default function HomePage() {
   const { data: latestBlogs, isLoading: blogsLoading } = blogAPI.useGetBlogList();
   const router = useRouter();
-  const [lotteryCode, setLotteryCode] = useState("");
   
   // اصلاح سشن برای جلوگیری از ری‌لود مداوم
-  const { data: session, status } = useSession();
   // بهینه‌سازی انیمیشن
   const fadeInUp = useMemo(() => ({
     hidden: { opacity: 0, y: 40 },
