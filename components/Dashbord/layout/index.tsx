@@ -1,5 +1,18 @@
 "use client";
-import { Button, Drawer, Layout, Menu, theme, Grid, Avatar, Badge, ConfigProvider } from "antd";
+
+import {
+  Button,
+  Drawer,
+  Layout,
+  Menu,
+  theme,
+  Grid,
+  Avatar,
+  Badge,
+  ConfigProvider,
+  MenuProps, // <--- ۱. این را اضافه کنید
+} from "antd";
+
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -8,6 +21,7 @@ import {
   MenuUnfoldOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
+
 import {
   LayoutDashboard,
   PackagePlus,
@@ -30,7 +44,11 @@ import { signOut } from "next-auth/react";
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) => {
+const LayoutComponentDashbord = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -46,16 +64,29 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
   const isDesktop = mounted && screens.lg;
   const contentMarginRight = isDesktop ? (collapsed ? 80 : 280) : 0;
 
-  const menuItems = [
+  // ۲. در اینجا نوع آرایه را مشخص کنید: MenuProps['items']
+  const menuItems: MenuProps['items'] = [
     { key: "dashboard", icon: <LayoutDashboard size={20} />, label: "داشبۆرد" },
     {
       key: "event",
       icon: <Video size={20} />,
       label: "چالاکیەکان",
       children: [
-        { key: "dashboard/event/add-event", icon: <PackagePlus size={18} />, label: "زیادکردنی چالاکی" },
-        { key: "dashboard/event/event-list", icon: <ListOrdered size={18} />, label: "لیستی چالاکیەکان" },
-        { key: "dashboard/event/event-lottery", icon: <Crown size={18} />, label: "قرعەکێشی" },
+        {
+          key: "dashboard/event/add-event",
+          icon: <PackagePlus size={18} />,
+          label: "زیادکردنی چالاکی",
+        },
+        {
+          key: "dashboard/event/event-list",
+          icon: <ListOrdered size={18} />,
+          label: "لیستی چالاکیەکان",
+        },
+        {
+          key: "dashboard/event/event-lottery",
+          icon: <Crown size={18} />,
+          label: "قرعەکێشی",
+        },
       ],
     },
     {
@@ -64,8 +95,16 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
       label: "کڕیارەکان",
       children: [
         { key: "dashboard/customers", label: "لیستی کڕیارەکان" },
-        { key: "customers/groups", icon: <UserCog size={18} />, label: "گرووپەکان" },
-        { key: "customers/vip", icon: <Crown size={18} />, label: "کڕیارە VIP" },
+        {
+          key: "customers/groups",
+          icon: <UserCog size={18} />,
+          label: "گرووپەکان",
+        },
+        {
+          key: "customers/vip",
+          icon: <Crown size={18} />,
+          label: "کڕیارە VIP",
+        },
       ],
     },
     {
@@ -78,8 +117,13 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
         { key: "dashboard/blog/comments", label: "کۆمێنتەکان" },
       ],
     },
+    // ۳. این خط قبلاً ارور می‌داد چون TS فکر می‌کرد type یک string معمولی است
     { type: "divider", className: "border-white/5 my-4" },
-    { key: "dashboard/settings", icon: <Settings size={20} />, label: "ڕێکخستنەکان" },
+    {
+      key: "dashboard/settings",
+      icon: <Settings size={20} />,
+      label: "ڕێکخستنەکان",
+    },
     {
       key: "logout",
       icon: <LogOut size={20} />,
@@ -88,7 +132,7 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
     },
   ];
 
-  const handleMenuClick = ({ key }: { key: string }) => {
+  const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === "logout") {
       signOut();
     } else {
@@ -121,8 +165,9 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
               <span className="font-black text-white text-xl">H</span>
             </div>
             {!collapsed && (
-              <motion.span 
-                initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+              <motion.span
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
                 className="text-white font-black tracking-tighter text-xl whitespace-nowrap"
               >
                 HATAW <span className="text-indigo-500 font-medium">GROUP</span>
@@ -147,7 +192,9 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
           width={280}
           closeIcon={null}
           styles={{ body: { padding: 0, backgroundColor: "#030712" } }}
-          title={<div className="text-white font-black py-2">HATAW DASHBOARD</div>}
+          title={
+            <div className="text-white font-black py-2">HATAW DASHBOARD</div>
+          }
         >
           <Menu
             theme="dark"
@@ -180,10 +227,13 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
                 onClick={() => setMobileOpen(true)}
                 className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 text-white"
               />
-              
+
               {/* Modern Search */}
               <div className="relative hidden md:block group">
-                <Search size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <Search
+                  size={16}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+                />
                 <input
                   placeholder="گەڕان بۆ هەر شتێک..."
                   className="bg-white/[0.03] border border-white/10 rounded-xl py-2.5 pr-11 pl-4 text-xs text-white outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] w-72 transition-all shadow-inner"
@@ -202,8 +252,12 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
 
               <div className="flex items-center gap-3 pl-2 py-1 pr-1 rounded-2xl hover:bg-white/5 transition-all cursor-pointer group border border-transparent hover:border-white/5">
                 <div className="text-left hidden sm:block mr-2">
-                  <p className="text-sm font-bold text-white leading-none text-right">ئەدمین</p>
-                  <p className="text-[10px] text-indigo-400 mt-1 uppercase font-black text-right tracking-widest">Super Admin</p>
+                  <p className="text-sm font-bold text-white leading-none text-right">
+                    ئەدمین
+                  </p>
+                  <p className="text-[10px] text-indigo-400 mt-1 uppercase font-black text-right tracking-widest">
+                    Super Admin
+                  </p>
                 </div>
                 <Avatar
                   size={44}
@@ -215,9 +269,9 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
           </Header>
 
           <Content className="p-4 md:p-8 overflow-x-hidden min-h-[calc(100vh-80px)]">
-             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                {children}
-             </div>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              {children}
+            </div>
           </Content>
         </Layout>
       </Layout>
@@ -244,7 +298,7 @@ const LayoutComponentDashbord = ({ children }: { children: React.ReactNode }) =>
           height: 50px !important;
           line-height: 50px !important;
         }
-        .custom-sidebar-menu .ant-menu-item:hover, 
+        .custom-sidebar-menu .ant-menu-item:hover,
         .custom-sidebar-menu .ant-menu-submenu-title:hover {
           color: #fff !important;
           background: rgba(255, 255, 255, 0.05) !important;
