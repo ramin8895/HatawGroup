@@ -5,6 +5,8 @@ import LayoutComponents from "../components/layout/layoutComponents";
 import SessionProvider from "@/components/SessionProvider";
 import QueryProvider from "@/components/QueryProvider";
 import { ToastProvider } from "@/components/Dashbord/TostComponents";
+import localFont from 'next/font/local'
+
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
@@ -26,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="name">
+    <html lang="fa" className={``}>
       <QueryProvider>
         <ToastProvider>
           <SessionProvider>

@@ -1,10 +1,9 @@
 "use client";
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { ArrowUpLeft, Trophy, Sparkles } from "lucide-react";
+import { ArrowUpLeft, Trophy, Sparkles, Crown } from "lucide-react";
 
 const HomeSection = () => {
-  // تعریف تایپ Variants برای جلوگیری از خطای TypeScript
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -23,21 +22,25 @@ const HomeSection = () => {
       y: 0, 
       transition: { 
         duration: 0.8, 
-        ease: "easeOut" // حالا TypeScript این مقدار را به درستی می‌شناسد
+        ease: "easeOut" 
       } 
     },
   };
 
   return (
     <div 
-      className="relative min-h-screen! flex items-center justify-center overflow-hidden bg-[#030712]" 
+      className="relative min-h-screen! flex items-center justify-center overflow-hidden bg-black" 
       id="home"
     >
-      {/* --- المان‌های نوری پس‌زمینه --- */}
-      <div className="absolute top-[-10%]! left-[-10%]! w-[600px]! h-[600px]! bg-indigo-600/20! blur-[140px]! rounded-full! pointer-events-none"></div>
-      <div className="absolute bottom-[-10%]! right-[-10%]! w-[500px]! h-[500px]! bg-purple-600/10! blur-[120px]! rounded-full! pointer-events-none"></div>
+      {/* --- Luxury Background Accents --- */}
+      {/* Top Gold Glow */}
+      <div className="absolute top-[-20%]! left-[-10%]! w-[800px]! h-[700px]! bg-amber-600/10! blur-[160px]! rounded-full! pointer-events-none"></div>
       
-      <div className="absolute inset-0! bg-[url('https://www.transparenttextures.com/patterns/grid-me.png')] opacity-[0.03]! pointer-events-none"></div>
+      {/* Bottom Center Spotlight */}
+      <div className="absolute bottom-[-15%]! left-1/2! -translate-x-1/2! w-[600px]! h-[400px]! bg-yellow-700/10! blur-[120px]! rounded-full! pointer-events-none"></div>
+      
+      {/* Subtle Pattern Overlay */}
+      <div className="absolute inset-0! bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]! pointer-events-none"></div>
 
       <motion.div
         className="max-w-6xl! mx-auto! px-6! relative z-10! text-center"
@@ -45,82 +48,88 @@ const HomeSection = () => {
         animate="visible"
         variants={containerVariants}
       >
+        {/* Badge Indicator */}
         <motion.div 
           variants={itemVariants}
-          className="inline-flex items-center gap-2! px-4! py-2! rounded-full! bg-white/5! border border-white/10! backdrop-blur-md mb-8!"
+          className="inline-flex items-center gap-2! px-5! py-2.5! rounded-full! bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/30! backdrop-blur-xl mb-10!"
         >
-          <Sparkles size={16} className="text-indigo-400" />
-          <span className="text-xs! font-black tracking-[0.2em] text-slate-300 uppercase">
+          <Crown size={14} className="text-amber-500" />
+          <span className="text-[10px]! font-black tracking-[0.3em] text-amber-500/90 uppercase">
             Hataw Branding Agency 2025
           </span>
         </motion.div>
 
+        {/* Hero Title with Metallic Gradient */}
         <motion.h1 
           variants={itemVariants}
-          className="text-5xl! md:text-8xl! font-black text-white mb-8! leading-[1.1]! tracking-tighter!"
+          className="text-6xl! md:text-9xl! font-black text-white mb-10! leading-[1]! tracking-tighter!"
         >
           بازرگانییەکەت بگۆڕە بۆ <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-gradient-x">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-500 to-amber-600 animate-gradient-x">
             براندێکی ئەفسانەیی
           </span>
         </motion.h1>
 
+        {/* Subtext */}
         <motion.p 
           variants={itemVariants}
-          className="text-slate-400 text-lg! md:text-xl! max-w-3xl! mx-auto! leading-relaxed! mb-12! font-light text-center"
+          className="text-gray-400 text-lg! md:text-xl! max-w-3xl! mx-auto! leading-relaxed! mb-14! font-medium"
         >
           ناسنامە و شوێنپێدانی ستراتیژیی براند کە تۆ لە بیرناچێت.
-          <span className="text-white font-medium"> ئێمە تەنها لۆگۆ دیزاین ناکەین؛ </span> 
-          ئێمە ئیمپراتۆریەتە دیجیتاڵییەکان بنیات دەنێین.
+          <span className="block mt-2 text-amber-500/80 italic font-bold"> ئێمە ئیمپراتۆریەتە دیجیتاڵییەکان بنیات دەنێین. </span> 
         </motion.p>
 
+        {/* Call to Actions */}
         <motion.div 
           variants={itemVariants}
           className="flex flex-col sm:flex-row-reverse items-center justify-center gap-6!"
         >
+          {/* Primary Gold Button */}
           <motion.a
             href="#award"
-            className="group relative px-10! py-5! bg-indigo-600 rounded-2xl! overflow-hidden flex items-center gap-3! transition-all duration-300 shadow-2xl shadow-indigo-600/20"
-            whileHover={{ y: -5, scale: 1.02 }}
+            className="group relative px-12! py-5! bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-2xl! overflow-hidden flex items-center gap-3! transition-all duration-300 shadow-[0_0_30px_rgba(217,119,6,0.3)]"
+            whileHover={{ y: -5, scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
-            {/* درخشش متحرک داخل دکمه */}
-            <div className="absolute inset-0! bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer transition-transform duration-1000"></div>
-            <Trophy size={20} className="text-white" />
-            <span className="text-white font-black text-lg!">بەشداری خەڵاتی Hataw بکە</span>
+            <div className="absolute inset-0! bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer transition-transform duration-1000"></div>
+            <Trophy size={22} className="text-black" />
+            <span className="text-black font-black text-xl!">بەشداری خەڵاتی Hataw بکە</span>
           </motion.a>
 
+          {/* Secondary Black Button */}
           <motion.a
             href="#services"
-            className="group px-10! py-5! bg-white/5 border border-white/10 rounded-2xl! flex items-center gap-3! hover:bg-white/10 transition-all duration-300 backdrop-blur-md"
+            className="group px-12! py-5! bg-black border border-amber-600/30 rounded-2xl! flex items-center gap-3! hover:bg-amber-600/10 hover:border-amber-500 transition-all duration-300 backdrop-blur-md"
             whileHover={{ y: -5 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-white font-bold">خزمەتگوزارییەکان ببینە</span>
-            <ArrowUpLeft size={20} className="text-slate-400 group-hover:text-indigo-400 transition-colors" />
+            <span className="text-white font-bold text-lg!">خزمەتگوزارییەکان</span>
+            <ArrowUpLeft size={20} className="text-amber-500 group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] transition-transform" />
           </motion.a>
         </motion.div>
 
+        {/* Scroll Indicator */}
         <motion.div 
           variants={itemVariants}
-          className="mt-24! pt-12! border-t border-white/5! flex flex-col items-center gap-4!"
+          className="mt-32! flex flex-col items-center gap-4!"
         >
-          <p className="text-[10px]! font-black uppercase tracking-[0.4em] text-slate-500">Scroll to Explore</p>
-          <motion.div 
-            animate={{ y: [0, 10, 0] }} 
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="w-[1px]! h-12! bg-gradient-to-b from-indigo-500 to-transparent"
-          ></motion.div>
+          <p className="text-[9px]! font-bold uppercase tracking-[0.5em] text-gray-600">Explore Heritage</p>
+          <div className="h-16! w-[1px]! bg-gradient-to-b from-amber-600 via-amber-900/50 to-transparent relative">
+            <motion.div 
+              animate={{ y: [0, 40, 0], opacity: [0, 1, 0] }} 
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="absolute top-0! left-[-1.5px]! w-1! h-1! bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"
+            ></motion.div>
+          </div>
         </motion.div>
       </motion.div>
 
-      {/* استایل‌های مورد نیاز برای انیمیشن‌های سفارشی */}
       <style jsx global>{`
         @keyframes shimmer {
           100% { transform: translateX(100%); }
         }
         .animate-shimmer {
-          animation: shimmer 1.5s infinite;
+          animation: shimmer 1.8s infinite;
         }
         @keyframes gradient-x {
           0%, 100% { background-position: 0% 50%; }
@@ -128,7 +137,7 @@ const HomeSection = () => {
         }
         .animate-gradient-x {
           background-size: 200% 200%;
-          animation: gradient-x 5s ease infinite;
+          animation: gradient-x 6s ease infinite;
         }
       `}</style>
     </div>

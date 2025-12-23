@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import TableComponents from "../../../components/TableComponents";
 import { Column } from "../../../components/TableComponents";
-import { useGetuserList } from "@/api/userService/useRequest";
+import { useGetRoleList, useGetuserList } from "@/api/userService/useRequest";
 import ModalComponents from "@/components/Dashbord/ModalComponents";
 import { ShieldCheck, Loader2, Save, User } from "lucide-react";
 import { FaUserEdit } from "react-icons/fa";
@@ -17,6 +17,8 @@ interface UserData {
 
 const Customers = () => {
   const { data: useGetuserListData, isLoading: isTableLoading } = useGetuserList();
+  const { data: useGetRoleListData, isLoading: isRoleLoading } = useGetRoleList();
+  console.log(useGetRoleListData?.data)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<UserData | null>(null);
   

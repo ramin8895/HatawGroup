@@ -9,6 +9,11 @@ export const useGetuserList = () =>
     refetchOnWindowFocus: false,
     enabled:true
   });
+export const useGetRoleList = () =>
+  useQuery({
+    queryKey: [cashKey.getneRole],
+    queryFn: () => services.GetRoleList(),
+  });
 
 export const useCreateNewcustomer = () =>
   

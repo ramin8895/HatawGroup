@@ -9,6 +9,9 @@ import http from "../HttpServices";
 export const GetuserList = async () => {
   return http.get(`${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Account/UserList`);
 };
+export const GetRoleList = async () => {
+  return http.get(`${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Account/RoleList`);
+};
 
 export const CreateNewcustomer = async (data) => {
   return await http.post(
