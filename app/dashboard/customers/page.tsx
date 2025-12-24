@@ -44,12 +44,10 @@ const Customers = () => {
     setEditingUser(null);
   };
 
-  // تابع اول: ویرایش مشخصات فردی (Fullname)
   const handleUpdateInfo = async () => {
     if (!editingUser) return;
     setIsUpdatingInfo(true);
     try {
-      // در اینجا می‌توانید API مربوط به آپدیت پروفایل را صدا بزنید
       console.log("Updating Info:", editingUser.fullname);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       alert("زانیارییە کەسییەکان نوێکرانەوە");
@@ -58,13 +56,12 @@ const Customers = () => {
     }
   };
 
-  // تابع دوم: ویرایش سطح دسترسی (Role)
   const handleUpdateAccess = () => {
     if (!editingUser || !session) return;
     
     useUpdateUserRoleEditPost({
-      userId: String(editingUser.id),             // شناسه کاربر مورد نظر
-      roleId: editingUser.access,                 // نقش جدید انتخاب شده
+      userId: String(editingUser.id),
+      roleId: editingUser.access,
     }, {
       onSuccess: () => {
         alert("ئاستی دەسەڵات نوێکرایەوە");
@@ -82,13 +79,13 @@ const Customers = () => {
         accessor: "access",
         render: (val: string) => (
           <span
-            className={`px-3! py-1! rounded-full text-[10px] font-black tracking-wide border ${
-              val === "1" || val?.includes("admin") // فرض بر اینکه ID یک ادمین است
+            className={`px-4! py-1! rounded-full text-[10px] font-black tracking-wider border ${
+              val === "1" || val?.toLowerCase().includes("admin")
                 ? "bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/20"
-                : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                : "bg-slate-100 text-slate-500 border-slate-200"
             }`}
           >
-            {val === "1" || val?.includes("admin") ? "ADMIN" : "USER"}
+            {val === "1" || val?.toLowerCase().includes("admin") ? "ADMIN" : "USER"}
           </span>
         ),
       },
@@ -108,15 +105,20 @@ const Customers = () => {
   }, [useGetuserListData]);
 
   return (
-    <div className="p-4 md:p-8 bg-[#030712] min-h-screen" dir="rtl">
-      <div className="flex items-center gap-4 mb-8">
-        <div className="p-3 bg-[#D4AF37]/10 rounded-2xl border border-[#D4AF37]/20">
-          <Crown className="text-[#D4AF37]" size={24} />
+    <div className="p-4 md:p-8 bg-[#FDFDFD] min-h-screen" dir="rtl">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-10">
+        <div className="p-3 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-2xl shadow-lg shadow-[#D4AF37]/20">
+          <Crown className="text-white" size={24} />
         </div>
-        <h1 className="text-2xl font-black text-white">بەڕێوەبردنی بەکارهێنەران</h1>
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 m-0">بەڕێوەبردنی بەکارهێنەران</h1>
+          <p className="text-slate-400 text-sm mt-1">لیست و دەسەڵاتی ئەندامانی سیستم</p>
+        </div>
       </div>
 
-      <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] overflow-hidden backdrop-blur-md">
+      {/* Table Container */}
+      <div className="bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <TableComponents<UserData>
           data={tableData}
           columns={USER_COLUMNS}
@@ -126,31 +128,33 @@ const Customers = () => {
       </div>
 
       <ModalComponents isOpen={isModalOpen} onClose={closeModal}>
-        <div className="p-1! bg-[#0b0f1a]! text-white! rounded-[2.5rem]! overflow-hidden max-w-xl! mx-auto! border! border-[#D4AF37]/20!">
-          {/* Header */}
+        <div className="p-1! bg-white! text-slate-800! rounded-[3rem]! overflow-hidden max-w-xl! mx-auto! border! border-slate-100! shadow-2xl!">
+          {/* Modal Header */}
           <div className="p-8! pb-4! text-right!">
-            <h2 className="text-2xl! font-black! flex! items-center! justify-start! gap-3! flex-row-reverse!">
-              <FaUserEdit className="text-[#D4AF37]" />
-              بەڕێوەبردنی هەژمار
-            </h2>
-            <p className="text-slate-500! text-sm! mt-2!">زانیارییەکانی پرۆفایل و دەسەڵاتەکان دەستکاری بکە.</p>
+            <div className="flex! items-center! justify-start! gap-3! flex-row-reverse!">
+               <div className="p-2! bg-[#D4AF37]/10! rounded-xl!">
+                 <FaUserEdit className="text-[#D4AF37]! size-6!" />
+               </div>
+               <h2 className="text-2xl! font-black! text-slate-900! m-0!">بەڕێوەبردنی هەژمار</h2>
+            </div>
+            <p className="text-slate-400! text-sm! mt-3!">زانیارییەکانی پرۆفایل و دەسەڵاتەکان لێرەدا دەستکاری دەکرێن.</p>
           </div>
 
-          <div className="p-8! pt-0! space-y-6! text-right!">
+          <div className="p-8! pt-2! space-y-6! text-right!">
             {editingUser && (
               <>
-                {/* بخش اول: مشخصات فردی */}
-                <section className="p-6! bg-white/[0.02]! border! border-white/5! rounded-3xl! space-y-4!">
+                {/* Section 1: Personal Info */}
+                <section className="p-6! bg-slate-50/50! border! border-slate-100! rounded-[2rem]! space-y-4!">
                   <div className="flex! items-center! justify-end! gap-2! text-[#D4AF37]! font-bold!">
-                    <span>زانیارییە کەسییەکان</span>
-                    <User size={20} />
+                    <span className="text-sm!">زانیارییە کەسییەکان</span>
+                    <User size={18} />
                   </div>
 
                   <div className="space-y-1.5!">
-                    <label className="text-[11px]! font-bold! text-slate-500! uppercase! pr-1!">ناو و پاشناو</label>
+                    <label className="text-[11px]! font-black! text-slate-400! uppercase! pr-1!">ناو و پاشناو</label>
                     <input
                       type="text"
-                      className="w-full! bg-black/40! border! border-white/10! rounded-xl! py-3! px-4! text-white! text-right! outline-none! focus:border-[#D4AF37]! transition-all!"
+                      className="w-full! bg-white! border! border-slate-200! rounded-xl! py-3! px-4! text-slate-700! text-right! outline-none! focus:border-[#D4AF37]! focus:ring-4! focus:ring-[#D4AF37]/5! transition-all!"
                       value={editingUser.fullname}
                       onChange={(e) => setEditingUser({ ...editingUser, fullname: e.target.value })}
                     />
@@ -159,28 +163,28 @@ const Customers = () => {
                   <button
                     onClick={handleUpdateInfo}
                     disabled={isUpdatingInfo}
-                    className="w-full! py-3! bg-white! text-black! hover:bg-[#D4AF37]! rounded-xl! text-sm! font-black! flex! items-center! justify-center! gap-2! transition-all! disabled:opacity-50!"
+                    className="w-full! py-3! bg-slate-900! text-white! hover:bg-[#D4AF37]! rounded-xl! text-sm! font-black! flex! items-center! justify-center! gap-2! transition-all! shadow-lg! shadow-slate-200!"
                   >
                     {isUpdatingInfo ? <Loader2 className="animate-spin" size={18} /> : <><Save size={16} /> پاشەکەوتکردن</>}
                   </button>
                 </section>
 
-                {/* بخش دوم: سطح دسترسی */}
-                <section className="p-6! bg-[#D4AF37]/[0.03]! border! border-[#D4AF37]/10! rounded-3xl! space-y-4!">
+                {/* Section 2: Access Level */}
+                <section className="p-6! bg-[#D4AF37]/5! border! border-[#D4AF37]/10! rounded-[2rem]! space-y-4!">
                   <div className="flex! items-center! justify-end! gap-2! text-[#D4AF37]! font-bold!">
-                    <span>ئاستی دەسەڵاتی سیستم</span>
-                    <ShieldCheck size={20} />
+                    <span className="text-sm!">ئاستی دەسەڵاتی سیستم</span>
+                    <ShieldCheck size={18} />
                   </div>
 
                   <div className="relative!">
                     <select
-                      className="w-full! bg-black/40! border! border-white/10! rounded-xl! py-3! px-4! text-white! text-right! outline-none! appearance-none! focus:border-[#D4AF37]! cursor-pointer!"
+                      className="w-full! bg-white! border! border-slate-200! rounded-xl! py-3! px-4! text-slate-700! text-right! outline-none! appearance-none! focus:border-[#D4AF37]! cursor-pointer!"
                       value={editingUser.access}
                       onChange={(e) => setEditingUser({ ...editingUser, access: e.target.value })}
                     >
                       {useGetRoleListData?.data.map((item: any) => (
-                        <option key={item.roleId} className="bg-[#0b0f1a]" value={item.roleId}>
-                          {item.rolename === "userRole" ? "بەکارهێنەری ئاسایی (سنووردار)" : "بەڕێوەبەری سیستم (دەسەڵاتی تەواو)"}
+                        <option key={item.roleId} value={item.roleId}>
+                          {item.rolename === "userRole" ? "بەکارهێنەری ئاسایی" : "بەڕێوەبەری سیستم"}
                         </option>
                       ))}
                     </select>
@@ -189,13 +193,18 @@ const Customers = () => {
                   <button
                     onClick={handleUpdateAccess}
                     disabled={isUpdatingAccess}
-                    className="w-full! py-3! bg-[#D4AF37]/10! hover:bg-[#D4AF37]/20! text-[#D4AF37]! border! border-[#D4AF37]/20! rounded-xl! text-sm! font-black! flex! items-center! justify-center! gap-2! transition-all!"
+                    className="w-full! py-3! bg-white! text-[#D4AF37]! border! border-[#D4AF37]/30! hover:bg-[#D4AF37]! hover:text-white! rounded-xl! text-sm! font-black! flex! items-center! justify-center! gap-2! transition-all! shadow-sm!"
                   >
                     {isUpdatingAccess ? <Loader2 className="animate-spin" size={18} /> : "نوێکردنەوەی دەسەڵات"}
                   </button>
                 </section>
 
-                <button onClick={closeModal} className="w-full! py-2! text-slate-500! text-xs! font-bold! hover:text-white! transition-colors!">داخستنی پەنجەرە</button>
+                <button 
+                  onClick={closeModal} 
+                  className="w-full! py-2! text-slate-400! text-xs! font-bold! hover:text-slate-600! transition-colors!"
+                >
+                  پەشیمانبوونەوە و داخستن
+                </button>
               </>
             )}
           </div>

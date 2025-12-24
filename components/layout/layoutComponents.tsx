@@ -97,19 +97,14 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
 
           {/* Logo with Gold Style */}
           <div className="flex items-center gap-4!">
-            <div className="flex flex-col! items-end!">
-              <span className="text-xl! font-black tracking-tighter!">
-                HATAW <span className="text-[#D4AF37]">GROUP</span>
-              </span>
-              <div className="h-[2px]! w-8! bg-gradient-to-r from-transparent to-[#D4AF37] rounded-full!"></div>
-            </div>
-            <div className="relative group">
+        
+            <div className="relative group" onClick={()=>router.push("/")}>
               <img
-                src="/svg/Hataw-Logo-Icon.svg"
+                src="/Hataw-Logo-01.png"
                 alt="Hataw Group"
-                className="w-12! h-12! rounded-2xl! border border-[#D4AF37]/50 shadow-lg shadow-[#D4AF37]/20 group-hover:border-[#D4AF37] transition-all"
+                className="w-28! h-12!  transition-all"
               />
-              <div className="absolute inset-0! rounded-2xl! border border-[#D4AF37]/20 animate-pulse"></div>
+              <div className="absolute inset-0! rounded-2xl! border cursor-pointer border-[#D4AF37]/20 animate-pulse"></div>
             </div>
           </div>
 

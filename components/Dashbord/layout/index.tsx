@@ -14,7 +14,7 @@ import {
 } from "antd";
 
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   MenuFoldOutlined,
@@ -61,7 +61,10 @@ const LayoutComponentDashbord = ({
   }, []);
 
   const isDesktop = mounted && screens.lg;
-  const contentMarginRight = isDesktop ? (collapsed ? 80 : 280) : 0;
+  const contentMarginRight = isDesktop ? (collapsed ? 100 : 300) : 0;
+
+  // رنگ طلایی لوکس
+  const goldColor = "#D4AF37";
 
   const menuItems: MenuProps['items'] = [
     { key: "dashboard", icon: <LayoutDashboard size={20} />, label: "داشبۆرد" },
@@ -95,13 +98,13 @@ const LayoutComponentDashbord = ({
         { key: "dashboard/blog/comments", label: "کۆمێنتەکان" },
       ],
     },
-    { type: "divider", className: "border-white/5 my-4" },
+    { type: "divider", className: "border-slate-100 my-6" },
     { key: "dashboard/settings", icon: <Settings size={20} />, label: "ڕێکخستنەکان" },
     {
       key: "logout",
       icon: <LogOut size={20} />,
       label: "چوونەدەرەوە",
-      className: "mt-auto! text-amber-500! hover:bg-amber-500/10!",
+      className: "logout-item! mt-auto! text-rose-500!",
     },
   ];
 
@@ -120,36 +123,40 @@ const LayoutComponentDashbord = ({
     <ConfigProvider
       direction="rtl"
       theme={{
-        algorithm: theme.darkAlgorithm,
+        algorithm: theme.defaultAlgorithm,
         token: { 
-            colorPrimary: "#f59e0b", 
-            borderRadius: 16,
-            colorBgLayout: "#020617"
+            colorPrimary: goldColor, 
+            borderRadius: 20,
+            colorBgLayout: "#FDFDFD",
+            fontFamily: "inherit"
         },
       }}
     >
-      <Layout className="min-h-screen! bg-[#020617]!" dir="rtl">
+      <Layout className="min-h-screen! bg-[#FDFDFD]!" dir="rtl">
         {/* Sidebar - Desktop */}
         <Sider
-          width={280}
-          collapsedWidth={80}
+          width={300}
+          collapsedWidth={100}
           collapsed={collapsed}
           trigger={null}
-          className="hidden! lg:block! fixed! right-0! top-0! h-screen! z-[60]! bg-[#030712]! border-l! border-white/5 shadow-2xl!"
+          className="hidden! lg:block! fixed! right-0! top-0! h-screen! z-[60]! bg-white! border-l! border-slate-100 shadow-[20px_0_40px_rgba(0,0,0,0.02)]!"
         >
-          <div className="flex items-center gap-3 h-20 px-6 border-b border-white/5 overflow-hidden">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex-shrink-0 flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <span className="font-black text-black text-xl">H</span>
+          <div className="flex items-center justify-center h-24 px-6 mb-4 overflow-hidden">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#B8860B] flex-shrink-0 flex items-center justify-center shadow-lg shadow-[#D4AF37]/30">
+                <span className="font-black text-white text-2xl">H</span>
+              </div>
+              {!collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex flex-col"
+                >
+                  <span className="text-slate-900 font-black tracking-tighter text-xl leading-none">HATAW</span>
+                  <span className="text-[#D4AF37] text-[10px] font-black tracking-[3px] uppercase mt-1">Management</span>
+                </motion.div>
+              )}
             </div>
-            {!collapsed && (
-              <motion.span
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-white font-black tracking-tighter text-xl whitespace-nowrap"
-              >
-                HATAW <span className="text-amber-500 font-medium">ADMIN</span>
-              </motion.span>
-            )}
           </div>
 
           <Menu
@@ -157,7 +164,7 @@ const LayoutComponentDashbord = ({
             selectedKeys={[pathname.substring(1)]}
             items={menuItems}
             onClick={handleMenuClick}
-            className="bg-transparent! pt-6 px-3 border-none! custom-sidebar-menu"
+            className="bg-transparent! px-4 border-none! custom-sidebar-menu h-[calc(100vh-120px)]"
           />
         </Sider>
 
@@ -168,158 +175,125 @@ const LayoutComponentDashbord = ({
           open={mobileOpen}
           width={280}
           closeIcon={null}
-          styles={{ body: { padding: 0, backgroundColor: "#030712" } }}
+          styles={{ body: { padding: "20px 0", backgroundColor: "#FFFFFF" } }}
         >
-          <div className="p-6 border-b border-white/5 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-black font-bold">H</div>
-             <span className="text-white font-black text-xl">DASHBOARD</span>
+          <div className="px-8 mb-8 flex items-center gap-3">
+             <div className="w-10 h-10 rounded-xl bg-[#D4AF37] flex items-center justify-center text-white font-bold shadow-lg shadow-[#D4AF37]/20">H</div>
+             <span className="text-slate-900 font-black text-xl">DASHBOARD</span>
           </div>
           <Menu
-            theme="dark"
             mode="inline"
             items={menuItems}
             onClick={handleMenuClick}
-            className="bg-transparent! pt-4 px-2"
+            className="bg-transparent! border-none!"
           />
         </Drawer>
 
         {/* Main Area */}
         <Layout
-          className="transition-all duration-300 bg-transparent!"
+          className="transition-all duration-500 bg-transparent!"
           style={{
             marginRight: contentMarginRight,
             width: isDesktop ? `calc(100% - ${contentMarginRight}px)` : "100%",
           }}
         >
-          {/* Header - Optimized for RTL */}
-          <Header className="sticky top-0 z-50 flex items-center justify-between h-20 px-6 bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 leading-none!">
+          {/* Header */}
+          <Header className="sticky top-0 z-50 flex items-center justify-between h-24 px-8 bg-white/70! backdrop-blur-2xl border-b border-slate-50 leading-none!">
             
-            {/* Right Side: Toggle & Search */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-8">
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => setCollapsed(!collapsed)}
-                className="hidden lg:flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 hover:text-amber-500 text-slate-400 transition-all border border-white/5"
+                className="hidden lg:flex items-center justify-center w-12 h-12 rounded-2xl bg-white hover:text-[#D4AF37] text-slate-400 transition-all border border-slate-100 shadow-sm"
               />
               <Button
                 type="text"
                 icon={<MenuOutlined />}
                 onClick={() => setMobileOpen(true)}
-                className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 text-white"
+                className="lg:hidden flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-50 text-slate-900"
               />
 
-              <div className="relative hidden md:flex items-center group">
-                <Search
-                  size={18}
-                  className="absolute right-4 text-slate-500 group-focus-within:text-amber-500 transition-colors z-10"
-                />
-                <input
-                  placeholder="گەڕان بۆ هەر شتێک..."
-                  className="bg-white/[0.03] border border-white/10 rounded-2xl py-2.5 pr-12 pl-4 text-sm text-white outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 w-80 transition-all"
-                />
-              </div>
+  
             </div>
 
-            {/* Left Side: Profile & Notifications */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Badge count={5} size="small" color="#f59e0b" offset={[-2, 5]}>
-                    <button className="p-3 rounded-xl bg-white/5 text-slate-400 hover:text-amber-500 hover:bg-white/10 transition-all border border-white/5">
-                    <Bell size={20} />
-                    </button>
-                </Badge>
-              </div>
-
-              <div className="w-px h-8 bg-white/10 mx-2 hidden sm:block" />
-
-              <div className="flex items-center gap-3 pr-2 pl-1 py-1 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-amber-500/20 transition-all cursor-pointer group">
-                <div className="flex flex-col items-end hidden sm:flex">
-                  <span className="text-sm font-bold text-white tracking-tight">ئەدمین</span>
-                  <span className="text-[10px] text-amber-500/80 font-black uppercase tracking-tighter">Super Admin</span>
-                </div>
-                <Avatar
-                  size={44}
-                  className="bg-gradient-to-tr from-amber-600 to-amber-400 shadow-lg shadow-amber-500/20 border-2 border-[#020617]"
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                />
-              </div>
-            </div>
           </Header>
 
-          <Content className="p-6 md:p-10 overflow-x-hidden">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 min-h-[calc(100vh-160px)] shadow-inner"
-            >
-              {children}
-            </motion.div>
+          <Content className="p-8 md:p-12">
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={pathname}
+                initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="bg-white border border-slate-100 rounded-[3rem] p-10 min-h-[calc(100vh-200px)] shadow-[0_20px_50px_rgba(0,0,0,0.02)]"
+              >
+                {children}
+              </motion.div>
+            </AnimatePresence>
           </Content>
         </Layout>
       </Layout>
 
       <style jsx global>{`
-        /* رفع تداخل‌های آنت دیزاین در حالت RTL */
-        .ant-layout-sider-children {
-            display: flex;
-            flex-direction: column;
-        }
+        .ant-layout-sider-children { display: flex; flex-direction: column; }
         
-        .custom-sidebar-menu { 
-            border: none !important; 
-        }
+        .custom-sidebar-menu { border: none !important; }
 
         .custom-sidebar-menu .ant-menu-item {
-          height: 52px !important;
-          margin-bottom: 8px !important;
+          height: 56px !important;
+          margin-bottom: 10px !important;
           color: #94a3b8 !important;
-          border-radius: 14px !important;
-          display: flex !important;
-          align-items: center !important;
+          border-radius: 18px !important;
+          font-weight: 600 !important;
         }
 
         .custom-sidebar-menu .ant-menu-item-selected {
-          background: linear-gradient(270deg, rgba(245, 158, 11, 0.15) 0%, transparent 100%) !important;
-          color: #f59e0b !important;
-          font-weight: 800 !important;
-          border-left: none !important;
-          border-right: 4px solid #f59e0b !important;
+          background: linear-gradient(90deg, #FFFFFF 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+          color: #D4AF37 !important;
+          font-weight: 900 !important;
+          box-shadow: -4px 0 0 #D4AF37;
         }
 
         .custom-sidebar-menu .ant-menu-submenu-title { 
             color: #94a3b8 !important; 
-            height: 52px !important;
-            display: flex !important;
-            align-items: center !important;
+            height: 56px !important;
+            font-weight: 600 !important;
         }
 
         .custom-sidebar-menu .ant-menu-item:hover,
         .custom-sidebar-menu .ant-menu-submenu-title:hover {
-          color: #f59e0b !important;
-          background: rgba(255, 255, 255, 0.03) !important;
+          color: #D4AF37 !important;
+          background: #FDFDFD !important;
         }
 
         .ant-menu-sub { 
-            background: rgba(0,0,0,0.2) !important; 
-            border-radius: 14px; 
-            margin: 4px 0 !important;
+            background: #F8F9FA !important; 
+            border-radius: 18px !important; 
+            padding: 8px !important;
+            margin: 5px 0 !important;
+            border: 1px solid #F1F5F9 !important;
         }
 
-        /* استایل اسکرول بار */
-        ::-webkit-scrollbar {
-          width: 6px;
+        .logout-item {
+          margin-top: auto !important;
+          border: 1px solid #fff1f2 !important;
+          background: #fff1f2/50 !important;
         }
-        ::-webkit-scrollbar-track {
-          background: #020617;
+        
+        .logout-item:hover {
+          background: #fff1f2 !important;
+          color: #e11d48 !important;
         }
-        ::-webkit-scrollbar-thumb {
-          background: #1e293b;
-          border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #f59e0b;
-        }
+
+        .ant-menu-inline-divider { border-color: #F1F5F9 !important; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #FDFDFD; }
+        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
       `}</style>
     </ConfigProvider>
   );

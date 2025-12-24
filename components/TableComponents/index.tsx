@@ -111,39 +111,39 @@ const TableComponents = <T,>({
   return (
     <ConfigProvider 
       theme={{ 
-        algorithm: theme.darkAlgorithm, 
+        algorithm: theme.defaultAlgorithm, 
         token: { 
           colorPrimary: "#D4AF37",
-          colorBgBase: "#050505",
-          borderRadius: 12
+          colorBgBase: "#FFFFFF",
+          borderRadius: 16
         } 
       }}
     >
-      <div className="p-6! bg-[#050505]! min-h-screen! font-sans" dir="rtl">
-        <div className="max-w-[1600px]! mx-auto!">
+      <div className="p-2! bg-transparent! font-sans" dir="rtl">
+        <div className="max-w-full! mx-auto!">
           
           {/* Top Toolbar */}
-          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-4! mb-6! p-5! bg-white/[0.02]! border! border-[#D4AF37]/20 rounded-3xl! backdrop-blur-xl shadow-2xl">
+          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-4! mb-6! p-5! bg-white! border! border-slate-100 rounded-[2rem]! shadow-sm">
             <div className="relative w-full lg:max-w-md group">
-              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-[#D4AF37] transition-colors" />
+              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#D4AF37] transition-colors" />
               <input
                 type="text"
                 placeholder="گەڕان بۆ هەر زانیارییەک..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-black/60! border! border-white/10 focus:border-[#D4AF37]/50 rounded-2xl! py-3! pr-11! pl-4! outline-none text-sm text-slate-200 transition-all shadow-inner placeholder:text-slate-600"
+                className="w-full bg-slate-50! border! border-slate-100 focus:border-[#D4AF37]/40 focus:ring-4 focus:ring-[#D4AF37]/5 rounded-2xl! py-3! pr-11! pl-4! outline-none text-sm text-slate-700 transition-all placeholder:text-slate-400"
               />
             </div>
 
             <div className="flex! items-center! gap-3! w-full lg:w-auto">
               {hasActionsColumn && (
-                <div className="flex! gap-2! border-l! border-white/10 pl-4!">
+                <div className="flex! gap-2! border-l! border-slate-100 pl-4!">
                   <Button
                     danger
                     icon={<Trash2 size={16} />}
                     disabled={!selectedRowKey}
                     onClick={() => onDelete && selectedRowData && onDelete(selectedRowData)}
-                    className="h-11! px-6! rounded-xl! border-red-500/20! bg-red-500/10! hover:bg-red-500/20! font-bold!"
+                    className="h-11! px-6! rounded-xl! border-rose-100! bg-rose-50! hover:bg-rose-100! font-bold! text-rose-600!"
                   >
                     حذف
                   </Button>
@@ -151,7 +151,7 @@ const TableComponents = <T,>({
                     icon={<Edit3 size={16} />}
                     disabled={!selectedRowKey}
                     onClick={() => onEdit && selectedRowData && onEdit(selectedRowData)}
-                    className="h-11! px-6! rounded-xl! border-[#D4AF37]/30! bg-[#D4AF37]/10! text-[#D4AF37] hover:bg-[#D4AF37]/20! font-bold!"
+                    className="h-11! px-6! rounded-xl! border-[#D4AF37]/20! bg-[#D4AF37]/5! text-[#D4AF37] hover:bg-[#D4AF37]/10! font-bold!"
                   >
                     دەستکاری
                   </Button>
@@ -161,7 +161,7 @@ const TableComponents = <T,>({
               <select
                 value={pageSize}
                 onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
-                className="h-11! px-4! bg-black/60! border! border-white/10 rounded-xl! text-xs font-bold text-[#D4AF37] outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all"
+                className="h-11! px-4! bg-white! border! border-slate-100 rounded-xl! text-xs font-bold text-slate-600 outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all shadow-sm"
               >
                 {[10, 20, 50].map(size => <option key={size} value={size}>{size} تۆمار</option>)}
               </select>
@@ -170,17 +170,17 @@ const TableComponents = <T,>({
 
           {/* Column Toggle */}
           <div className="flex! flex-wrap! gap-2! mb-5! px-2!">
-             <div className="flex! items-center! gap-2! text-[#D4AF37]/60 text-[10px]! font-black! uppercase! tracking-widest ml-3!">
+             <div className="flex! items-center! gap-2! text-slate-400 text-[10px]! font-black! uppercase! tracking-widest ml-3!">
                 <Columns size={14} /> ستونەکان:
              </div>
             {columns.map((col) => (
               <button
                 key={String(col.accessor)}
                 onClick={() => toggleColumn(col.accessor)}
-                className={`px-4! py-1.5! rounded-full! text-[11px] font-bold transition-all duration-300 ${
+                className={`px-4! py-1.5! rounded-full! text-[11px] font-bold transition-all duration-300 border ${
                   visibleColumns[col.accessor as string]
-                    ? "bg-gradient-to-r from-[#B8860B] to-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/10"
-                    : "bg-white/5 text-slate-500 border border-white/5 hover:bg-white/10"
+                    ? "bg-[#D4AF37] border-[#D4AF37] text-white shadow-md shadow-[#D4AF37]/20"
+                    : "bg-white text-slate-400 border-slate-100 hover:bg-slate-50"
                 }`}
               >
                 {col.label}
@@ -189,32 +189,32 @@ const TableComponents = <T,>({
           </div>
 
           {/* Table Container */}
-          <div className="bg-white/[0.01]! border! border-white/5 rounded-[2rem]! overflow-hidden shadow-2xl backdrop-blur-sm">
+          <div className="bg-white! border! border-slate-100 rounded-[2rem]! overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full! border-collapse!">
                 <thead>
-                  <tr className="bg-white/[0.03]! border-b! border-white/10">
+                  <tr className="bg-[#F8F9FA]! border-b! border-slate-100">
                     {visibleColumnAccessors.map((col) => (
                       <th
                         key={String(col.accessor)}
                         style={{ width: columnWidths[String(col.accessor)] || 'auto' }}
-                        className="p-5! text-right text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] relative group"
+                        className="p-5! text-right text-[11px] font-black text-slate-500 uppercase tracking-widest relative group"
                       >
                         {col.label}
                         <div
                           onMouseDown={(e) => startResizing(e, String(col.accessor))}
-                          className="absolute left-0 top-1/4 bottom-1/4 w-[1px]! bg-[#D4AF37]/0 group-hover:bg-[#D4AF37]/40 cursor-col-resize transition-all"
+                          className="absolute left-0 top-1/4 bottom-1/4 w-[2px]! bg-slate-200 opacity-0 group-hover:opacity-100 cursor-col-resize transition-all"
                         />
                       </th>
                     ))}
                     {hasActionsColumn && (
-                      <th className="p-5! text-center text-[11px] font-black text-[#D4AF37] bg-black/60! border-r! border-white/10 sticky left-0 z-10 uppercase tracking-widest">
+                      <th className="p-5! text-center text-[11px] font-black text-[#D4AF37] bg-slate-50! border-r! border-slate-100 sticky left-0 z-10 uppercase tracking-widest">
                         کردارەکان
                       </th>
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y! divide-white/[0.04]">
+                <tbody className="divide-y! divide-slate-50">
                   {paginatedData.length > 0 ? (
                     paginatedData.map((row) => {
                       const isSelected = row[rowKeyAccessor] === selectedRowKey;
@@ -223,25 +223,25 @@ const TableComponents = <T,>({
                           key={String(row[rowKeyAccessor])}
                           onClick={() => handleRowClick(row)}
                           className={`group transition-all duration-300 cursor-pointer ${
-                            isSelected ? "bg-[#D4AF37]/10" : "hover:bg-white/[0.02]"
+                            isSelected ? "bg-[#D4AF37]/5" : "hover:bg-slate-50/50"
                           }`}
                         >
                           {visibleColumnAccessors.map((col) => (
-                            <td key={String(col.accessor)} className={`p-5! text-sm font-medium transition-colors ${isSelected ? "text-[#D4AF37]" : "text-slate-300"} whitespace-nowrap`}>
+                            <td key={String(col.accessor)} className={`p-5! text-sm font-medium transition-colors ${isSelected ? "text-[#D4AF37]" : "text-slate-600"} whitespace-nowrap`}>
                               {col.render 
                                 ? col.render(row[col.accessor], row) 
                                 : String(row[col.accessor] ?? '')}
                             </td>
                           ))}
                           {hasActionsColumn && (
-                            <td className="p-3! text-center sticky left-0 bg-[#080808]! border-r! border-white/10 shadow-[-15px_0_25px_-5px_rgba(0,0,0,0.7)]">
+                            <td className="p-3! text-center sticky left-0 bg-white! border-r! border-slate-50 shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.05)]">
                               <div className="flex! gap-2! justify-center">
                                 <Button 
                                   type="text" 
                                   size="small"
                                   icon={<Edit3 size={16} className="text-[#D4AF37]" />} 
                                   onClick={(e) => { e.stopPropagation(); onEdit?.(row); }}
-                                  className="hover:bg-[#D4AF37]/20! h-9! w-9! rounded-lg!"
+                                  className="hover:bg-[#D4AF37]/10! h-9! w-9! rounded-lg!"
                                 />
                                 <Button 
                                   type="text" 
@@ -249,7 +249,7 @@ const TableComponents = <T,>({
                                   danger
                                   icon={<Trash2 size={16} />} 
                                   onClick={(e) => { e.stopPropagation(); onDelete?.(row); }}
-                                  className="hover:bg-red-500/20! h-9! w-9! rounded-lg!"
+                                  className="hover:bg-rose-50! h-9! w-9! rounded-lg!"
                                 />
                               </div>
                             </td>
@@ -259,11 +259,11 @@ const TableComponents = <T,>({
                     })
                   ) : (
                     <tr>
-                      <td colSpan={100} className="p-24! text-center">
-                        <div className="inline-flex! p-6! bg-white/[0.02] rounded-full! mb-4!">
-                           <LayoutList className="text-slate-800" size={54} />
+                      <td colSpan={100} className="p-24! text-center bg-white">
+                        <div className="inline-flex! p-6! bg-slate-50 rounded-full! mb-4!">
+                           <LayoutList className="text-slate-200" size={54} />
                         </div>
-                        <div className="text-slate-500 font-bold text-lg!">هیچ زانیارییەک لێرە نییە</div>
+                        <div className="text-slate-400 font-bold text-lg!">هیچ زانیارییەک لێرە نییە</div>
                       </td>
                     </tr>
                   )}
@@ -274,29 +274,29 @@ const TableComponents = <T,>({
 
           {/* Pagination */}
           <div className="flex! flex-col! sm:flex-row! justify-between! items-center! gap-4! mt-8! px-4!">
-            <div className="text-[11px]! text-slate-500! font-bold uppercase tracking-widest">
-              نیشاندان <span className="text-[#D4AF37] px-1">{(currentPage - 1) * pageSize + 1}</span> بۆ <span className="text-[#D4AF37] px-1">{Math.min(currentPage * pageSize, filteredData.length)}</span> لە کۆی <span className="text-[#D4AF37] px-1">{filteredData.length}</span> تۆمار
+            <div className="text-[11px]! text-slate-400! font-bold uppercase tracking-widest">
+              نیشاندان <span className="text-[#D4AF37] px-1 font-black">{(currentPage - 1) * pageSize + 1}</span> بۆ <span className="text-[#D4AF37] px-1 font-black">{Math.min(currentPage * pageSize, filteredData.length)}</span> لە کۆی <span className="text-[#D4AF37] px-1 font-black">{filteredData.length}</span> تۆمار
             </div>
             
             <div className="flex! items-center! gap-3!">
               <button
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-2.5! rounded-xl! border! border-white/10 bg-white/5 text-slate-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 disabled:opacity-10 transition-all"
+                className="p-2.5! rounded-xl! border! border-slate-100 bg-white text-slate-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 disabled:opacity-30 transition-all shadow-sm"
               >
                 <ChevronRight size={20} />
               </button>
               
-              <div className="flex! items-center! gap-2! px-4! py-2! bg-white/[0.03] rounded-xl! border! border-white/5">
+              <div className="flex! items-center! gap-2! px-4! py-2! bg-slate-50 rounded-xl! border! border-slate-100">
                 <span className="text-[#D4AF37] text-sm font-black">{currentPage}</span>
-                <span className="text-slate-700 font-bold">/</span>
-                <span className="text-slate-500 text-xs font-bold">{totalPages}</span>
+                <span className="text-slate-300 font-bold">/</span>
+                <span className="text-slate-400 text-xs font-bold">{totalPages}</span>
               </div>
 
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="p-2.5! rounded-xl! border! border-white/10 bg-white/5 text-slate-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 disabled:opacity-10 transition-all"
+                className="p-2.5! rounded-xl! border! border-slate-100 bg-white text-slate-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 disabled:opacity-30 transition-all shadow-sm"
               >
                 <ChevronLeft size={20} />
               </button>

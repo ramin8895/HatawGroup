@@ -5,17 +5,6 @@ import LayoutComponents from "../components/layout/layoutComponents";
 import SessionProvider from "@/components/SessionProvider";
 import QueryProvider from "@/components/QueryProvider";
 import { ToastProvider } from "@/components/Dashbord/TostComponents";
-import localFont from 'next/font/local'
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   title: "hatawgroup",
@@ -29,6 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" className={``}>
+<meta name="google-site-verification" content="kSg0zTBvoUZ7-muAd8WVhIUfzlQaWUMMRft1bKFLci4" />
       <QueryProvider>
         <ToastProvider>
           <SessionProvider>
