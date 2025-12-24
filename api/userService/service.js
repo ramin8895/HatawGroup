@@ -24,3 +24,14 @@ export const CreateNewcustomer = async (data) => {
     }
   );
 };
+export const UpdateUserRoleEdit = async (data) => {
+  return await http.post(
+    `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Account/UserRoleEdit`,
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};

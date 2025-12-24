@@ -3,7 +3,7 @@
 @font-face {
   font-family: IRANSans;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 200;
   src: url("../public/IRANSans/IRANSans\(Small\).ttf");
   src: url("../public/IRANSans/IRANSans\(Small\).ttf")
       format("embedded-opentype"),
@@ -81,7 +81,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "iransans" !important;
+  font-family: IRANSans, tahoma, arial !important;
+  font-size: 15px !important;
+
 }
 
 :root {
@@ -111,6 +113,7 @@ body {
   background: var(--primary-black);
   color: var(--primary-silver);
   line-height: 1.6;
+
 }
 
 /* Header & Navigation */

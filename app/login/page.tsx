@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { User, Lock, Phone, Mail, LogIn, UserPlus, ArrowLeft, Sparkles } from "lucide-react";
+import { User, Lock, Phone, Mail, LogIn, UserPlus, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function AuthPage() {
@@ -33,19 +33,21 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen! flex! items-center! justify-center! bg-[#030712]! px-4! relative! overflow-hidden! font-sans" dir="rtl">
-      {/* Background Glows */}
+    // تغییر در این بخش: افزودن pt-24 برای فاصله از منوی بالا و تغییر items-center به items-start برای کنترل بهتر در اسکرول
+    <div className="min-h-screen! flex! items-start! md:items-center! justify-center! bg-[#030712]! px-4! pt-24! pb-12! relative! overflow-hidden! font-sans" dir="rtl">
+      
+      {/* Background Glows (Gold Theme) */}
       <motion.div 
         animate={{ 
           scale: isLogin ? 1 : 1.2,
           opacity: isLogin ? 0.4 : 0.6 
         }}
-        className="absolute! top-[-10%]! left-[-10%]! w-[50%]! h-[50%]! bg-indigo-600/20! blur-[120px]! rounded-full! pointer-events-none!" 
+        className="absolute! top-[10%]! left-[-10%]! w-[50%]! h-[60%]! bg-[#D4AF37]/10! blur-[120px]! rounded-full! pointer-events-none!" 
       />
       
       <div className="w-full! max-w-[480px]! z-10! relative!">
         {/* Glow behind the card */}
-        <div className={`absolute! -inset-1! bg-linear-to-r ${isLogin ? 'from-indigo-500/20 to-purple-500/20' : 'from-emerald-500/20 to-teal-500/20'} blur-xl! rounded-[3rem]!`} />
+        <div className={`absolute! -inset-1! bg-gradient-to-r from-[#D4AF37]/20 to-[#B8860B]/20 blur-xl! rounded-[3rem]!`} />
 
         <motion.div 
           layout
@@ -59,14 +61,12 @@ export default function AuthPage() {
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: 180 }}
-                className={`inline-flex! p-4! rounded-3xl! mb-4! border! ${
-                  isLogin ? "bg-indigo-600/10! border-indigo-500/20!" : "bg-emerald-600/10! border-emerald-500/20!"
-                }`}
+                className={`inline-flex! p-4! rounded-3xl! mb-4! border! bg-[#D4AF37]/10! border-[#D4AF37]/20!`}
               >
                 {isLogin ? (
-                  <LogIn className="text-indigo-400" size={32} />
+                  <LogIn className="text-[#D4AF37]" size={32} />
                 ) : (
-                  <UserPlus className="text-emerald-400" size={32} />
+                  <UserPlus className="text-[#D4AF37]" size={32} />
                 )}
               </motion.div>
             </AnimatePresence>
@@ -87,18 +87,16 @@ export default function AuthPage() {
             <AnimatePresence mode="popLayout">
               {/* Username Field */}
               <motion.div layout className="relative! group!">
-                <User className={`absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! transition-colors! ${isLogin ? 'group-focus-within:text-indigo-400!' : 'group-focus-within:text-emerald-400!'}`} size={20} />
+                <User className="absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! transition-colors! group-focus-within:text-[#D4AF37]!" size={20} />
                 <input
                   value={userData.username}
                   onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                   placeholder="ناوی بەکارهێنەر"
-                  className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:bg-white/[0.07]! transition-all! placeholder:text-slate-600!"
-                  style={{ borderColor: isLogin ? 'initial' : '' }} // Dynamic focus border via CSS
+                  className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:border-[#D4AF37]/50! focus:bg-white/[0.07]! transition-all! placeholder:text-slate-600!"
                   required
                 />
               </motion.div>
 
-              {/* Email & Phone (Signup Only) */}
               {!isLogin && (
                 <>
                   <motion.div 
@@ -107,11 +105,11 @@ export default function AuthPage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="relative! group!"
                   >
-                    <Mail className="absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! group-focus-within:text-emerald-400!" size={20} />
+                    <Mail className="absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! group-focus-within:text-[#D4AF37]!" size={20} />
                     <input
                       type="email"
                       placeholder="ئیمەیڵ"
-                      className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:border-emerald-500/50! transition-all! placeholder:text-slate-600!"
+                      className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:border-[#D4AF37]/50! transition-all! placeholder:text-slate-600!"
                       required
                     />
                   </motion.div>
@@ -122,25 +120,24 @@ export default function AuthPage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="relative! group!"
                   >
-                    <Phone className="absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! group-focus-within:text-emerald-400!" size={20} />
+                    <Phone className="absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! group-focus-within:text-[#D4AF37]!" size={20} />
                     <input
                       placeholder="ژمارەی مۆبایل"
-                      className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:border-emerald-500/50! transition-all! placeholder:text-slate-600!"
+                      className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:border-[#D4AF37]/50! transition-all! placeholder:text-slate-600!"
                       required
                     />
                   </motion.div>
                 </>
               )}
 
-              {/* Password Field */}
               <motion.div layout className="relative! group!">
-                <Lock className={`absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! transition-colors! ${isLogin ? 'group-focus-within:text-indigo-400!' : 'group-focus-within:text-emerald-400!'}`} size={20} />
+                <Lock className="absolute! right-4! top-1/2! -translate-y-1/2! text-slate-500! transition-colors! group-focus-within:text-[#D4AF37]!" size={20} />
                 <input
                   type="password"
                   value={userData.password}
                   onChange={(e) => setUserData({ ...userData, password: e.target.value })}
                   placeholder="وشەی نهێنی"
-                  className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! transition-all! placeholder:text-slate-600!"
+                  className="w-full! bg-white/[0.03]! border! border-white/10! rounded-2xl! py-4! pr-12! pl-4! text-white! outline-none! focus:border-[#D4AF37]/50! transition-all! placeholder:text-slate-600!"
                   required
                 />
               </motion.div>
@@ -150,51 +147,41 @@ export default function AuthPage() {
               layout
               type="submit"
               disabled={loading}
-              className={`w-full! py-4! rounded-2xl! font-black! text-lg! transition-all! shadow-xl! active:scale-[0.98]! flex! items-center! justify-center! gap-2! mt-4! ${
-                isLogin 
-                  ? "bg-indigo-600! hover:bg-indigo-500! text-white! shadow-indigo-600/20!" 
-                  : "bg-emerald-600! hover:bg-emerald-500! text-white! shadow-emerald-600/20!"
-              }`}
+              className="w-full! py-4! bg-gradient-to-r! from-[#D4AF37]! to-[#B8860B]! text-black! rounded-2xl! font-black! text-lg! transition-all! shadow-xl! shadow-[#D4AF37]/10! active:scale-[0.98]! flex! items-center! justify-center! gap-2! mt-4! hover:opacity-90!"
             >
               {loading ? "چاوەڕوانبە..." : isLogin ? "چوونە ژوورەوە" : "تۆمارکردن"}
             </motion.button>
           </form>
 
-          {/* Google Login (Login Only) */}
-          <AnimatePresence>
-            {isLogin && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="mt-4!"
+          {isLogin && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-4!"
+            >
+              <button
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+                className="w-full! flex! items-center! justify-center! gap-4! bg-white/5! border! border-white/10! text-white! py-4! rounded-2xl! font-bold! hover:bg-white/10! transition-all!"
               >
-                <button
-                  onClick={() => signIn("google", { callbackUrl: "/" })}
-                  className="w-full! flex! items-center! justify-center! gap-4! bg-white/5! border! border-white/10! text-white! py-4! rounded-2xl! font-bold! hover:bg-white/10! transition-all!"
-                >
-                  <FcGoogle size={22} /> بەردەوامبە لەگەڵ گوگڵ
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <FcGoogle size={22} /> بەردەوامبە لەگەڵ گوگڵ
+              </button>
+            </motion.div>
+          )}
 
-          {/* Toggle Switch */}
           <motion.div layout className="mt-10! text-center! border-t! border-white/5! pt-6!">
             <button 
               onClick={() => setIsLogin(!isLogin)}
               className="text-slate-400! text-sm! font-medium! hover:text-white! transition-colors! flex! items-center! justify-center! gap-2! mx-auto!"
             >
               {isLogin ? (
-                <>هێشتا هەژمارت نییە؟ <span className="text-indigo-400! font-bold! italic! underline! underline-offset-4!">دروستی بکە</span></>
+                <>هێشتا هەژمارت نییە؟ <span className="text-[#D4AF37]! font-bold! italic! underline! underline-offset-4!">دروستی بکە</span></>
               ) : (
-                <>پێشتر هەژمارت دروست کردووە؟ <span className="text-emerald-400! font-bold! italic! underline! underline-offset-4!">بچۆ ژوورەوە</span></>
+                <>پێشتر هەژمارت دروست کردووە؟ <span className="text-[#D4AF37]! font-bold! italic! underline! underline-offset-4!">بچۆ ژوورەوە</span></>
               )}
             </button>
           </motion.div>
         </motion.div>
 
-        {/* Footer Link */}
         <motion.div layout className="mt-8! text-center!">
           <button 
             onClick={() => window.history.back()} 

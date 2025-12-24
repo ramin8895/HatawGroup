@@ -29,49 +29,51 @@ const ServiceComponents = () => {
     },
   };
 
+  // استفاده از کد رنگ طلایی دقیق شما: #D4AF37
   const services = [
     {
-      icon: <Palette className="text-amber-500" size={28} />,
+      icon: <Palette className="text-[#D4AF37]" size={28} />,
       title: "دیزاینی ناسنامەی براند",
       desc: "سیستەمی تەواوی ناسنامەی بینینی لەوانە دیزاینی لۆگۆ، ڕەنگەکان و فۆنتەکان کە یەکگرتوویی دڵنیادەکاتەوە.",
-      color: "from-amber-500/10"
+      color: "from-[#D4AF37]/10"
     },
     {
-      icon: <BarChart3 className="text-amber-400" size={28} />,
+      icon: <BarChart3 className="text-[#F5E1A4]" size={28} />,
       title: "ستراتیژی براند",
       desc: "توێژینەوەی قووڵی بازاڕ و شوێنپێدانی ستراتیژی بۆ جیاکردنەوەی براندەکەت و دروستکردنی پێشەنگایەتی.",
-      color: "from-yellow-600/10"
+      color: "from-[#D4AF37]/10"
     },
     {
-      icon: <Lightbulb className="text-amber-300" size={28} />,
+      icon: <Lightbulb className="text-[#C19A2E]" size={28} />,
       title: "ڕاوێژکاری براند",
       desc: "ڕێنمایی پسپۆڕانە لەسەر گەشە و فراوانکردنی براند بۆ ئەوەی یارمەتیت بدەین لە هەنگاوەکانی گەشەدا.",
-      color: "from-amber-400/10"
+      color: "from-[#D4AF37]/10"
     },
     {
-      icon: <Globe className="text-amber-500" size={28} />,
+      icon: <Globe className="text-[#D4AF37]" size={28} />,
       title: "براندی دیجیتاڵ",
       desc: "ئامادەبوونی دیجیتاڵی گشتگیر لەوانە دیزاینی وێبسایت و ستراتیژی تۆڕە کۆمەڵایەتییەکان.",
-      color: "from-yellow-500/10"
+      color: "from-[#D4AF37]/10"
     },
     {
-      icon: <Zap className="text-amber-400" size={28} />,
+      icon: <Zap className="text-[#F5E1A4]" size={28} />,
       title: "ئەزموونی براند",
       desc: "دروستکردنی ئەزموونی بیرلەبەر لە ڕێگەی چیرۆکگێڕان و ستراتیژییەکانی بەشداریکردنی کڕیار.",
-      color: "from-amber-600/10"
+      color: "from-[#D4AF37]/10"
     },
     {
-      icon: <RefreshCw className="text-amber-300" size={28} />,
+      icon: <RefreshCw className="text-[#C19A2E]" size={28} />,
       title: "نوێکردنەوەی براند",
       desc: "خزمەتگوزارییە تەواوەکانی گۆڕانکاری براند بۆ ئەو بازرگانیانەی کە ئامادەن بۆ پەرەپێدانی گەورە.",
-      color: "from-amber-200/10"
+      color: "from-[#D4AF37]/10"
     },
   ];
 
   return (
     <section className="py-24! bg-[#030712] relative overflow-hidden" id="services">
-      {/* دکوراسیون پس‌زمینه طلایی ملایم */}
-      <div className="absolute top-0! right-0! w-[500px]! h-[500px]! bg-amber-600/5! blur-[120px]! rounded-full! pointer-events-none"></div>
+      {/* دکوراسیون پس‌زمینه طلایی لوکس */}
+      <div className="absolute top-0! right-0! w-[500px]! h-[500px]! bg-[#D4AF37]/5! blur-[120px]! rounded-full! pointer-events-none"></div>
+      <div className="absolute bottom-0! left-0! w-[300px]! h-[300px]! bg-[#D4AF37]/5! blur-[100px]! rounded-full! pointer-events-none"></div>
 
       <div className="max-w-7xl! mx-auto! px-6! relative z-10!">
         {/* هدر بخش خدمات */}
@@ -79,7 +81,7 @@ const ServiceComponents = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-block px-4! py-1! rounded-full! bg-amber-500/5! border border-amber-500/20! text-amber-500 text-xs! font-black tracking-widest uppercase mb-4!"
+            className="inline-block px-4! py-1! rounded-full! bg-[#D4AF37]/5! border border-[#D4AF37]/20! text-[#D4AF37] text-xs! font-black tracking-widest uppercase mb-4!"
           >
             What We Offer
           </motion.div>
@@ -114,18 +116,18 @@ const ServiceComponents = () => {
               key={index}
               variants={itemVariants}
               whileHover={{ y: -10 }}
-              className="group relative p-8! bg-white/[0.02] border border-white/5! rounded-[2.5rem]! overflow-hidden hover:bg-white/[0.04] hover:border-amber-500/20 transition-all duration-500"
+              className="group relative p-8! bg-white/[0.01] border border-white/5! rounded-[2.5rem]! overflow-hidden hover:bg-white/[0.03] hover:border-[#D4AF37]/20 transition-all duration-500"
             >
-              {/* افکت نوری گوشه کارت (طلایی) */}
+              {/* افکت نوری گوشه کارت (طلایی متالیک) */}
               <div className={`absolute top-0! left-0! w-32! h-32! bg-gradient-to-br ${service.color} blur-[50px]! opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
               
               <div className="relative z-10! flex flex-col items-end text-right">
-                {/* باکس آیکون */}
-                <div className="w-16! h-16! bg-white/5! rounded-2xl! flex items-center justify-center mb-6! group-hover:scale-110 group-hover:bg-amber-500/10 transition-all duration-500 border border-white/5 group-hover:border-amber-500/20">
+                {/* باکس آیکون با استایل طلایی */}
+                <div className="w-16! h-16! bg-white/5! rounded-2xl! flex items-center justify-center mb-6! group-hover:scale-110 group-hover:bg-[#D4AF37]/10 transition-all duration-500 border border-white/5 group-hover:border-[#D4AF37]/20">
                   {service.icon}
                 </div>
                 
-                <h3 className="text-xl! font-bold text-white mb-4! group-hover:text-amber-400 transition-colors">
+                <h3 className="text-xl! font-bold text-white mb-4! group-hover:text-[#D4AF37] transition-colors">
                   {service.title}
                 </h3>
                 
@@ -133,14 +135,14 @@ const ServiceComponents = () => {
                   {service.desc}
                 </p>
 
-                <div className="mt-auto! flex items-center gap-2! text-white/40 group-hover:text-amber-500 transition-colors text-xs! font-bold">
+                <div className="mt-auto! flex items-center gap-2! text-white/40 group-hover:text-[#D4AF37] transition-colors text-xs! font-bold">
                   <ArrowUpLeft size={16} />
                   <span>زیاتر ببینە</span>
                 </div>
               </div>
 
-              {/* خط نازک پایین کارت - گرادینت طلایی */}
-              <div className="absolute bottom-0! left-0! right-0! h-[2px]! bg-gradient-to-r from-transparent via-amber-500/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+              {/* خط نازک پایین کارت - گرادینت طلایی در حالت هاور */}
+              <div className="absolute bottom-0! left-0! right-0! h-[2px]! bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
             </motion.div>
           ))}
         </motion.div>

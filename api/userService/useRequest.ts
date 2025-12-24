@@ -24,3 +24,12 @@ export const useCreateNewcustomer = () =>
 
 
   });
+export const useUpdateUserRoleEdit = () =>
+  
+  useMutation({
+    mutationKey: [cashKey.updateUpdateUserRoleEdit],
+    mutationFn: (data:any) => services.UpdateUserRoleEdit(data),
+    retry: false,
+
+
+  });

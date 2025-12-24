@@ -24,15 +24,15 @@ const AboutComponents = () => {
   return (
     <motion.section
       id="about"
-      className="relative py-24! md:py-32! bg-black overflow-hidden"
+      className="relative py-24! md:py-32! bg-[#030712] overflow-hidden"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
       variants={container}
     >
-      {/* Luxury Gold Background Glows */}
-      <div className="absolute top-1/2! left-0! -translate-y-1/2! w-[500px]! h-[500px]! bg-amber-600/5! blur-[140px]! rounded-full! pointer-events-none"></div>
-      <div className="absolute top-0! right-0! w-[300px]! h-[300px]! bg-yellow-600/5! blur-[100px]! rounded-full! pointer-events-none"></div>
+      {/* Luxury Gold Background Glows - Adjusted to #D4AF37 */}
+      <div className="absolute top-1/2! left-0! -translate-y-1/2! w-[500px]! h-[500px]! bg-[#D4AF37]/5! blur-[140px]! rounded-full! pointer-events-none"></div>
+      <div className="absolute top-0! right-0! w-[300px]! h-[300px]! bg-[#D4AF37]/5! blur-[100px]! rounded-full! pointer-events-none"></div>
 
       <div className="max-w-7xl! mx-auto! px-6! relative z-10!">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16! items-center!">
@@ -42,15 +42,15 @@ const AboutComponents = () => {
             className="relative group order-2 lg:order-1!"
             variants={fadeInUp}
           >
-            <div className="relative rounded-[3rem]! overflow-hidden border border-amber-900/20! bg-neutral-900/50! p-3! backdrop-blur-sm transition-all duration-500 group-hover:border-amber-500/40">
+            <div className="relative rounded-[3rem]! overflow-hidden border border-[#D4AF37]/10! bg-neutral-900/50! p-3! backdrop-blur-sm transition-all duration-500 group-hover:border-[#D4AF37]/40">
               <img
                 src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop"
                 alt="Branding Strategy"
                 className="w-full! h-[550px]! object-cover rounded-[2.5rem]! grayscale! group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
               />
               
-              {/* Floating Gold Experience Card */}
-              <div className="absolute bottom-10! -right-6! md:right-10! bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 p-7! rounded-3xl! shadow-[0_20px_50px_rgba(180,130,30,0.3)] hidden md:block!">
+              {/* Floating Gold Experience Card - Luxury Metallic Style */}
+              <div className="absolute bottom-10! -right-6! md:right-10! bg-gradient-to-br from-[#D4AF37] via-[#F5E1A4] to-[#B8860B] p-7! rounded-3xl! shadow-[0_20px_50px_rgba(212,175,55,0.3)] hidden md:block!">
                 <div className="flex items-center gap-4!">
                   <div className="w-14! h-14! bg-black/10! rounded-2xl! flex items-center justify-center backdrop-blur-md">
                     <Rocket className="text-black" size={28} />
@@ -64,24 +64,24 @@ const AboutComponents = () => {
             </div>
 
             {/* Decorative Gold Frame */}
-            <div className="absolute -top-6! -left-6! w-40! h-40! border-t-2! border-l-2! border-amber-500/20! rounded-tl-[4rem]! -z-10!"></div>
+            <div className="absolute -top-6! -left-6! w-40! h-40! border-t-2! border-l-2! border-[#D4AF37]/20! rounded-tl-[4rem]! -z-10!"></div>
           </motion.div>
 
           {/* Text Column - Right */}
           <motion.div className="space-y-8! text-right order-1 lg:order-2!" variants={fadeInUp}>
             <div className="space-y-4!">
               <div className="flex items-center justify-end gap-3!">
-                <span className="text-amber-500 text-xs! font-black tracking-[0.3em] uppercase">About Hataw Group</span>
-                <span className="w-16! h-[1px]! bg-gradient-to-l from-amber-600 to-transparent"></span>
+                <span className="text-[#D4AF37] text-xs! font-black tracking-[0.3em] uppercase">About Hataw Group</span>
+                <span className="w-16! h-[1px]! bg-gradient-to-l from-[#D4AF37] to-transparent"></span>
               </div>
               <h3 className="text-5xl! md:text-6xl! font-black text-white leading-[1.1]!">
-                دروستکردنی براندەکان کە <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-l from-amber-200 via-amber-400 to-amber-500">بەردەوام دەبن</span>
+                درۆستکردنی براندەکان کە <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-l from-[#F5E1A4] via-[#D4AF37] to-[#B8860B]">بەردەوام دەبن</span>
               </h3>
             </div>
 
             <p className="text-gray-400 text-xl! leading-relaxed! font-light">
-              لە <span className="text-amber-500 font-bold">Hataw Group</span>، باوەڕمان وایە هەموو بازرگانییەک شایەنی ئەوەیە ببێتە براندێکی بەهێز. ڕێبازی ستراتیژیمان توێژینەوەی بازاڕی قووڵ و داهێنانی پیشەیی تێکەڵ دەکات بۆ ئەوەی تۆ لە پێشەنگانی بواری خۆت دابنێین.
+              لە <span className="text-[#D4AF37] font-bold">Hataw Group</span>، باوەڕمان وایە هەموو بازرگانییەک شایەنی ئەوەیە ببێتە براندێکی بەهێز. ڕێبازی ستراتیژیمان توێژینەوەی بازاڕی قووڵ و داهێنانی پیشەیی تێکەڵ دەکات بۆ ئەوەی تۆ لە پێشەنگانی بواری خۆت دابنێین.
             </p>
 
             {/* Feature List with Gold Icons */}
@@ -93,9 +93,9 @@ const AboutComponents = () => {
                 "پەرەپێدانی بازرگانی"
               ].map((item, index) => (
                 <div key={index} className="flex items-center justify-end gap-3! text-gray-300 group/item">
-                  <span className="text-base! font-semibold group-hover/item:text-amber-400 transition-colors">{item}</span>
-                  <div className="p-1! rounded-full! bg-amber-500/10! border border-amber-500/20!">
-                    <CheckCircle2 size={16} className="text-amber-500" />
+                  <span className="text-base! font-semibold group-hover/item:text-[#D4AF37] transition-colors">{item}</span>
+                  <div className="p-1! rounded-full! bg-[#D4AF37]/10! border border-[#D4AF37]/20!">
+                    <CheckCircle2 size={16} className="text-[#D4AF37]" />
                   </div>
                 </div>
               ))}
@@ -104,7 +104,7 @@ const AboutComponents = () => {
             <div className="pt-8!">
               <motion.a
                 href="#contact"
-                className="group relative inline-flex items-center gap-4! px-12! py-5! bg-gradient-to-r from-amber-400 to-amber-600 text-black rounded-2xl! font-black text-lg! shadow-[0_15px_35px_-10px_rgba(217,119,6,0.4)] transition-all overflow-hidden"
+                className="group relative inline-flex items-center gap-4! px-12! py-5! bg-gradient-to-r from-[#D4AF37] via-[#F5E1A4] to-[#C19A2E] text-black rounded-2xl! font-black text-lg! shadow-[0_15px_35px_-10px_rgba(212,175,55,0.4)] transition-all overflow-hidden"
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.95 }}
               >

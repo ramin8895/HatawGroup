@@ -4,11 +4,10 @@ import React, { useState, useMemo, useCallback } from "react";
 import { Button, ConfigProvider, theme } from "antd";
 import { Edit3, Trash2, Search, ChevronRight, ChevronLeft, Columns, LayoutList } from "lucide-react";
 
-// ۱. اصلاح اینترفیس برای پذیرش تابع رندر سفارشی
 export interface Column<T> {
   label: string;
   accessor: keyof T;
-  render?: (value: any, record: T) => React.ReactNode; // تابع رندر اختیاری
+  render?: (value: any, record: T) => React.ReactNode;
 }
 
 interface TableComponentsProps<T> {
@@ -17,7 +16,7 @@ interface TableComponentsProps<T> {
   rowKeyAccessor: keyof T;
   onEdit?: (rowData: T) => void;
   onDelete?: (rowData: T) => void;
-  isLoading?: boolean; // اضافه کردن لودینگ برای تجربه کاربری بهتر
+  isLoading?: boolean;
 }
 
 const TableComponents = <T,>({
@@ -110,20 +109,29 @@ const TableComponents = <T,>({
   const selectedRowData = data.find((row) => row[rowKeyAccessor] === selectedRowKey);
 
   return (
-    <ConfigProvider theme={{ algorithm: theme.darkAlgorithm, token: { colorPrimary: "#6366f1" } }}>
-      <div className="p-4! bg-[#020617]! min-h-screen!" dir="rtl">
+    <ConfigProvider 
+      theme={{ 
+        algorithm: theme.darkAlgorithm, 
+        token: { 
+          colorPrimary: "#D4AF37",
+          colorBgBase: "#050505",
+          borderRadius: 12
+        } 
+      }}
+    >
+      <div className="p-6! bg-[#050505]! min-h-screen! font-sans" dir="rtl">
         <div className="max-w-[1600px]! mx-auto!">
           
           {/* Top Toolbar */}
-          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-4! mb-6! p-4! bg-white/[0.02]! border! border-white/10 rounded-2xl! backdrop-blur-md">
+          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-4! mb-6! p-5! bg-white/[0.02]! border! border-[#D4AF37]/20 rounded-3xl! backdrop-blur-xl shadow-2xl">
             <div className="relative w-full lg:max-w-md group">
-              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-[#D4AF37] transition-colors" />
               <input
                 type="text"
-                placeholder="گەڕان..."
+                placeholder="گەڕان بۆ هەر زانیارییەک..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-black/40! border! border-white/10 focus:border-indigo-500/50 rounded-xl! py-2.5! pr-11! pl-4! outline-none text-sm text-slate-200 transition-all shadow-inner"
+                className="w-full bg-black/60! border! border-white/10 focus:border-[#D4AF37]/50 rounded-2xl! py-3! pr-11! pl-4! outline-none text-sm text-slate-200 transition-all shadow-inner placeholder:text-slate-600"
               />
             </div>
 
@@ -135,7 +143,7 @@ const TableComponents = <T,>({
                     icon={<Trash2 size={16} />}
                     disabled={!selectedRowKey}
                     onClick={() => onDelete && selectedRowData && onDelete(selectedRowData)}
-                    className="h-10! rounded-lg! border-red-500/20! bg-red-500/10! hover:bg-red-500/20!"
+                    className="h-11! px-6! rounded-xl! border-red-500/20! bg-red-500/10! hover:bg-red-500/20! font-bold!"
                   >
                     حذف
                   </Button>
@@ -143,7 +151,7 @@ const TableComponents = <T,>({
                     icon={<Edit3 size={16} />}
                     disabled={!selectedRowKey}
                     onClick={() => onEdit && selectedRowData && onEdit(selectedRowData)}
-                    className="h-10! rounded-lg! border-indigo-500/20! bg-indigo-500/10!"
+                    className="h-11! px-6! rounded-xl! border-[#D4AF37]/30! bg-[#D4AF37]/10! text-[#D4AF37] hover:bg-[#D4AF37]/20! font-bold!"
                   >
                     دەستکاری
                   </Button>
@@ -153,25 +161,25 @@ const TableComponents = <T,>({
               <select
                 value={pageSize}
                 onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
-                className="h-10! px-3! bg-black/40! border! border-white/10 rounded-lg! text-xs text-slate-300 outline-none cursor-pointer"
+                className="h-11! px-4! bg-black/60! border! border-white/10 rounded-xl! text-xs font-bold text-[#D4AF37] outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all"
               >
-                {[10, 20, 50].map(size => <option key={size} value={size}>{size} دانە</option>)}
+                {[10, 20, 50].map(size => <option key={size} value={size}>{size} تۆمار</option>)}
               </select>
             </div>
           </div>
 
           {/* Column Toggle */}
-          <div className="flex! flex-wrap! gap-2! mb-4! px-1!">
-             <div className="flex! items-center! gap-2! text-slate-500! text-[10px]! font-bold! uppercase! ml-2!">
-                <Columns size={12} /> ستونەکان:
+          <div className="flex! flex-wrap! gap-2! mb-5! px-2!">
+             <div className="flex! items-center! gap-2! text-[#D4AF37]/60 text-[10px]! font-black! uppercase! tracking-widest ml-3!">
+                <Columns size={14} /> ستونەکان:
              </div>
             {columns.map((col) => (
               <button
                 key={String(col.accessor)}
                 onClick={() => toggleColumn(col.accessor)}
-                className={`px-3! py-1! rounded-lg! text-[11px] font-medium transition-all ${
+                className={`px-4! py-1.5! rounded-full! text-[11px] font-bold transition-all duration-300 ${
                   visibleColumns[col.accessor as string]
-                    ? "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30"
+                    ? "bg-gradient-to-r from-[#B8860B] to-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/10"
                     : "bg-white/5 text-slate-500 border border-white/5 hover:bg-white/10"
                 }`}
               >
@@ -181,7 +189,7 @@ const TableComponents = <T,>({
           </div>
 
           {/* Table Container */}
-          <div className="bg-white/[0.02]! border! border-white/10 rounded-2xl! overflow-hidden shadow-2xl backdrop-blur-sm">
+          <div className="bg-white/[0.01]! border! border-white/5 rounded-[2rem]! overflow-hidden shadow-2xl backdrop-blur-sm">
             <div className="overflow-x-auto">
               <table className="w-full! border-collapse!">
                 <thead>
@@ -190,23 +198,23 @@ const TableComponents = <T,>({
                       <th
                         key={String(col.accessor)}
                         style={{ width: columnWidths[String(col.accessor)] || 'auto' }}
-                        className="p-4! text-right text-xs font-bold text-slate-400 uppercase tracking-wider relative group"
+                        className="p-5! text-right text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] relative group"
                       >
                         {col.label}
                         <div
                           onMouseDown={(e) => startResizing(e, String(col.accessor))}
-                          className="absolute left-0 top-1/4 bottom-1/4 w-0.5! bg-indigo-500/0 group-hover:bg-indigo-500/40 cursor-col-resize transition-all"
+                          className="absolute left-0 top-1/4 bottom-1/4 w-[1px]! bg-[#D4AF37]/0 group-hover:bg-[#D4AF37]/40 cursor-col-resize transition-all"
                         />
                       </th>
                     ))}
                     {hasActionsColumn && (
-                      <th className="p-4! text-center text-xs font-bold text-slate-400 bg-black/40! border-r! border-white/10 sticky left-0 z-10">
+                      <th className="p-5! text-center text-[11px] font-black text-[#D4AF37] bg-black/60! border-r! border-white/10 sticky left-0 z-10 uppercase tracking-widest">
                         کردارەکان
                       </th>
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y! divide-white/5">
+                <tbody className="divide-y! divide-white/[0.04]">
                   {paginatedData.length > 0 ? (
                     paginatedData.map((row) => {
                       const isSelected = row[rowKeyAccessor] === selectedRowKey;
@@ -214,35 +222,34 @@ const TableComponents = <T,>({
                         <tr
                           key={String(row[rowKeyAccessor])}
                           onClick={() => handleRowClick(row)}
-                          className={`group transition-colors cursor-pointer ${
-                            isSelected ? "bg-indigo-500/10" : "hover:bg-white/[0.02]"
+                          className={`group transition-all duration-300 cursor-pointer ${
+                            isSelected ? "bg-[#D4AF37]/10" : "hover:bg-white/[0.02]"
                           }`}
                         >
                           {visibleColumnAccessors.map((col) => (
-                            <td key={String(col.accessor)} className="p-4! text-sm text-slate-300 whitespace-nowrap">
-                              {/* ۲. بخش اصلاح شده: بررسی وجود تابع رندر */}
+                            <td key={String(col.accessor)} className={`p-5! text-sm font-medium transition-colors ${isSelected ? "text-[#D4AF37]" : "text-slate-300"} whitespace-nowrap`}>
                               {col.render 
                                 ? col.render(row[col.accessor], row) 
                                 : String(row[col.accessor] ?? '')}
                             </td>
                           ))}
                           {hasActionsColumn && (
-                            <td className="p-2! text-center sticky left-0 bg-[#0a0f1e]! border-r! border-white/10 shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.5)]">
-                              <div className="flex! gap-1! justify-center">
+                            <td className="p-3! text-center sticky left-0 bg-[#080808]! border-r! border-white/10 shadow-[-15px_0_25px_-5px_rgba(0,0,0,0.7)]">
+                              <div className="flex! gap-2! justify-center">
                                 <Button 
                                   type="text" 
                                   size="small"
-                                  icon={<Edit3 size={14} className="text-indigo-400" />} 
+                                  icon={<Edit3 size={16} className="text-[#D4AF37]" />} 
                                   onClick={(e) => { e.stopPropagation(); onEdit?.(row); }}
-                                  className="hover:bg-indigo-500/20!"
+                                  className="hover:bg-[#D4AF37]/20! h-9! w-9! rounded-lg!"
                                 />
                                 <Button 
                                   type="text" 
                                   size="small"
                                   danger
-                                  icon={<Trash2 size={14} />} 
+                                  icon={<Trash2 size={16} />} 
                                   onClick={(e) => { e.stopPropagation(); onDelete?.(row); }}
-                                  className="hover:bg-red-500/20!"
+                                  className="hover:bg-red-500/20! h-9! w-9! rounded-lg!"
                                 />
                               </div>
                             </td>
@@ -252,9 +259,11 @@ const TableComponents = <T,>({
                     })
                   ) : (
                     <tr>
-                      <td colSpan={100} className="p-20! text-center">
-                        <LayoutList className="mx-auto! mb-4! text-slate-700" size={48} />
-                        <div className="text-slate-500 font-medium">هیچ داتایەک نەدۆزرایەوە</div>
+                      <td colSpan={100} className="p-24! text-center">
+                        <div className="inline-flex! p-6! bg-white/[0.02] rounded-full! mb-4!">
+                           <LayoutList className="text-slate-800" size={54} />
+                        </div>
+                        <div className="text-slate-500 font-bold text-lg!">هیچ زانیارییەک لێرە نییە</div>
                       </td>
                     </tr>
                   )}
@@ -264,30 +273,32 @@ const TableComponents = <T,>({
           </div>
 
           {/* Pagination */}
-          <div className="flex! flex-col! sm:flex-row! justify-between! items-center! gap-4! mt-6! px-2!">
-            <div className="text-xs! text-slate-500! font-medium">
-              نیشاندان <span className="text-indigo-400">{(currentPage - 1) * pageSize + 1}</span> بۆ <span className="text-indigo-400">{Math.min(currentPage * pageSize, filteredData.length)}</span> لە <span className="text-indigo-400">{filteredData.length}</span> تۆمار
+          <div className="flex! flex-col! sm:flex-row! justify-between! items-center! gap-4! mt-8! px-4!">
+            <div className="text-[11px]! text-slate-500! font-bold uppercase tracking-widest">
+              نیشاندان <span className="text-[#D4AF37] px-1">{(currentPage - 1) * pageSize + 1}</span> بۆ <span className="text-[#D4AF37] px-1">{Math.min(currentPage * pageSize, filteredData.length)}</span> لە کۆی <span className="text-[#D4AF37] px-1">{filteredData.length}</span> تۆمار
             </div>
             
-            <div className="flex! items-center! gap-2!">
+            <div className="flex! items-center! gap-3!">
               <button
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-2! rounded-lg! border! border-white/10 bg-white/5 text-slate-400 hover:text-white disabled:opacity-20 transition-all"
+                className="p-2.5! rounded-xl! border! border-white/10 bg-white/5 text-slate-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 disabled:opacity-10 transition-all"
               >
-                <ChevronRight size={18} />
+                <ChevronRight size={20} />
               </button>
-              <div className="flex! items-center! gap-1!">
-                <span className="bg-indigo-600! text-white! px-3! py-1! rounded-lg! text-xs font-bold">{currentPage}</span>
-                <span className="text-slate-600 px-1">/</span>
-                <span className="text-slate-400 text-xs">{totalPages}</span>
+              
+              <div className="flex! items-center! gap-2! px-4! py-2! bg-white/[0.03] rounded-xl! border! border-white/5">
+                <span className="text-[#D4AF37] text-sm font-black">{currentPage}</span>
+                <span className="text-slate-700 font-bold">/</span>
+                <span className="text-slate-500 text-xs font-bold">{totalPages}</span>
               </div>
+
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="p-2! rounded-lg! border! border-white/10 bg-white/5 text-slate-400 hover:text-white disabled:opacity-20 transition-all"
+                className="p-2.5! rounded-xl! border! border-white/10 bg-white/5 text-slate-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 disabled:opacity-10 transition-all"
               >
-                <ChevronLeft size={18} />
+                <ChevronLeft size={20} />
               </button>
             </div>
           </div>

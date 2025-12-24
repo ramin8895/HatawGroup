@@ -3,10 +3,8 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, DatePicker, message, Switch, Spin, ConfigProvider, theme } from "antd";
 import dayjs from "dayjs";
-import { Calendar, Settings, Type, FileText, Hash, Trophy, Save, XCircle, Sparkles } from "lucide-react";
+import { Settings, Type, Hash, Trophy, Save, XCircle, Sparkles, Languages } from "lucide-react";
 import { useCreateEvents, useGetEventById } from "@/api/EventService/useRequest";
-
-const { TextArea } = Input;
 
 const AddEvent: React.FC<{ id?: number }> = ({ id }) => {
   const [form] = Form.useForm();
@@ -32,126 +30,154 @@ const AddEvent: React.FC<{ id?: number }> = ({ id }) => {
       code: Number(values.code), 
       score: Number(values.score) 
     };
-    createEvent(payload, { onSuccess: () => { message.success("🎉 چالاکی تۆمار کرا"); !isEdit && form.resetFields(); } });
+    createEvent(payload, { 
+      onSuccess: () => { 
+        message.success("🎉 چالاکی بە سەرکەوتوویی تۆمار کرا"); 
+        !isEdit && form.resetFields(); 
+      } 
+    });
   };
 
   return (
     <ConfigProvider 
       theme={{ 
         algorithm: theme.darkAlgorithm, 
-        token: { colorPrimary: "#6366f1", colorBgBase: "#020617", borderRadius: 12 } 
+        token: { 
+          colorPrimary: "#D4AF37",
+          colorBgBase: "#050505", 
+          borderRadius: 16,
+          colorLink: "#D4AF37",
+          colorTextBase: "#e5e7eb"
+        },
+        components: {
+          Input: {
+            colorBgContainer: "rgba(255, 255, 255, 0.03)",
+            activeBorderColor: "#D4AF37",
+            hoverBorderColor: "rgba(212, 175, 55, 0.5)",
+          },
+          DatePicker: {
+            colorBgContainer: "rgba(255, 255, 255, 0.03)",
+          }
+        }
       }}
     >
-      <div className="min-h-screen! bg-[#020617]! p-6! flex! justify-center!" dir="rtl">
-        <div className="max-w-5xl! w-full! m-0!">
+      <div className="min-h-screen! bg-[#050505]! p-4! md:p-10! flex! justify-center! font-sans" dir="rtl">
+        <div className="max-w-6xl! w-full! animate-in fade-in duration-700">
           
-          {/* Header & Quick Settings */}
-          <div className="flex! items-center! justify-between! mb-6! p-4! bg-white/[0.02] border! border-white/10 rounded-2xl shadow-2xl">
-            <div className="flex! items-center! gap-3!">
-              <div className="p-2! bg-indigo-500/20 rounded-lg!">
-                <Sparkles className="text-indigo-400" size={20} />
+          {/* Header Section */}
+          <div className="relative overflow-hidden! mb-8! p-8! bg-white/[0.01] border! border-white/[0.08] rounded-[2.5rem] shadow-2xl backdrop-blur-md">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/10 blur-[60px] rounded-full" />
+            <div className="relative z-10! flex! flex-col! md:flex-row! items-center! justify-between! gap-6!">
+              <div className="flex! items-center! gap-5!">
+                <div className="p-4! bg-gradient-to-br from-[#D4AF37]/20 to-transparent border! border-[#D4AF37]/30 rounded-2xl shadow-[0_0_20px_rgba(212,175,55,0.1)]">
+                  <Sparkles className="text-[#D4AF37]" size={28} />
+                </div>
+                <div>
+                  <h1 className="text-2xl! md:text-3xl! font-black! text-white m-0! tracking-tight">
+                    {isEdit ? "دەستکاری چالاکی" : "زیادکردنی چالاکی نوێ"}
+                  </h1>
+                  <p className="text-slate-500! text-xs! mt-1! font-medium">بەڕێوەبردنی زانیارییەکان و ڕێکخستنی کاتەکان</p>
+                </div>
               </div>
-              <h1 className="text-lg! font-bold! text-white m-0!">
-                {isEdit ? "دەستکاری چالاکی" : "زیادکردنی چالاکی"}
-              </h1>
-            </div>
-            
-            <div className="flex! items-center! gap-6!">
-              <Form form={form} component={false}>
-                <Form.Item name="titleDefaultIsEn" valuePropName="checked" className="m-0!">
-                  <div className="flex! items-center! gap-2!">
-                    <span className="text-[10px]! text-slate-500 font-bold uppercase">EN Default</span>
-                    <Switch size="small" />
+              
+              <div className="flex! items-center! gap-4! bg-black/40! p-3! rounded-2xl! border! border-white/5">
+                <Form form={form} component={false}>
+                  <div className="flex! items-center! gap-6! px-2!">
+                    <Form.Item name="titleDefaultIsEn" valuePropName="checked" className="m-0!">
+                      <div className="flex! flex-col! items-center! gap-1.5!">
+                        <span className="text-[9px]! text-slate-400 font-black uppercase tracking-widest">Language EN</span>
+                        <Switch size="small" className="bg-white/10" />
+                      </div>
+                    </Form.Item>
+                    <div className="w-[1px]! h-8! bg-white/10" />
+                    <Form.Item name="duplicateEventAllow" valuePropName="checked" className="m-0!">
+                      <div className="flex! flex-col! items-center! gap-1.5!">
+                        <span className="text-[9px]! text-slate-400 font-black uppercase tracking-widest">Duplicate</span>
+                        <Switch size="small" className="bg-white/10" />
+                      </div>
+                    </Form.Item>
                   </div>
-                </Form.Item>
-                <Form.Item name="duplicateEventAllow" valuePropName="checked" className="m-0!">
-                  <div className="flex! items-center! gap-2!">
-                    <span className="text-[10px]! text-slate-500 font-bold uppercase">Duplicate</span>
-                    <Switch size="small" />
-                  </div>
-                </Form.Item>
-              </Form>
+                </Form>
+              </div>
             </div>
           </div>
 
           {isFetching ? (
-            <div className="flex! justify-center! py-20!"><Spin size="large" /></div>
+            <div className="flex! justify-center! items-center! h-64!"><Spin size="large" /></div>
           ) : (
             <Form form={form} layout="vertical" onFinish={onFinish} requiredMark={false} className="m-0!">
-              <div className="grid! grid-cols-1 md:grid-cols-3! gap-5!">
+              <div className="grid! grid-cols-1 lg:grid-cols-12! gap-8!">
                 
-                {/* Main Content Area (2/3) */}
-                <div className="md:col-span-2! space-y-5!">
-                  {/* Titles Box */}
-                  <div className="bg-white/[0.02]! p-5! rounded-2xl! border! border-white/5 shadow-lg">
-                    <div className="flex! items-center! gap-2! text-indigo-400 text-[11px] font-bold mb-4! uppercase tracking-widest">
-                      <Type size={14} /> ناونیشان و کات
+                {/* Main Content Area - Titles & Dates */}
+                <div className="lg:col-span-8!">
+                  <div className="group bg-white/[0.02]! p-10! rounded-[3rem]! border! border-white/[0.05] shadow-xl hover:border-[#D4AF37]/20! transition-all duration-500 h-full!">
+                    <div className="flex! items-center! gap-3! text-[#D4AF37] text-[12px] font-black mb-10! uppercase tracking-[0.3em]">
+                      <div className="w-8! h-[1px]! bg-[#D4AF37]/30" />
+                      <Languages size={18} /> زانیارییە سەرەکییەکان
                     </div>
-                    <div className="grid! grid-cols-2! gap-4!">
-                      <Form.Item name="titleKordish" label={<span className="text-xs! text-slate-400">ناونیشانی کوردی</span>} rules={[{ required: true }]} className="mb-2!">
-                        <Input className="bg-black/40! border-white/10! h-10! rounded-lg" />
-                      </Form.Item>
-                      <Form.Item name="titleEnglish" label={<span className="text-xs! text-slate-400">English Title</span>} rules={[{ required: true }]} className="mb-2!">
-                        <Input dir="ltr" className="bg-black/40! border-white/10! h-10! rounded-lg" />
-                      </Form.Item>
-                    </div>
-                    <div className="grid! grid-cols-2! gap-4! mt-2!">
-                      <Form.Item name="startdate" label={<span className="text-xs! text-slate-400">بەرواری دەستپێک</span>} rules={[{ required: true }]} className="mb-0!">
-                        <DatePicker showTime className="w-full! bg-black/40! border-white/10! h-10! rounded-lg" />
-                      </Form.Item>
-                      <Form.Item name="enddate" label={<span className="text-xs! text-slate-400">بەرواری کۆتایی</span>} rules={[{ required: true }]} className="mb-0!">
-                        <DatePicker showTime className="w-full! bg-black/40! border-white/10! h-10! rounded-lg" />
-                      </Form.Item>
-                    </div>
-                  </div>
+                    
+                    <div className="space-y-8!">
+                      <div className="grid! grid-cols-1 md:grid-cols-2! gap-8!">
+                        <Form.Item name="titleKordish" label={<span className="text-xs! text-slate-300 font-bold pr-1">ناونیشانی کوردی</span>} rules={[{ required: true }]}>
+                          <Input placeholder="بنووسە..." className="bg-black/40! border-white/10! h-14! rounded-2xl focus:shadow-[0_0_20px_rgba(212,175,55,0.1)]!" />
+                        </Form.Item>
+                        <Form.Item name="titleEnglish" label={<span className="text-xs! text-slate-300 font-bold pr-1">English Title</span>} rules={[{ required: true }]}>
+                          <Input dir="ltr" placeholder="Type here..." className="bg-black/40! border-white/10! h-14! rounded-2xl focus:shadow-[0_0_20px_rgba(212,175,55,0.1)]!" />
+                        </Form.Item>
+                      </div>
 
-                  {/* Description Box */}
-                  <div className="bg-white/[0.02]! p-5! rounded-2xl! border! border-white/5">
-                    <div className="flex! items-center! gap-2! text-indigo-400 text-[11px] font-bold mb-4! uppercase tracking-widest">
-                      <FileText size={14} /> وەسفی چالاکی
-                    </div>
-                    <div className="grid! grid-cols-2! gap-4!">
-                      <Form.Item name="descriptionKordish" label={<span className="text-xs! text-slate-400">وەسفی کوردی</span>} rules={[{ required: true }]} className="mb-0!">
-                        <TextArea rows={3} className="bg-black/40! border-white/10! rounded-lg" />
-                      </Form.Item>
-                      <Form.Item name="descriptionEnglish" label={<span className="text-xs! text-slate-400">English Desc</span>} rules={[{ required: true }]} className="mb-0!">
-                        <TextArea rows={3} dir="ltr" className="bg-black/40! border-white/10! rounded-lg" />
-                      </Form.Item>
+                      <div className="grid! grid-cols-1 md:grid-cols-2! gap-8!">
+                        <Form.Item name="startdate" label={<span className="text-xs! text-slate-300 font-bold pr-1">بەرواری دەستپێک</span>} rules={[{ required: true }]}>
+                          <DatePicker showTime className="w-full! bg-black/40! border-white/10! h-14! rounded-2xl hover:border-[#D4AF37]/50!" />
+                        </Form.Item>
+                        <Form.Item name="enddate" label={<span className="text-xs! text-slate-300 font-bold pr-1">بەرواری کۆتایی</span>} rules={[{ required: true }]}>
+                          <DatePicker showTime className="w-full! bg-black/40! border-white/10! h-14! rounded-2xl hover:border-[#D4AF37]/50!" />
+                        </Form.Item>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Sidebar (1/3) */}
-                <div className="space-y-5!">
-                  <div className="bg-indigo-600/5! p-6! rounded-2xl! border! border-indigo-500/20 flex! flex-col! justify-between! h-full!">
-                    <div>
-                      <div className="flex! items-center! gap-2! text-indigo-400 text-[11px] font-bold mb-6! uppercase tracking-widest">
-                        <Settings size={14} /> پارامیتەرەکان
-                      </div>
-                      <Form.Item name="code" label={<span className="text-xs! text-slate-400">کۆدی چالاکی</span>} rules={[{ required: true }]} className="mb-4!">
-                        <Input prefix={<Hash size={14} className="text-indigo-400" />} className="bg-black/40! border-indigo-500/20! h-11! rounded-lg font-mono" />
+                {/* Sidebar Controls */}
+                <div className="lg:col-span-4! space-y-8!">
+                  <div className="bg-gradient-to-b from-[#D4AF37]/10 to-black/40! p-8! rounded-[3rem]! border! border-[#D4AF37]/20 shadow-2xl backdrop-blur-xl">
+                    <div className="flex! items-center! gap-3! text-[#D4AF37] text-[12px] font-black mb-10! uppercase tracking-[0.3em]">
+                      <Settings size={16} /> پارامیتەرەکان
+                    </div>
+                    
+                    <div className="space-y-6!">
+                      <Form.Item name="code" label={<span className="text-xs! text-slate-400 font-bold">کۆدی ناسنامە</span>} rules={[{ required: true }]}>
+                        <Input 
+                          prefix={<Hash size={16} className="ml-2 text-[#D4AF37]/60" />} 
+                          className="bg-black/60! border-white/10! h-14! rounded-2xl font-mono text-lg! text-[#D4AF37] focus:border-[#D4AF37]!" 
+                        />
                       </Form.Item>
-                      <Form.Item name="score" label={<span className="text-xs! text-slate-400">خاڵی دیاریکراو</span>} rules={[{ required: true }]} className="mb-4!">
-                        <Input prefix={<Trophy size={14} className="text-amber-500" />} className="bg-black/40! border-indigo-500/20! h-11! rounded-lg font-bold text-amber-500" />
+                      
+                      <Form.Item name="score" label={<span className="text-xs! text-slate-400 font-bold">خاڵی دیاریکراو (Score)</span>} rules={[{ required: true }]}>
+                        <Input 
+                          prefix={<Trophy size={18} className="ml-2 text-amber-500" />} 
+                          className="bg-black/60! border-white/10! h-14! rounded-2xl font-black text-xl! text-amber-500" 
+                        />
                       </Form.Item>
                     </div>
                     
-                    <div className="space-y-3! pt-6! border-t! border-white/5 mt-4!">
+                    <div className="pt-10! mt-10! border-t! border-white/5 space-y-4!">
                       <Button
                         type="primary"
                         htmlType="submit"
                         loading={createLoading}
-                        icon={<Save size={18} />}
-                        className="w-full! h-12! rounded-xl! bg-indigo-600! border-none! shadow-lg shadow-indigo-600/20 font-bold!"
+                        icon={<Save size={20} className="ml-1" />}
+                        className="w-full! h-16! rounded-[1.25rem]! bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#FFD700]! border-none! shadow-2xl shadow-[#D4AF37]/30 text-black! font-black! text-lg! hover:scale-[1.03] transition-all duration-300"
                       >
                         {isEdit ? "نوێکردنەوە" : "تۆمارکردن"}
                       </Button>
+                      
                       <Button 
                         onClick={() => form.resetFields()} 
-                        icon={<XCircle size={18} />}
-                        className="w-full! h-11! rounded-xl! border-white/10! bg-white/5! text-slate-400 hover:text-white!"
+                        icon={<XCircle size={18} className="ml-1" />}
+                        className="w-full! h-14! rounded-[1.25rem]! border-white/5! bg-white/5! text-slate-400 font-bold hover:text-white! hover:bg-white/10! hover:border-white/20! transition-all"
                       >
-                        هەڵوەشاندنەوە
+                        پاککردنەوە
                       </Button>
                     </div>
                   </div>
