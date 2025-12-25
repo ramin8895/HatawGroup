@@ -51,12 +51,9 @@ const HomeSection = () => {
         {/* Badge Indicator - طلایی روی مشکی */}
         <motion.div
           variants={itemVariants}
-          className="inline-flex items-center gap-2! px-5! py-2.5! rounded-full! bg-[#D4AF37]/5! border border-[#D4AF37]/20! backdrop-blur-xl mb-10!"
+          className="inline-flex items-center gap-2! px-5! py-2.5! rounded-full! mb-10!"
         >
-          <Crown size={14} className="text-[#D4AF37]" />
-          <span className="text-[10px]! font-black tracking-[0.3em] text-[#D4AF37] uppercase">
-            Hataw Branding Agency 2025
-          </span>
+    
         </motion.div>
 
         {/* Hero Title - سفید خالص و طلایی متالیک */}
