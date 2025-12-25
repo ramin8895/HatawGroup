@@ -57,3 +57,6 @@ export const DeleteEvents = async (id?: number) => {
     `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Events/EventDelete/${id}`
   );
 };
+
+
+

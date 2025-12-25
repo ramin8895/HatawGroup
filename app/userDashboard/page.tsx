@@ -8,20 +8,23 @@ import {
   Settings,
   Zap,
   Star,
-  ChevronLeft,
   Edit3,
   Mail,
   LayoutDashboard,
   ArrowLeft,
   LogOut,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useGetEventUser } from "@/api/EventUserService/useRequest";
 
 export default function UserDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const router = useRouter();
-
+  const { data: Sessions } = useSession();
+  const { data: useGetEventUserData, isFetched: useGetEventUserISFetched } =
+    useGetEventUser();
+  console.log(useGetEventUserData);
   const stats = [
     {
       label: "خاڵی گشتی",
@@ -67,16 +70,19 @@ export default function UserDashboard() {
               </div>
             </div>
             <div className="text-right!">
-              <h1 className="text-4xl! font-black! text-white! tracking-tight! mb-2!">پانێڵی بەکارهێنەر</h1>
+              <h1 className="text-4xl! font-black! text-white! tracking-tight! mb-2!">
+                پانێڵی بەکارهێنەر
+              </h1>
               <p className="text-[#E0E0E0]/40! font-medium! flex items-center gap-2!">
-                بەخێربێیت بۆ جیهانی <span className="text-[#D4AF37]! font-black">Hataw Group</span>
+                بەخێربێیت بۆ جیهانی{" "}
+                <span className="text-[#D4AF37]! font-black">Hataw Group</span>
               </p>
             </div>
           </div>
 
           <div className="flex! flex-wrap! justify-center! gap-4!">
-            <button 
-              onClick={()=>router.push("/")}
+            <button
+              onClick={() => router.push("/")}
               className="px-6! py-3.5! bg-[#FFFFFF]/[0.03]! border! border-[#E0E0E0]/10! text-[#E0E0E0]/70! rounded-2xl! font-bold! hover:bg-[#FFFFFF]/[0.08]! hover:text-white! transition-all! flex! items-center! gap-2!"
             >
               <ArrowLeft size={18} /> گەڕانەوە
@@ -97,9 +103,21 @@ export default function UserDashboard() {
           {/* Sidebar - Navigation */}
           <aside className="lg:col-span-3! space-y-4!">
             {[
-              { id: "overview", label: "داشبۆرد", icon: <LayoutDashboard size={20} /> },
-              { id: "events", label: "چالاکییەکانم", icon: <Calendar size={20} /> },
-              { id: "edit", label: "گۆڕینی پرۆفایل", icon: <Edit3 size={20} /> },
+              {
+                id: "overview",
+                label: "داشبۆرد",
+                icon: <LayoutDashboard size={20} />,
+              },
+              {
+                id: "events",
+                label: "چالاکییەکانم",
+                icon: <Calendar size={20} />,
+              },
+              {
+                id: "edit",
+                label: "گۆڕینی پرۆفایل",
+                icon: <Edit3 size={20} />,
+              },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -114,7 +132,12 @@ export default function UserDashboard() {
                   {tab.icon}
                   <span className="text-lg!">{tab.label}</span>
                 </div>
-                {activeTab === tab.id && <motion.div layoutId="activeDot" className="w-2! h-2! bg-[#D4AF37]! rounded-full! shadow-[0_0_10px_#D4AF37]!" />}
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeDot"
+                    className="w-2! h-2! bg-[#D4AF37]! rounded-full! shadow-[0_0_10px_#D4AF37]!"
+                  />
+                )}
               </button>
             ))}
           </aside>
@@ -143,7 +166,9 @@ export default function UserDashboard() {
                         <p className="text-[#E0E0E0]/30! text-[10px]! font-black! uppercase! tracking-widest! mb-2!">
                           {stat.label}
                         </p>
-                        <h4 className="text-3xl! font-black! text-white!">{stat.value}</h4>
+                        <h4 className="text-3xl! font-black! text-white!">
+                          {stat.value}
+                        </h4>
                       </div>
                     ))}
                   </div>
@@ -151,11 +176,12 @@ export default function UserDashboard() {
                   {/* Activity Table */}
                   <div className="bg-[#FFFFFF]/[0.02]! border! border-[#E0E0E0]/5! rounded-[3rem]! p-10! relative overflow-hidden!">
                     <div className="absolute top-0! right-0! w-64! h-64! bg-[#D4AF37]/5! blur-[80px]! rounded-full! pointer-events-none!"></div>
-                    
+
                     <h3 className="text-2xl! font-black! mb-8! flex! items-center! gap-3! text-white!">
-                      <Trophy className="text-[#D4AF37]" size={24} /> دواین چالاکییەکان
+                      <Trophy className="text-[#D4AF37]" size={24} /> دواین
+                      چالاکییەکان
                     </h3>
-                    
+
                     <div className="space-y-4!">
                       {[1, 2, 3].map((_, i) => (
                         <div
@@ -167,8 +193,12 @@ export default function UserDashboard() {
                               <Star size={20} />
                             </div>
                             <div className="text-right!">
-                              <h5 className="font-bold! text-lg! text-[#E0E0E0] group-hover:text-white!">کێبڕکێی بڕاندینگ {i + 1}</h5>
-                              <p className="text-xs! text-[#E0E0E0]/30! font-medium!">بەروار: ٢٠ی ئایاری ٢٠٢٥</p>
+                              <h5 className="font-bold! text-lg! text-[#E0E0E0] group-hover:text-white!">
+                                کێبڕکێی بڕاندینگ {i + 1}
+                              </h5>
+                              <p className="text-xs! text-[#E0E0E0]/30! font-medium!">
+                                بەروار: ٢٠ی ئایاری ٢٠٢٥
+                              </p>
                             </div>
                           </div>
                           <div className="text-[#D4AF37]! font-black! text-lg!">
@@ -189,12 +219,19 @@ export default function UserDashboard() {
                   className="bg-[#FFFFFF]/[0.02]! border! border-[#E0E0E0]/5! rounded-[3.5rem]! p-10! md:p-16! relative overflow-hidden!"
                 >
                   <div className="relative z-10!">
-                    <h3 className="text-3xl! font-black! mb-10! text-white!">گۆڕینی زانیارییەکان</h3>
+                    <h3 className="text-3xl! font-black! mb-10! text-white!">
+                      گۆڕینی زانیارییەکان
+                    </h3>
                     <form className="grid! grid-cols-1! md:grid-cols-2! gap-8!">
                       <div className="space-y-3!">
-                        <label className="text-xs! font-black! text-[#D4AF37]! uppercase! tracking-widest! pr-2!">ناوی بەکارهێنەر</label>
+                        <label className="text-xs! font-black! text-[#D4AF37]! uppercase! tracking-widest! pr-2!">
+                          ناوی بەکارهێنەر
+                        </label>
                         <div className="relative!">
-                          <User className="absolute! right-5! top-1/2! -translate-y-1/2! text-[#E0E0E0]/20!" size={20} />
+                          <User
+                            className="absolute! right-5! top-1/2! -translate-y-1/2! text-[#E0E0E0]/20!"
+                            size={20}
+                          />
                           <input
                             type="text"
                             placeholder="Hataw_User"
@@ -203,9 +240,14 @@ export default function UserDashboard() {
                         </div>
                       </div>
                       <div className="space-y-3!">
-                        <label className="text-xs! font-black! text-[#D4AF37]! uppercase! tracking-widest! pr-2!">ئیمەیڵ</label>
+                        <label className="text-xs! font-black! text-[#D4AF37]! uppercase! tracking-widest! pr-2!">
+                          ئیمەیڵ
+                        </label>
                         <div className="relative!">
-                          <Mail className="absolute! right-5! top-1/2! -translate-y-1/2! text-[#E0E0E0]/20!" size={20} />
+                          <Mail
+                            className="absolute! right-5! top-1/2! -translate-y-1/2! text-[#E0E0E0]/20!"
+                            size={20}
+                          />
                           <input
                             type="email"
                             placeholder="user@hataw.group"
