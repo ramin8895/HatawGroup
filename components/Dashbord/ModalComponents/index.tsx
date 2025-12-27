@@ -7,7 +7,7 @@ import React from "react";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: React.ReactNode; // تغییر به ReactNode برای پشتیبانی از آیکون در عنوان
+  title?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -21,53 +21,67 @@ const ModalComponents: React.FC<ModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed! inset-0! w-full! z-[999]! flex! items-center! justify-center! p-4!"
+          className="fixed! inset-0! w-full! z-999! flex! items-center! justify-center! p-4! md:p-6!"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* Backdrop (پس‌زمینه محو کننده) */}
+          {/* Backdrop (پس‌زمینه محو کننده روشن) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute! inset-0! bg-black/80! backdrop-blur-md!"
+            className="absolute! inset-0! bg-white/40! backdrop-blur-md!"
             onClick={onClose}
           />
 
           {/* Modal Box */}
           <motion.div
             dir="rtl"
-            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 30 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative! z-10! w-full! max-w-3xl! rounded-[2.5rem]! bg-[#020617]! border! border-white/10 shadow-[0_0_50px_-12px_rgba(99,102,241,0.2)] overflow-hidden!"
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            transition={{ type: "spring", damping: 22, stiffness: 280 }}
+            className="relative! z-10! w-full! max-w-7xl! rounded-[3rem]! bg-white! border! border-gray-100! shadow-[0_30px_100px_-20px_rgba(212,175,55,0.2)] overflow-hidden!"
           >
+            {/* Top Golden Bar (خط طلایی ظریف بالای مدال) */}
+            <div className="absolute! top-0! left-0! right-0! h-1.5! bg-gradient-to-r! from-transparent! via-[#D4AF37]! to-transparent!" />
+
             {/* Header */}
-            <div className="flex! items-center! justify-between! px-8! py-5! border-b! border-white/5 bg-white/[0.02]!">
+            <div className="flex! items-center! justify-between! px-10! py-4! border-b! border-gray-50! bg-[#FDFBF7]/50!">
               {title && (
-                <div className="text-lg! font-black! text-white!">
+                <div className="text-xl! font-black! text-[#1A1A1A]! flex! items-center! gap-3!">
+                  <div className="w-10! h-10! rounded-xl! bg-[#D4AF37]/10! flex! items-center! justify-center!">
+                    <div className="w-2! h-2! bg-[#D4AF37]! rounded-full!" />
+                  </div>
                   {title}
                 </div>
               )}
               <button
                 onClick={onClose}
-                className="group! rounded-xl! p-2! bg-white/5! text-slate-400! hover:bg-red-500/10! hover:text-red-500! transition-all! duration-300!"
+                className="group! rounded-2xl! p-3! bg-gray-50! text-gray-400! hover:bg-red-50! hover:text-red-500! transition-all! duration-300! border! border-gray-100!"
               >
-                <X size={20} className="group-hover:rotate-90! transition-transform! duration-300!" />
+                <X
+                  size={20}
+                  className="group-hover:rotate-90! transition-transform! duration-300!"
+                />
               </button>
             </div>
 
             {/* Content Container */}
-            <div className="p-2! md:p-4! max-h-[85vh]! overflow-y-auto! custom-scrollbar!">
-                <div className="bg-transparent!">
-                    {children}
-                </div>
+            <div className="p-4! md:p-4! max-h-full! overflow-y-auto! custom-scrollbar!">
+              <div className="bg-transparent! text-[#2D2D2D]!">{children}</div>
             </div>
 
-            {/* Decorative Glow (نور تزیینی گوشه مدال) */}
-            <div className="absolute! -top-[10%]! -right-[10%]! w-40! h-40! bg-indigo-500/10! blur-[60px]! pointer-events-none!" />
+            {/* Footer / Decorative Element */}
+            <div className="px-10! py-6! bg-gray-50/50! border-t! border-gray-50! flex! justify-end! gap-3!">
+              <div className="text-[10px]! text-[#D4AF37]! font-bold! uppercase! tracking-tighter!">
+                © Golden Interface System
+              </div>
+            </div>
+
+            {/* Decorative Glows (نورهای طلایی ملایم در پس‌زمینه محتوا) */}
+            <div className="absolute! -bottom-20! -right-20! w-64! h-64! bg-[#D4AF37]/5! blur-[80px]! pointer-events-none!" />
           </motion.div>
         </motion.div>
       )}

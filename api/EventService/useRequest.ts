@@ -9,13 +9,16 @@ export const useGetEvents = () =>
     refetchOnWindowFocus: false,
     enabled: true,
   });
-export const useGetEventById = (id?: number) =>
-  useQuery({
-    queryKey: [cashKey.getevent],
-    queryFn: () => services.GetEventGetById(id),
+
+export const useGetEventById = (id?: number) => {
+  return useQuery({
+    queryKey: ["get-event-by-id", id],
+    queryFn: () => services.GetEventGetById(id!),
+    enabled: !!id,
     refetchOnWindowFocus: false,
-    enabled: id != undefined,
   });
+};
+
 export const useGetEventActiveEventsBymode = () =>
   useQuery({
     queryKey: [cashKey.geteventactiveeventsbymode],
@@ -30,6 +33,24 @@ export const useCreateEvents = () =>
     mutationFn: (data: EventType) => services.CreateEvents(data),
     retry: false,
   });
+
+export const useCreateEventsScore = () =>
+  useMutation({
+    mutationKey: [cashKey.createeventscore],
+    mutationFn: (data: any) => services.CreateEventsScore(data),
+    retry: false,
+  });
+
+
+  export const useGetEventScoreById = (id?: number) => {
+  return useQuery({
+    queryKey: ["get-event-by-id-score", id],
+    queryFn: () => services.GetEventScoreGetById(id!),
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useUpdateEvents = () =>
   useMutation({
     mutationKey: [cashKey.createevent],

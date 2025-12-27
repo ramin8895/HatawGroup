@@ -207,12 +207,12 @@ const LayoutComponentDashbord = ({
                 onClick={() => setCollapsed(!collapsed)}
                 className="hidden lg:flex items-center justify-center w-12 h-12 rounded-2xl bg-white hover:text-[#D4AF37] text-slate-400 transition-all border border-slate-100 shadow-sm"
               />
-              <Button
+              {/* <Button
                 type="text"
                 icon={<MenuOutlined />}
                 onClick={() => setMobileOpen(true)}
                 className="lg:hidden flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-50 text-slate-900"
-              />
+              /> */}
 
   
             </div>

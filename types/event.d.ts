@@ -12,15 +12,8 @@
 // }
 
 interface EventType {
-  id?:number
-  titleDefaultIsEn: boolean;
-  duplicateEventAllow: boolean;
-  titleEnglish: string;
-  titleKordish: string;
-  startdate: string;
-  enddate: string;
-  descriptionEnglish: string;
-  descriptionKordish: string;
+  id?: number;
+  title: string;
   code: number;
   score: number;
 }

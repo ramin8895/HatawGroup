@@ -69,6 +69,7 @@ const handler = NextAuth({
           phonenumber: data.phonenumber,
           backendToken: data.userToken,
           userRoleId: data.userRoleId,
+          userId: data.userId,
           userRoleCaption: data.userRoleCaption,
           data: data,
         };
@@ -104,6 +105,7 @@ const handler = NextAuth({
         const data = await res.json();
         user.backendToken = data.token;
         user.userRoleId = data.userRoleId;
+        user.userId = data.userId;
         user.userRoleCaption = data.userRoleCaption;
         return true;
       } catch (err) {
@@ -116,6 +118,7 @@ const handler = NextAuth({
       if (user?.backendToken) {
         token.backendToken = user.backendToken;
         token.userRoleId = user.userRoleId;
+        token.userId = user.userId;
         token.userRoleCaption = user.userRoleCaption;
       }
       return token;
@@ -126,6 +129,7 @@ const handler = NextAuth({
       if (token?.backendToken) {
         session.backendToken = token.backendToken;
         session.userRoleId = token.userRoleId;
+        session.userId=token.userId;
         session.userRoleCaption = token.userRoleCaption;
       }
       return session;
