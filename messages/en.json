@@ -159,5 +159,18 @@
     "loginAction": "Sign In",
     "back": "Go Back",
     "loading": "Authenticating..."
+  },
+  "blog": {
+    "loading": "Loading content...",
+    "error_not_found": "Sorry, this article was not found.",
+    "back_to_blog": "Back to Blog",
+    "back": "Back",
+    "author": "Hataw Group",
+    "tags": "Tags:",
+    "prev_post": "Previous Post",
+    "next_post": "Next Post",
+    "no_next": "No further information",
+    "save": "Save",
+    "share": "Share"
   }
 }

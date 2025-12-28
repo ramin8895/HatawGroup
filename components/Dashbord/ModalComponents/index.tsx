@@ -42,7 +42,7 @@ const ModalComponents: React.FC<ModalProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 22, stiffness: 280 }}
-            className="relative! z-10! w-full! max-w-7xl! rounded-[3rem]! bg-white! border! border-gray-100! shadow-[0_30px_100px_-20px_rgba(212,175,55,0.2)] overflow-hidden!"
+            className="relative! z-10! w-full! max-w-5xl! rounded-[3rem]! bg-white! border! border-gray-100! shadow-[0_30px_100px_-20px_rgba(212,175,55,0.2)] overflow-hidden!"
           >
             {/* Top Golden Bar (خط طلایی ظریف بالای مدال) */}
             <div className="absolute! top-0! left-0! right-0! h-1.5! bg-gradient-to-r! from-transparent! via-[#D4AF37]! to-transparent!" />

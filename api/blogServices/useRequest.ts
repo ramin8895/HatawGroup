@@ -15,3 +15,18 @@ export const useBlogCreate = () =>
     mutationKey: [cashKey.updateblog],
     mutationFn: (data:Blog) => services.CreateBlog(data),
   });
+
+export const useBlogUploadImage = () =>
+  useMutation({
+    mutationKey: ["upload-blog-image"],
+    mutationFn: ({ id, file }: { id: number; file: File }) => 
+      services.UploadBlogImage({ id, file }),
+  });
+
+export const useGetBlogDetail = (id: number) =>
+  useQuery({
+    queryKey: [cashKey.getblog, id], // یا هر کلید مشخص دیگری برای جزئیات
+    queryFn: () => services.GetBlogById(id),
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });

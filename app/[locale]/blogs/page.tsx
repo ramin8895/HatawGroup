@@ -1,153 +1,242 @@
 "use client";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Search,
-  Calendar,
-  ArrowUpLeft,
-  Clock,
-  ChevronLeft,
-} from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { useParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Calendar, ArrowUpLeft, ArrowUpRight, Hash } from "lucide-react";
 import Link from "next/link";
 import { blogAPI } from "@/api";
 
+const BASE_URL = "https://hataw.wbsoft.ir";
+
 const BlogPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("همه");
-  const categories = ["همه", "استراتژی", "برندینگ", "دیزاین", "تجربه کاربری"];
+  const params = useParams();
+  const locale = (params.locale as string) || "ku";
+  const isRTL = locale === "ku" || locale === "fa";
+
+  const [searchTerm, setSearchTerm] = useState("");
   const { data: latestBlogs, isLoading } = blogAPI.useGetBlogList();
 
+  const dict = {
+    title: isRTL ? "گۆشەی" : "THE",
+    titleBold: isRTL ? "بیرکردنەوە" : "JOURNAL",
+    description: isRTL 
+      ? "لێرەدا نوێترین وتار و بیرۆکەکانمان لەسەر تەکنەلۆژیا و دیزاین دەخەینە ڕوو." 
+      : "Exploring the intersection of design, technology, and future-forward ideas.",
+    searchPlaceholder: isRTL ? "گەڕان لە وتارەکان..." : "Search articles...",
+    categoriesTitle: isRTL ? "پۆلێنەکان" : "CATEGORIES",
+    all: isRTL ? "هەموو" : "All",
+    readMore: isRTL ? "خوێندنەوەی زیاتر" : "READ ARTICLE",
+    noResult: isRTL ? "هیچ بابەتێک نەدۆزرایەوە" : "No articles found",
+  };
+
+  const [selectedCategory, setSelectedCategory] = useState(dict.all);
+
+  const blogsByLanguage = useMemo(() => {
+    if (!latestBlogs?.data) return [];
+    return latestBlogs.data.filter((blog: any) => {
+      if (locale === "en") {
+        return blog.languageTitle === "English" || blog.languageId === 2;
+      }
+      return blog.languageTitle !== "English";
+    });
+  }, [latestBlogs, locale]);
+
+  const dynamicCategories = useMemo(() => {
+    const cats = blogsByLanguage.map((item: any) => item.categoryTitle);
+    return [dict.all, ...Array.from(new Set(cats))];
+  }, [blogsByLanguage, dict.all]);
+
+  const filteredBlogs = useMemo(() => {
+    return blogsByLanguage.filter((blog: any) => {
+      const matchesSearch = blog.titleBlog?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === dict.all || blog.categoryTitle === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [blogsByLanguage, searchTerm, selectedCategory, dict.all]);
+
+  const stripHtml = (html: string) => (html ? html.replace(/<[^>]*>/g, "") : "");
+
   return (
-    <main className="min-h-screen! bg-[#080808] text-white py-32! px-6! overflow-hidden">
+    <main 
+      dir={isRTL ? "rtl" : "ltr"}
+      className="min-h-screen! bg-[#0a0a0a]! text-[#E0E0E0]! py-24! px-6! md:px-12! overflow-x-hidden! selection:bg-[#D4AF37]/30! selection:text-[#FFD700]!"
+    >
+      {/* Background Gradients for Depth */}
+      <div className="fixed! top-0! left-0! w-full! h-full! bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))]! from-[#1a1a1a]! via-[#0a0a0a]! to-[#0a0a0a]! -z-10!" />
+      
       <div className="max-w-7xl! mx-auto!">
-        <div className="flex flex-col lg:flex-row-reverse gap-16! items-start">
-          {/* Sidebar (سمت راست) */}
-          <aside className="w-full! lg:w-72! sticky top-32! z-20!">
-            <div className="bg-white/[0.02] border border-white/5! rounded-[2.5rem]! p-8! backdrop-blur-xl">
-              {/* جستجو */}
-              <div className="relative mb-10!">
+        
+        {/* Header Section */}
+        <header className={`mb-24! relative! ${isRTL ? 'text-right!' : 'text-left!'}`}>
+          <motion.div 
+            initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1 }}
+            className={`absolute! ${isRTL ? '-left-20!' : '-right-20!'} -top-20! text-[140px]! lg:text-[180px]! font-black! text-white/[0.02]! select-none! pointer-events-none! hidden! md:block!`}
+          >
+            {isRTL ? "JOURNAL" : "BLOG"}
+          </motion.div>
+          
+          <div className="relative! z-10!">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex! items-center! gap-4! mb-6!"
+            >
+               <span className="h-px! w-12! bg-[#D4AF37]! inline-block!" />
+               <span className="text-[#D4AF37]! text-xs! uppercase! tracking-[0.3em]! font-bold!">
+                 {isRTL ? "بلۆگی فەرمی" : "Official Blog"}
+               </span>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-5xl! md:text-7xl! lg:text-8xl! font-light! tracking-tight! mb-8! text-white!"
+            >
+              {dict.title} <span className="font-serif! italic! text-transparent! bg-clip-text! bg-gradient-to-r! from-[#D4AF37]! to-[#F4CF57]! pr-2!">{dict.titleBold}</span>
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className={`text-white/50! text-lg! md:text-xl! max-w-2xl! leading-relaxed! ${isRTL ? 'mr-0! ml-auto!' : 'ml-0! mr-auto!'}`}
+            >
+              {dict.description}
+            </motion.p>
+          </div>
+        </header>
+
+        <div className={`flex! flex-col! ${isRTL ? 'lg:flex-row-reverse!' : 'lg:flex-row!'} gap-16! lg:gap-24! items-start!`}>
+          
+          {/* Sidebar */}
+          <aside className="w-full! lg:w-72! sticky! top-8! z-20!">
+            <div className="p-6! rounded-3xl! bg-white/[0.02]! border! border-white/[0.05]! backdrop-blur-sm!">
+              {/* Search */}
+              <div className="relative! group! mb-12!">
                 <input
                   type="text"
-                  placeholder="جستجو در مقالات..."
-                  className="w-full! bg-white/5! border border-white/10! rounded-2xl! py-3! pr-12! pl-4! text-sm! outline-none focus:border-[#D4AF37]/50 transition-all"
+                  placeholder={dict.searchPlaceholder}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className={`w-full! bg-[#121212]! border! border-white/10! rounded-2xl! py-4! text-sm! text-white! placeholder:text-white/20! outline-none! focus:border-[#D4AF37]/50! focus:bg-black! transition-all! duration-300! ${isRTL ? 'pr-12! pl-4! text-right!' : 'pl-12! pr-4! text-left!'}`}
                 />
-                <Search
-                  className="absolute right-4! top-1/2! -translate-y-1/2! text-slate-500"
-                  size={18}
-                />
+                <Search className={`absolute! ${isRTL ? 'right-4!' : 'left-4!'} top-1/2! -translate-y-1/2! text-white/30! group-focus-within:text-[#D4AF37]! transition-colors!`} size={18} />
               </div>
 
-              {/* فیلترها */}
-              <div className="space-y-6!">
-                <h3 className="text-xs! font-bold text-slate-500 uppercase tracking-widest text-right">
-                  فیلتر موضوعی
-                </h3>
-                <div className="flex flex-wrap lg:flex-col gap-2!">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-5! py-2.5! rounded-xl! text-sm! text-right transition-all duration-300 ${
-                        selectedCategory === cat
-                          ? "bg-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/20"
-                          : "bg-transparent text-slate-400 hover:bg-white/5 hover:text-white"
-                      }`}
-                    >
-                      {cat}
-                    </button>
+              {/* Navigation */}
+              <nav className={isRTL ? 'text-right!' : 'text-left!'}>
+                <h3 className="text-[11px]! font-bold! text-white/30! uppercase! tracking-[0.2em]! mb-6! px-2!">{dict.categoriesTitle}</h3>
+                <ul className="space-y-2!">
+                  {dynamicCategories.map((cat: any) => (
+                    <li key={cat}>
+                      <button
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`group! flex! items-center! gap-3! w-full! py-3! px-4! rounded-xl! text-sm! transition-all! duration-300! ${
+                          selectedCategory === cat 
+                            ? "bg-[#D4AF37]/10! text-[#D4AF37]!" 
+                            : "text-white/50! hover:bg-white/[0.03]! hover:text-white!"
+                        } ${isRTL ? 'justify-end!' : 'justify-start!'}`}
+                      >
+                        {!isRTL && <span className={`w-1.5! h-1.5! rounded-full! transition-colors! ${selectedCategory === cat ? 'bg-[#D4AF37]!' : 'bg-white/10! group-hover:bg-white/30!'}`} />}
+                        <span className="font-medium!">{cat}</span>
+                        {isRTL && <span className={`w-1.5! h-1.5! rounded-full! transition-colors! ${selectedCategory === cat ? 'bg-[#D4AF37]!' : 'bg-white/10! group-hover:bg-white/30!'}`} />}
+                      </button>
+                    </li>
                   ))}
-                </div>
-              </div>
+                </ul>
+              </nav>
             </div>
           </aside>
 
-          {/* لیست مقالات */}
+          {/* Article Feed */}
           <div className="flex-1! w-full!">
-            <div className="grid grid-cols-1! gap-12!">
-              {latestBlogs?.data.map((item: any, index: number) => (
-                <motion.article
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="group relative"
-                >
-                  <Link
-                    href={`/blogs/${item.id}`}
-                    className="block relative overflow-hidden bg-white/[0.02] border border-white/5! rounded-[3rem]! p-6! md:p-10! hover:bg-white/[0.04] hover:border-[#D4AF37]/30 transition-all duration-500"
-                  >
-                    <div className="flex flex-col md:flex-row-reverse gap-10! items-center">
-                      {/* تصویر مقاله */}
-                      <div className="relative w-full! md:w-80! shrink-0! aspect-[16/10]! md:aspect-square! rounded-[2.5rem]! overflow-hidden shadow-2xl">
-                        <img
-                          src={`/api/placeholder/800/800`}
-                          alt="blog"
-                          className="w-full! h-full! object-cover transition-transform duration-1000 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0! bg-[#D4AF37]/10! opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
+            {isLoading ? (
+              <div className="space-y-12!">
+                {[1, 2].map((n) => (
+                  <div key={n} className="w-full! h-[300px]! bg-white/[0.02]! rounded-3xl! animate-pulse! border! border-white/5!" />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-16!">
+                <AnimatePresence mode="popLayout">
+                  {filteredBlogs.map((item: any) => (
+                    <motion.article
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, y: 40 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className="group! relative! bg-white/[0.02]! rounded-3xl! border! border-white/[0.06]! overflow-hidden! hover:border-[#D4AF37]/30! hover:bg-white/[0.04]! transition-all! duration-500! shadow-2xl!"
+                    >
+                      <Link href={`/${locale}/blogs/${item.id}`} className="block!">
+                        <div className={`flex! flex-col! ${isRTL ? 'md:flex-row-reverse!' : 'md:flex-row!'} items-stretch!`}>
+                          
+                          {/* Image Section */}
+                          <div className="w-full! md:w-[45%]! relative! overflow-hidden! min-h-[280px]! md:min-h-full!">
+                            <div className="absolute! inset-0! bg-[#1a1a1a]! z-0!" />
+                            <img
+                              src={item.featured_image ? `${BASE_URL}${item.featured_image}` : ""}
+                              alt={item.titleBlog}
+                              className="w-full! h-full! object-cover! absolute! inset-0! opacity-90! group-hover:opacity-100! group-hover:scale-105! transition-all! duration-700! ease-in-out!"
+                              onError={(e: any) => { e.target.src = "https://via.placeholder.com/800x600/121212/D4AF37?text=Hataw"; }}
+                            />
+                            {/* Overlay Gradient */}
+                            <div className="absolute! inset-0! bg-gradient-to-t! from-[#0a0a0a]! via-transparent! to-transparent! opacity-60! md:opacity-30!" />
+                          </div>
 
-                      {/* محتوای مقاله */}
-                      <div className="flex-1! text-right w-full!">
-                        <div className="flex items-center justify-end gap-6! text-[11px]! font-bold text-[#D4AF37]/70 mb-6! uppercase tracking-widest">
-                          <span className="flex items-center gap-2!">
-                            <Clock size={14} /> ۵ دقیقه مطالعه
-                          </span>
-                          <span className="flex items-center gap-2!">
-                            <Calendar size={14} /> ۱۴۰۲/۱۰/۱۲
-                          </span>
-                        </div>
+                          {/* Content Section */}
+                          <div className={`flex-1! p-8! md:p-10! flex! flex-col! justify-between! ${isRTL ? 'text-right!' : 'text-left!'}`}>
+                            
+                            <div>
+                              {/* Meta Tags */}
+                              <div className={`flex! flex-wrap! items-center! gap-4! mb-6! ${isRTL ? 'justify-end!' : 'justify-start!'}`}>
+                                <div className="flex! items-center! gap-2! text-[#D4AF37]! bg-[#D4AF37]/10! px-3! py-1! rounded-full! border! border-[#D4AF37]/20!">
+                                  <Hash size={12} />
+                                  <span className="text-[11px]! font-bold! tracking-wide! uppercase!">{item.categoryTitle}</span>
+                                </div>
+                                <div className="flex! items-center! gap-2! text-white/40! text-[11px]! font-medium! tracking-widest! uppercase!">
+                                  <Calendar size={12} />
+                                  <span>{item.created_at ? new Date(item.created_at).toLocaleDateString(isRTL ? 'fa-IR' : 'en-US') : ''}</span>
+                                </div>
+                              </div>
 
-                        <h2 className="text-2xl! md:text-3xl! font-bold leading-tight mb-6! group-hover:text-[#D4AF37] transition-colors">
-                          {item.titleBlog || "عنوان مقاله"}
-                        </h2>
+                              <h2 className="text-2xl! md:text-3xl! font-semibold! leading-tight! text-white! group-hover:text-[#D4AF37]! transition-colors! duration-300! mb-4!">
+                                {item.titleBlog}
+                              </h2>
 
-                        <p className="text-slate-400 text-sm! leading-relaxed line-clamp-2 mb-8! font-light">
-                          تمایز تنها یک انتخاب نیست، یک ضرورت است. در این مطلب
-                          به بررسی استراتژی‌هایی می‌پردازیم که برندهای معمولی را
-                          به رهبران بازار تبدیل می‌کند.
-                        </p>
-
-                        <div className="flex items-center justify-end">
-                          <div className="flex items-center gap-3! text-sm! font-black text-white group/btn">
-                            <span className="group-hover/btn:text-[#D4AF37] transition-colors">
-                              مشاهده مقاله
-                            </span>
-                            <div className="w-10! h-10! rounded-full! bg-white/5! border border-white/10! flex items-center justify-center group-hover/btn:bg-[#D4AF37] group-hover/btn:border-[#D4AF37] group-hover/btn:text-black transition-all">
-                              <ArrowUpLeft size={18} />
+                              <p className="text-white/60! text-base! leading-relaxed! line-clamp-3! font-light!">
+                                {item.excerpt || stripHtml(item.contentBlog).substring(0, 160)}...
+                              </p>
                             </div>
+
+                            {/* Footer/Action */}
+                            <div className={`mt-8! pt-6! border-t! border-white/5! flex! items-center! ${isRTL ? 'justify-end!' : 'justify-start!'}`}>
+                              <div className={`flex! items-center! gap-3! text-sm! font-bold! tracking-widest! uppercase! group/btn! ${isRTL ? 'flex-row' : 'flex-row-reverse'}`}>
+                                <span className="text-white/80! group-hover:text-white! transition-colors!">{dict.readMore}</span>
+                                <div className={`w-10! h-10! rounded-full! bg-white/5! flex! items-center! justify-center! group-hover:bg-[#D4AF37]! group-hover:text-black! transition-all! duration-300! ${isRTL ? 'group-hover:-translate-x-2' : 'group-hover:translate-x-2'}`}>
+                                  {isRTL ? <ArrowUpLeft size={18} /> : <ArrowUpRight size={18} />}
+                                </div>
+                              </div>
+                            </div>
+
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.article>
-              ))}
-            </div>
-
-            {/* Pagination */}
-            <div className="mt-20! flex justify-center gap-4!">
-              <button className="w-12! h-12! rounded-full! border border-white/10! flex items-center justify-center hover:bg-[#D4AF37] hover:text-black hover:border-[#D4AF37] transition-all">
-                <ChevronLeft size={20} />
-              </button>
-              {latestBlogs?.data &&
-                Array.from({
-                  length: Math.ceil(latestBlogs.data.length / 6) || 3,
-                }).map((_, index) => {
-                  const pageNumber = index + 1;
-                  return (
-                    <button
-                      key={pageNumber}
-                      className={`w-12! h-12! rounded-full! border transition-all ${
-                        pageNumber === 1 // اینجا بعداً می‌توانید یک State برای currentPage تعریف کنید
-                          ? "bg-[#D4AF37] border-[#D4AF37] text-black font-bold"
-                          : "border-white/10 text-white hover:bg-white/5"
-                      }`}
-                    >
-                      {pageNumber}
-                    </button>
-                  );
-                })}
-            </div>
+                      </Link>
+                    </motion.article>
+                  ))}
+                </AnimatePresence>
+                
+                {filteredBlogs.length === 0 && !isLoading && (
+                  <div className="py-32! text-center! border! border-dashed! border-white/10! rounded-3xl! bg-white/[0.01]!">
+                    <p className="text-white/30! text-lg!">{dict.noResult}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

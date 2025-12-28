@@ -7,8 +7,6 @@ import {
   Menu,
   theme,
   Grid,
-  Avatar,
-  Badge,
   ConfigProvider,
   MenuProps,
 } from "antd";
@@ -16,11 +14,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  MenuOutlined,
-} from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
 import {
   LayoutDashboard,
@@ -33,8 +27,7 @@ import {
   Settings,
   Video,
   LogOut,
-  Bell,
-  Search,
+  Languages,
 } from "lucide-react";
 
 import { useRouter, usePathname } from "next/navigation";
@@ -66,16 +59,28 @@ const LayoutComponentDashbord = ({
   // رنگ طلایی لوکس
   const goldColor = "#D4AF37";
 
-  const menuItems: MenuProps['items'] = [
+  const menuItems: MenuProps["items"] = [
     { key: "dashboard", icon: <LayoutDashboard size={20} />, label: "داشبۆرد" },
     {
       key: "event",
       icon: <Video size={20} />,
       label: "چالاکیەکان",
       children: [
-        { key: "dashboard/event/add-event", icon: <PackagePlus size={18} />, label: "زیادکردنی چالاکی" },
-        { key: "dashboard/event/event-list", icon: <ListOrdered size={18} />, label: "لیستی چالاکیەکان" },
-        { key: "dashboard/event/event-lottery", icon: <Crown size={18} />, label: "قرعەکێشی" },
+        {
+          key: "dashboard/event/add-event",
+          icon: <PackagePlus size={18} />,
+          label: "زیادکردنی چالاکی",
+        },
+        {
+          key: "dashboard/event/event-list",
+          icon: <ListOrdered size={18} />,
+          label: "لیستی چالاکیەکان",
+        },
+        {
+          key: "dashboard/event/event-lottery",
+          icon: <Crown size={18} />,
+          label: "قرعەکێشی",
+        },
       ],
     },
     {
@@ -84,8 +89,16 @@ const LayoutComponentDashbord = ({
       label: "کڕیارەکان",
       children: [
         { key: "dashboard/customers", label: "لیستی کڕیارەکان" },
-        { key: "customers/groups", icon: <UserCog size={18} />, label: "گرووپەکان" },
-        { key: "customers/vip", icon: <Crown size={18} />, label: "کڕیارە VIP" },
+        {
+          key: "customers/groups",
+          icon: <UserCog size={18} />,
+          label: "گرووپەکان",
+        },
+        {
+          key: "customers/vip",
+          icon: <Crown size={18} />,
+          label: "کڕیارە VIP",
+        },
       ],
     },
     {
@@ -99,7 +112,12 @@ const LayoutComponentDashbord = ({
       ],
     },
     { type: "divider", className: "border-slate-100 my-6" },
-    { key: "dashboard/settings", icon: <Settings size={20} />, label: "ڕێکخستنەکان" },
+    {
+      key: "dashboard/settings",
+      icon: <Settings size={20} />,
+      label: "ڕێکخستنەکان",
+    },
+    { key: "dashboard/lang", icon: <Languages size={20} />, label: "زبان" },
     {
       key: "logout",
       icon: <LogOut size={20} />,
@@ -108,7 +126,7 @@ const LayoutComponentDashbord = ({
     },
   ];
 
-  const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
+  const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
     if (key === "logout") {
       signOut();
     } else {
@@ -124,11 +142,11 @@ const LayoutComponentDashbord = ({
       direction="rtl"
       theme={{
         algorithm: theme.defaultAlgorithm,
-        token: { 
-            colorPrimary: goldColor, 
-            borderRadius: 20,
-            colorBgLayout: "#FDFDFD",
-            fontFamily: "inherit"
+        token: {
+          colorPrimary: goldColor,
+          borderRadius: 20,
+          colorBgLayout: "#FDFDFD",
+          fontFamily: "inherit",
         },
       }}
     >
@@ -152,8 +170,12 @@ const LayoutComponentDashbord = ({
                   animate={{ opacity: 1, x: 0 }}
                   className="flex flex-col"
                 >
-                  <span className="text-slate-900 font-black tracking-tighter text-xl leading-none">HATAW</span>
-                  <span className="text-[#D4AF37] text-[10px] font-black tracking-[3px] uppercase mt-1">Management</span>
+                  <span className="text-slate-900 font-black tracking-tighter text-xl leading-none">
+                    HATAW
+                  </span>
+                  <span className="text-[#D4AF37] text-[10px] font-black tracking-[3px] uppercase mt-1">
+                    Management
+                  </span>
                 </motion.div>
               )}
             </div>
@@ -178,8 +200,10 @@ const LayoutComponentDashbord = ({
           styles={{ body: { padding: "20px 0", backgroundColor: "#FFFFFF" } }}
         >
           <div className="px-8 mb-8 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl bg-[#D4AF37] flex items-center justify-center text-white font-bold shadow-lg shadow-[#D4AF37]/20">H</div>
-             <span className="text-slate-900 font-black text-xl">DASHBOARD</span>
+            <div className="w-10 h-10 rounded-xl bg-[#D4AF37] flex items-center justify-center text-white font-bold shadow-lg shadow-[#D4AF37]/20">
+              H
+            </div>
+            <span className="text-slate-900 font-black text-xl">DASHBOARD</span>
           </div>
           <Menu
             mode="inline"
@@ -199,7 +223,6 @@ const LayoutComponentDashbord = ({
         >
           {/* Header */}
           <Header className="sticky top-0 z-50 flex items-center justify-between h-24 px-8 bg-white/70! backdrop-blur-2xl border-b border-slate-50 leading-none!">
-            
             <div className="flex items-center gap-8">
               <Button
                 type="text"
@@ -213,15 +236,12 @@ const LayoutComponentDashbord = ({
                 onClick={() => setMobileOpen(true)}
                 className="lg:hidden flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-50 text-slate-900"
               /> */}
-
-  
             </div>
-
           </Header>
 
           <Content className="p-8 md:p-12">
             <AnimatePresence mode="wait">
-              <motion.div 
+              <motion.div
                 key={pathname}
                 initial={{ opacity: 0, scale: 0.98, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -237,9 +257,14 @@ const LayoutComponentDashbord = ({
       </Layout>
 
       <style jsx global>{`
-        .ant-layout-sider-children { display: flex; flex-direction: column; }
-        
-        .custom-sidebar-menu { border: none !important; }
+        .ant-layout-sider-children {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .custom-sidebar-menu {
+          border: none !important;
+        }
 
         .custom-sidebar-menu .ant-menu-item {
           height: 56px !important;
@@ -250,30 +275,34 @@ const LayoutComponentDashbord = ({
         }
 
         .custom-sidebar-menu .ant-menu-item-selected {
-          background: linear-gradient(90deg, #FFFFFF 0%, rgba(212, 175, 55, 0.08) 100%) !important;
-          color: #D4AF37 !important;
+          background: linear-gradient(
+            90deg,
+            #ffffff 0%,
+            rgba(212, 175, 55, 0.08) 100%
+          ) !important;
+          color: #d4af37 !important;
           font-weight: 900 !important;
-          box-shadow: -4px 0 0 #D4AF37;
+          box-shadow: -4px 0 0 #d4af37;
         }
 
-        .custom-sidebar-menu .ant-menu-submenu-title { 
-            color: #94a3b8 !important; 
-            height: 56px !important;
-            font-weight: 600 !important;
+        .custom-sidebar-menu .ant-menu-submenu-title {
+          color: #94a3b8 !important;
+          height: 56px !important;
+          font-weight: 600 !important;
         }
 
         .custom-sidebar-menu .ant-menu-item:hover,
         .custom-sidebar-menu .ant-menu-submenu-title:hover {
-          color: #D4AF37 !important;
-          background: #FDFDFD !important;
+          color: #d4af37 !important;
+          background: #fdfdfd !important;
         }
 
-        .ant-menu-sub { 
-            background: #F8F9FA !important; 
-            border-radius: 18px !important; 
-            padding: 8px !important;
-            margin: 5px 0 !important;
-            border: 1px solid #F1F5F9 !important;
+        .ant-menu-sub {
+          background: #f8f9fa !important;
+          border-radius: 18px !important;
+          padding: 8px !important;
+          margin: 5px 0 !important;
+          border: 1px solid #f1f5f9 !important;
         }
 
         .logout-item {
@@ -281,19 +310,30 @@ const LayoutComponentDashbord = ({
           border: 1px solid #fff1f2 !important;
           background: #fff1f2/50 !important;
         }
-        
+
         .logout-item:hover {
           background: #fff1f2 !important;
           color: #e11d48 !important;
         }
 
-        .ant-menu-inline-divider { border-color: #F1F5F9 !important; }
+        .ant-menu-inline-divider {
+          border-color: #f1f5f9 !important;
+        }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #FDFDFD; }
-        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+        ::-webkit-scrollbar {
+          width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+          background: #fdfdfd;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #e2e8f0;
+          border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #d4af37;
+        }
       `}</style>
     </ConfigProvider>
   );

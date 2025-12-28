@@ -5,16 +5,17 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import {
   Upload,
-  Tag,
-  Layout,
-  Send,
   Image as ImageIcon,
   Sparkles,
-  Eye,
-  Type,
+  CheckCircle2,
+  Loader2,
+  ArrowRight,
+  Layout,
+  Languages,
+  Tag,
 } from "lucide-react";
 import { useToast } from "@/components/Dashbord/TostComponents";
-import { blogAPI } from "@/api";
+import { blogAPI, langAPI } from "@/api";
 import { useGetCategory } from "@/api/categoryService/useRequest";
 
 const AddBlog = () => {
@@ -22,6 +23,7 @@ const AddBlog = () => {
   const quillInstance = useRef<Quill | null>(null);
   const { addToast } = useToast();
 
+  const [createdBlogId, setCreatedBlogId] = useState<number | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [content, setContent] = useState("");
   const [BlogData, setBlogData] = useState<any>({
@@ -30,204 +32,262 @@ const AddBlog = () => {
     slug: "",
     statusblog: 0,
     languageId: 1,
-    contentBlog: "",
-    excerpt: "",
   });
 
-  const { mutate: BlogPostData, isPending: isPendingBlogPostData } =
+  // Hooks
+  const { mutate: BlogPostData, isPending: isCreating } =
     blogAPI.useBlogCreate();
+  const { mutate: uploadImage, isPending: isUploading } =
+    blogAPI.useBlogUploadImage();
   const { data: useGetCategoryData } = useGetCategory();
+  const { data: useGetLangData } = langAPI.useGetlang();
 
   useEffect(() => {
-    let isMounted = true;
-    const initQuill = async () => {
-      if (!editorRef.current || quillInstance.current) return;
-      const QuillModule = (await import("quill")).default;
-      if (!isMounted) return;
-
-      quillInstance.current = new QuillModule(editorRef.current, {
+    if (!editorRef.current || quillInstance.current) return;
+    import("quill").then((QuillModule) => {
+      quillInstance.current = new QuillModule.default(editorRef.current!, {
         theme: "snow",
         placeholder: "لێرەدا دەست بکە بە نووسین...",
         modules: {
           toolbar: [
             [{ header: [1, 2, 3, false] }],
-            ["bold", "italic", "underline", "strike"],
+            ["bold", "italic", "underline"],
             [{ list: "ordered" }, { list: "bullet" }],
-            [{ direction: "rtl" }, { align: [] }],
-            ["link", "image", "video"],
-            ["clean"],
+            [{ direction: "rtl" }],
+            ["link", "image"],
           ],
         },
       });
-
-      quillInstance.current.root.setAttribute("dir", "rtl");
-      quillInstance.current.on("text-change", () => {
-        setContent(quillInstance.current!.root.innerHTML);
-      });
-    };
-    initQuill();
-    return () => {
-      isMounted = false;
-    };
+      quillInstance.current!.root.setAttribute("dir", "rtl");
+      quillInstance.current!.on("text-change", () =>
+        setContent(quillInstance.current!.root.innerHTML)
+      );
+    });
   }, []);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setImagePreview(URL.createObjectURL(file));
-  };
+  // مرحله ۱: ثبت بلاگ
+  const handleBlogSubmit = () => {
+    if (!BlogData.titleBlog || !content) {
+      addToast("تکایە ناونیشان و ناوەڕۆک پڕ بکەرەوە", "error");
+      return;
+    }
 
-  const handleSubmit = () => {
     const finalData = { ...BlogData, contentBlog: content };
-    addToast("خەریکی ناردنی بابەتەکەین...");
+
     BlogPostData(finalData, {
-      onSuccess: () => addToast("بابەتەکە بە سەرکەوتوویی بڵاوکرایەوە!", "success"),
-      onError: () => addToast("هەڵەیەک ڕوویدا لە بڵاوکردنەوە", "error"),
+      onSuccess: (response: any) => {
+        // چون لیست برمی‌گرداند، آخرین آیتم را می‌گیریم
+        const allBlogs = response?.data;
+        if (Array.isArray(allBlogs) && allBlogs.length > 0) {
+          const lastCreatedBlog = allBlogs[allBlogs.length - 1]; // گرفتن آخرین وبلاگ لیست
+          const blogId = lastCreatedBlog.id;
+
+          if (blogId) {
+            setCreatedBlogId(blogId);
+            addToast(
+              "بابەتەکە بە سەرکەوتوویی تۆمارکرا. ئێستا وێنەکە دابنێ",
+              "success"
+            );
+          }
+        } else {
+          addToast("هەڵەیەک لە وەرگرتنی ناسنامەی بابەتەکە ڕوویدا", "error");
+        }
+      },
+      onError: () => addToast("هەڵەیەک ڕوویدا لە تۆمارکردنی بابەتەکە", "error"),
     });
   };
 
+  // مرحله ۲: آپلود عکس (بلافاصله بعد از انتخاب فایل)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !createdBlogId) return;
+
+    setImagePreview(URL.createObjectURL(file));
+
+    // فراخوانی هوک آپلود با ساختار جدید
+    uploadImage(
+      { id: createdBlogId, file: file },
+      {
+        onSuccess: () => addToast("وێنەکە بە سەرکەوتوویی بارکرا", "success"),
+        onError: () => addToast("کێشەیەک لە آپلۆدی وێنەکە هەبوو", "error"),
+      }
+    );
+  };
+
   return (
-    <div className="bg-[#F8F9FA]! min-h-screen! text-slate-800! p-4! md:p-8!" dir="rtl">
-      {/* Header Section */}
-      <div className="max-w-7xl! mx-auto! flex! flex-col! md:flex-row! justify-between! items-center! gap-4! bg-white! border! border-slate-100 p-6! rounded-[2.5rem]! shadow-sm mb-10!">
-        <div className="flex! items-center! gap-4!">
-          <div className="p-3! bg-[#D4AF37]/10! rounded-2xl! border! border-[#D4AF37]/20">
-            <Sparkles className="text-[#D4AF37]" size={28} />
-          </div>
-          <div>
-            <h1 className="text-2xl! font-black! m-0! text-slate-900!">
-              زیادکردنی بابەتێکی <span className="text-[#D4AF37]">نوێ</span>
-            </h1>
-            <p className="text-slate-400! text-sm! mt-1">
-              ناوەڕۆک و زانیارییەکانی بلۆگ لێرەدا بنووسە
-            </p>
-          </div>
-        </div>
-
-        <div className="flex! items-center! gap-3!">
-          <button className="flex! items-center! gap-2! px-5! py-2.5! rounded-xl! bg-white! border! border-slate-200 text-slate-500 hover:bg-slate-50 transition-all font-bold">
-            <Eye size={18} /> پێشاندانی پێشوەختە
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={isPendingBlogPostData}
-            className="flex! items-center! gap-2! bg-gradient-to-r from-[#D4AF37] to-[#B8860B]! text-white! px-8! py-2.5! rounded-xl! font-bold! transition-all shadow-lg shadow-[#D4AF37]/30 active:scale-95"
+    <div className="bg-[#F8F9FA]! min-h-screen! p-4! md:p-8!" dir="rtl">
+      <div className="max-w-4xl! mx-auto!">
+        {/* Stepper */}
+        <div className="flex! items-center! justify-center! gap-4! mb-10!">
+          <div
+            className={`flex items-center gap-2 font-bold ${
+              !createdBlogId ? "text-[#D4AF37]" : "text-green-500"
+            }`}
           >
-            {isPendingBlogPostData ? "خەریکی ناردنە..." : <>بڵاوکردنەوە <Send size={18} /></>}
-          </button>
+            <span className="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+              {createdBlogId ? <CheckCircle2 size={16} /> : "1"}
+            </span>
+            زانیارییەکان
+          </div>
+          <div className="w-10 h-[2px] bg-slate-200" />
+          <div
+            className={`flex items-center gap-2 font-bold ${
+              createdBlogId ? "text-[#D4AF37]" : "text-slate-300"
+            }`}
+          >
+            <span className="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+              2
+            </span>
+            بارکردنی وێنە
+          </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl! mx-auto! grid grid-cols-1! lg:grid-cols-12! gap-8!">
-        {/* Main Editor Area */}
-        <div className="lg:col-span-8! space-y-6!">
-          <div className="relative group px-2">
+        {!createdBlogId ? (
+          <div className="bg-white! p-6! rounded-[2.5rem]! shadow-sm border! border-slate-100 animate-in fade-in duration-500">
             <input
               type="text"
-              placeholder="ناونیشانی بابەتەکە لێرە بنووسە..."
-              className="w-full! bg-transparent! text-4xl! font-black! border-none! focus:ring-0! placeholder:text-slate-300! text-slate-900! transition-all"
-              value={BlogData.titleBlog}
-              onChange={(e) => setBlogData({ ...BlogData, titleBlog: e.target.value })}
+              placeholder="ناونیشانی بابەت..."
+              className="w-full! text-3xl! font-black! border-none! focus:ring-0! mb-6!"
+              onChange={(e) =>
+                setBlogData({ ...BlogData, titleBlog: e.target.value })
+              }
             />
-            <div className="h-1.5! w-24! bg-[#D4AF37]! rounded-full! group-focus-within:w-full! transition-all duration-700 mt-2" />
-          </div>
 
-          <div className="bg-white! border! border-slate-100 rounded-[2.5rem]! overflow-hidden! shadow-sm">
-            <div className="p-4! border-b! border-slate-50 bg-slate-50/50! flex! items-center! gap-2! text-slate-400 font-bold">
-              <Type size={18} /> ناوەڕۆکی سەرەکی
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400 flex items-center gap-1">
+                  <Layout size={14} /> پۆلێن
+                </label>
+                <select
+                  className="w-full bg-slate-50 border-none rounded-xl p-3"
+                  onChange={(e) =>
+                    setBlogData({
+                      ...BlogData,
+                      categoryId: Number(e.target.value),
+                    })
+                  }
+                >
+                  <option value={0}>هەڵبژاردن</option>
+                  {useGetCategoryData?.data?.map((c: any) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nameCategory}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400 flex items-center gap-1">
+                  <Languages size={14} /> زمان
+                </label>
+                <select
+                  className="w-full bg-slate-50 border-none rounded-xl p-3"
+                  onChange={(e) =>
+                    setBlogData({
+                      ...BlogData,
+                      languageId: Number(e.target.value),
+                    })
+                  }
+                >
+                  {useGetLangData?.data?.map((l: any) => (
+                    <option key={l.id} value={l.id}>
+                      {l.titleLanguage}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400 flex items-center gap-1">
+                  <Tag size={14} /> Slug
+                </label>
+                <input
+                  className="w-full bg-slate-50 border-none rounded-xl p-3"
+                  placeholder="my-post-url"
+                  onChange={(e) =>
+                    setBlogData({ ...BlogData, slug: e.target.value })
+                  }
+                />
+              </div>
             </div>
-            <div ref={editorRef} className="min-h-[500px]! text-slate-700! text-lg!" />
-          </div>
-        </div>
 
-        {/* Sidebar Settings */}
-        <div className="lg:col-span-4! space-y-6!">
-          {/* Category Card */}
-          <div className="bg-white! border! border-slate-100 p-6! rounded-[2rem]! shadow-sm">
-            <div className="flex! items-center! gap-2! text-[#D4AF37]! font-bold! mb-4!">
-              <Layout size={18} /> پۆلێنکردن
+            <div className="border rounded-2xl overflow-hidden mb-6">
+              <div ref={editorRef} className="min-h-[350px]" />
             </div>
-            <select
-              className="w-full! bg-slate-50! border! border-slate-100! rounded-xl! p-3! text-slate-600! outline-none! focus:border-[#D4AF37]/50 transition-all cursor-pointer"
-              value={BlogData.categoryId}
-              onChange={(e) => setBlogData({ ...BlogData, categoryId: Number(e.target.value) })}
+
+            <button
+              onClick={handleBlogSubmit}
+              disabled={isCreating}
+              className="w-full! py-4! bg-[#D4AF37]! text-white! rounded-2xl! font-bold! flex! items-center! justify-center! gap-2!"
             >
-              <option value={0}>هەڵبژاردنی پۆلێن</option>
-              {useGetCategoryData?.data?.map((item: any) => (
-                <option value={item.id} key={item.id}>{item.nameCategory}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Tags/Slug Card */}
-          <div className="bg-white! border! border-slate-100 p-6! rounded-[2rem]! shadow-sm">
-            <div className="flex! items-center! gap-2! text-[#D4AF37]! font-bold! mb-4!">
-              <Tag size={18} /> ناسناو (Slug)
-            </div>
-            <input
-              type="text"
-              className="w-full! bg-slate-50! border! border-slate-100! rounded-xl! p-3! text-slate-600! outline-none! focus:border-[#D4AF37]/50 transition-all"
-              placeholder="وەک: my-article-slug"
-              value={BlogData.slug}
-              onChange={(e) => setBlogData({ ...BlogData, slug: e.target.value })}
-            />
-          </div>
-
-          {/* Featured Image Card */}
-          <div className="bg-white! border! border-slate-100 p-2! rounded-[2.5rem]! shadow-sm">
-            <label className="relative! flex! flex-col! items-center! justify-center! w-full! h-72! border-2! border-dashed! border-slate-100 rounded-[2.3rem]! hover:bg-slate-50! hover:border-[#D4AF37]/30 transition-all cursor-pointer overflow-hidden group">
-              {imagePreview ? (
-                <>
-                  <img src={imagePreview} alt="Preview" className="w-full! h-full! object-cover!" />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                    <Upload className="text-white" />
-                  </div>
-                </>
+              {isCreating ? (
+                <Loader2 className="animate-spin" />
               ) : (
-                <div className="flex! flex-col! items-center! gap-3!">
-                  <div className="p-4! bg-[#D4AF37]/5! rounded-full! text-[#D4AF37]">
-                    <ImageIcon size={32} />
-                  </div>
-                  <p className="text-sm! text-slate-400! font-bold">وێنەی سەرەکی بابەت</p>
-                </div>
+                <>
+                  تۆمارکردن و بەردەوامبوون <ArrowRight size={20} />
+                </>
               )}
-              <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
-            </label>
+            </button>
           </div>
-        </div>
-      </div>
+        ) : (
+          <div className="bg-white! p-10! rounded-[3rem]! shadow-xl! border! border-[#D4AF37]/20 text-center animate-in zoom-in duration-300">
+            <div className="mb-6 w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto">
+              <CheckCircle2 size={40} />
+            </div>
+            <h2 className="text-2xl font-black mb-2">
+              بابەتەکە بە سەرکەوتوویی تۆمارکرا
+            </h2>
+            <p className="text-slate-400 mb-8">
+              ئێستا وێنەی سەرەکی بلۆگەکە لێرەدا باربکە
+            </p>
 
-      <style jsx global>{`
-        .ql-toolbar.ql-snow {
-          border: none !important;
-          background: #fdfdfd !important;
-          border-bottom: 1px solid #f1f5f9 !important;
-          padding: 15px !important;
-        }
-        .ql-snow .ql-stroke { stroke: #64748b !important; }
-        .ql-snow .ql-fill { fill: #64748b !important; }
-        .ql-snow .ql-picker { color: #64748b !important; font-weight: bold; }
-        .ql-container.ql-snow { border: none !important; }
-        .ql-editor {
-          min-height: 450px !important;
-          padding: 30px !important;
-          line-height: 2 !important;
-          color: #334155 !important;
-          background: white;
-        }
-        .ql-editor.ql-blank::before {
-          right: 30px !important;
-          left: auto !important;
-          color: #cbd5e1 !important;
-          font-style: normal !important;
-        }
-        .ql-snow .ql-tooltip {
-          background-color: white !important;
-          color: #334155 !important;
-          border: 1px solid #e2e8f0 !important;
-          border-radius: 12px !important;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
-        }
-      `}</style>
+            <label className="relative block w-full max-w-sm mx-auto cursor-pointer group">
+              <div
+                className={`aspect-video rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all ${
+                  imagePreview
+                    ? "border-solid border-[#D4AF37]"
+                    : "border-slate-200 group-hover:border-[#D4AF37]"
+                }`}
+              >
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    className="w-full h-full object-cover rounded-[1.8rem]"
+                  />
+                ) : (
+                  <>
+                    <Upload size={40} className="text-slate-300 mb-2" />
+                    <span className="font-bold text-slate-400">
+                      کلیک بکە بۆ هەڵبژاردن
+                    </span>
+                  </>
+                )}
+
+                {isUploading && (
+                  <div className="absolute inset-0 bg-white/80 rounded-[1.8rem] flex flex-col items-center justify-center">
+                    <Loader2 className="animate-spin text-[#D4AF37] mb-2" />
+                    <span className="text-[#D4AF37] font-bold">
+                      خەریکی بارکردنە...
+                    </span>
+                  </div>
+                )}
+              </div>
+              <input
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={isUploading}
+              />
+            </label>
+
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-10 text-slate-400 hover:text-[#D4AF37] font-bold transition-colors"
+            >
+              تەواو، چوون بۆ لیستی بلۆگەکان
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

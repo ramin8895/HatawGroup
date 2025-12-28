@@ -120,6 +120,16 @@ body {
 
 /* Header & Navigation */
 
+.rich-text-container p {
+  line-height: 2.2 !important;
+  margin-bottom: 1.5rem;
+  color: rgba(224, 224, 224, 0.8);
+}
+
+.rich-text-container img {
+  border-radius: 1rem;
+  margin: 2rem 0;
+}
 .login {
   min-height: 100vh;
   display: flex;
