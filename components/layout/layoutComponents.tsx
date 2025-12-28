@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Instagram,
@@ -16,8 +17,11 @@ import {
   X,
   ChevronLeft,
 } from "lucide-react";
+import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher";
 
 const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
+  const t = useTranslations("Layout");
+  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -25,8 +29,12 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isDashboard =
-    pathname.startsWith("/dashboard") || pathname.startsWith("/userDashboard");
+  // بررسی دقیق‌تر مسیر برای مخفی کردن منو و فوتر در داشبورد و صفحات احراز هویت
+  const isDashboardOrAuth = 
+    pathname.includes("/dashboard") || 
+    pathname.includes("/userDashboard") || 
+    pathname.includes("/login") || 
+    pathname.includes("/register");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -34,7 +42,10 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if (isDashboard) return <>{children}</>;
+  // اگر در مسیرهای داشبورد یا لاگین بودیم، فقط محتوای صفحه را بدون هدر و فوتر برگردان
+  if (isDashboardOrAuth) {
+    return <main className="min-h-screen bg-[#121212]">{children}</main>;
+  }
 
   return (
     <div className="min-h-screen! bg-black text-white flex flex-col!">
@@ -48,31 +59,32 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
       >
         <div className="max-w-7xl! mx-auto! px-6! flex items-center justify-between!">
           {/* Gold CTA Button */}
-          <div className="hidden md:flex! items-center gap-4!">
+          <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher />
+
             <button
               onClick={() =>
                 router.push(
                   session?.userRoleCaption === "userRole"
-                    ? "/userDashboard"
-                    : "/login"
+                    ? `/${locale}/userDashboard`
+                    : `/${locale}/login`
                 )
               }
-              className="px-6! py-2.5! bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#FFD700] rounded-xl! font-black text-sm! text-black hover:scale-105 hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] transition-all flex items-center gap-2!"
+              className="px-6! py-2.5! bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#FFD700] rounded-xl font-black text-sm text-black hover:scale-105 transition-all flex items-center gap-2"
             >
-              {session?.backendToken ? "داشبۆرد" : "بەشداری خەڵات بکە"}
+              {session?.backendToken ? t("nav.dashboard") : t("nav.joinAward")}
               <ChevronLeft size={16} />
             </button>
           </div>
 
           {/* Main Menu */}
           <ul className="hidden lg:flex! items-center gap-8! text-sm! font-bold text-gray-300">
-            {/* لیست آیتم‌ها با هاور طلایی */}
             {[
-              { name: "دەربارەی ئێمه", href: "#about" },
-              { name: "پەیوەندی", href: "#Contact" },
-              { name: "بلۆگ", href: "#blog" },
-              { name: "نمونە کارەکان", href: "#portfolio" },
-              { name: "خزمەتگوزاریەکان", href: "#services" },
+              { name: t("menu.about"), href: "#about" },
+              { name: t("menu.contact"), href: "#Contact" },
+              { name: t("menu.blog"), href: "#blog" },
+              { name: t("menu.portfolio"), href: "#portfolio" },
+              { name: t("menu.services"), href: "#services" },
             ].map((link) => (
               <li key={link.href}>
                 <a href={link.href} className="hover:text-[#D4AF37] transition-colors">
@@ -82,7 +94,7 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
             ))}
             <li>
               <a href="#award" className="relative group hover:text-[#D4AF37] transition-colors">
-                هەتاو و خەڵات
+                {t("menu.award")}
                 <span className="absolute -top-4! -right-4! bg-[#D4AF37] text-black text-[10px]! px-1.5! py-0.5! rounded-md font-black animate-pulse shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                   NEW
                 </span>
@@ -90,21 +102,20 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
             </li>
             <li>
               <a href="#home" className="text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1">
-                ماڵەوە
+                {t("menu.home")}
               </a>
             </li>
           </ul>
 
-          {/* Logo with Gold Style */}
+          {/* Logo */}
           <div className="flex items-center gap-4!">
-        
-            <div className="relative group" onClick={()=>router.push("/")}>
+            <div className="relative group cursor-pointer" onClick={() => router.push(`/${locale}`)}>
               <img
                 src="/Hataw-Logo-01.png"
                 alt="Hataw Group"
-                className="w-28! h-12!  transition-all"
+                className="w-28! h-12! transition-all"
               />
-              <div className="absolute inset-0! rounded-2xl! border cursor-pointer border-[#D4AF37]/20 animate-pulse"></div>
+              <div className="absolute inset-0! rounded-2xl! border border-[#D4AF37]/20 animate-pulse"></div>
             </div>
           </div>
 
@@ -127,7 +138,14 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
             exit={{ opacity: 0, x: 50 }}
             className="fixed inset-0! z-[90] bg-black p-10! flex flex-col! justify-center items-end! gap-8! border-l border-[#D4AF37]/20"
           >
-            {["سەرەتا", "خزمەتگوزارییەکان", "پۆرتفۆلیۆ", "بلۆگ", "خەڵاتی Hataw", "دەربارەی ئێمە"].map((item) => (
+            {[
+              t("menu.home"),
+              t("menu.services"),
+              t("menu.portfolio"),
+              t("menu.blog"),
+              t("menu.award"),
+              t("menu.about"),
+            ].map((item) => (
               <a
                 key={item}
                 href="#"
@@ -147,10 +165,9 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
       <footer className="bg-[#050505] border-t border-[#D4AF37]/20! pt-20! pb-10!">
         <div className="max-w-7xl! mx-auto! px-6!">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12! mb-20!">
-            {/* Contact Section */}
             <div className="flex flex-col! items-end! text-right!">
               <h3 className="text-[#D4AF37] font-black text-lg! mb-6! border-b border-[#D4AF37]/20! pb-2! w-full">
-                پەیوەندی
+                {t("footer.contactTitle")}
               </h3>
               <ul className="space-y-4! text-gray-400 text-sm!">
                 <li className="flex items-center gap-3! justify-end hover:text-[#D4AF37] transition-colors cursor-pointer">
@@ -160,51 +177,43 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
                   +1 (234) 567-890 <Phone size={16} className="text-[#D4AF37]" />
                 </li>
                 <li className="flex items-center gap-3! justify-end">
-                  هەولێر، هەرێمی کوردستان <MapPin size={16} className="text-[#D4AF37]" />
+                  {t("footer.location")} <MapPin size={16} className="text-[#D4AF37]" />
                 </li>
                 <li className="flex items-center gap-3! justify-end">
-                  ٩ی بەیانی – ٦ی ئێوارە <Clock size={16} className="text-[#D4AF37]" />
+                  {t("footer.workingHours")} <Clock size={16} className="text-[#D4AF37]" />
                 </li>
               </ul>
             </div>
 
-            {/* Quick Links */}
             <div className="flex flex-col! items-end! text-right!">
-              <h3 className="text-white font-black text-lg! mb-6!">کۆمپانیا</h3>
+              <h3 className="text-white font-black text-lg! mb-6!">{t("footer.companyTitle")}</h3>
               <ul className="space-y-4! text-gray-400 text-sm!">
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">دەربارەی ئێمە</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">پۆرتفۆلیۆ</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">بلۆگ</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">خەڵاتی Hataw</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("menu.about")}</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("menu.portfolio")}</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("menu.blog")}</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("menu.award")}</a></li>
               </ul>
             </div>
 
-            {/* Services */}
             <div className="flex flex-col! items-end! text-right!">
-              <h3 className="text-white font-black text-lg! mb-6!">خزمەتگوزارییەکان</h3>
+              <h3 className="text-white font-black text-lg! mb-6!">{t("footer.servicesTitle")}</h3>
               <ul className="space-y-4! text-gray-400 text-sm!">
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">دیزاینی ناسنامەی براند</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">ستراتژی براند</a></li>
-                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">ڕاوێژکاری براند</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("footer.service1")}</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("footer.service2")}</a></li>
+                <li><a href="#" className="hover:text-[#D4AF37] transition-colors">{t("footer.service3")}</a></li>
               </ul>
             </div>
 
-            {/* Footer Brand */}
             <div className="flex flex-col! items-end! text-right!">
               <h3 className="text-2xl! font-black mb-6! text-white">
                 HATAW <span className="text-[#D4AF37]">GROUP</span>
               </h3>
               <p className="text-gray-400 leading-relaxed! mb-8!">
-                گۆڕینی بازرگانییەکان بۆ براندی ئەفسانەیی بە شوێنپێدانی ستراتیژی
-                و داهێنانی پیشەیی.
+                {t("footer.description")}
               </p>
               <div className="flex items-center gap-4!">
                 {[Instagram, Twitter, Linkedin, Facebook].map((Icon, idx) => (
-                  <a
-                    key={idx}
-                    href="#"
-                    className="w-10! h-10! rounded-full! bg-[#D4AF37]/5! border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all shadow-sm hover:shadow-[#D4AF37]/40"
-                  >
+                  <a key={idx} href="#" className="w-10! h-10! rounded-full! bg-[#D4AF37]/5! border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all">
                     <Icon size={18} />
                   </a>
                 ))}
@@ -213,10 +222,11 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
           </div>
 
           <div className="pt-10! border-t border-white/5! flex flex-col md:flex-row-reverse justify-between items-center gap-6! text-gray-500 text-[10px]! font-bold uppercase tracking-widest!">
-            <p>© 2025 Hataw Group. هەموو مافەکان پارێزراون</p>
+            <p>{t("footer.copyright")}</p>
             <div className="flex items-center gap-6!">
-              <a href="#" className="hover:text-[#D4AF37] transition-colors">سیاسەتی تایبەتمەندی</a>
-              <a href="#" className="hover:text-[#D4AF37] transition-colors">مەرجەکانی خزمەتگوزاری</a>
+              <LanguageSwitcher />
+              <a href="#" className="hover:text-[#D4AF37] transition-colors">{t("footer.privacy")}</a>
+              <a href="#" className="hover:text-[#D4AF37] transition-colors">{t("footer.terms")}</a>
             </div>
           </div>
         </div>

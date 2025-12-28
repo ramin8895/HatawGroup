@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import createMiddleware from 'next-intl/middleware';
 
-export async function proxy(req: NextRequest) {
+// 1. تعریف میدلور زبان
+const intlMiddleware = createMiddleware({
+  locales: ["en", "ku"],
+  defaultLocale: 'en'
+});
+
+export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 1️⃣ مسیرهای عمومی و سیستمی (خیلی مهم: قبل از getToken)
+  // مسیرهای سیستمی و API را نادیده بگیر
   if (
-    pathname === "/" ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico"
@@ -15,56 +21,60 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2️⃣ فقط اینجا توکن رو بگیر
+  // 2. دریافت توکن
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
 
+  // استخراج زبان از مسیر (مثلاً /en/dashboard -> en)
+  const pathnameHasLocale = ["/en", "/ku"].some(
+    (locale) => pathname.startsWith(locale + "/") || pathname === locale
+  );
+
+  // پیدا کردن مسیر بدون زبان برای چک کردن منطق (مثلاً /en/dashboard -> /dashboard)
+  const purePathname = pathnameHasLocale 
+    ? pathname.replace(/^\/(en|ku)/, "") 
+    : pathname;
+
   const url = req.nextUrl.clone();
+  const localePrefix = pathnameHasLocale ? pathname.split('/')[1] : 'en';
 
-  // 3️⃣ مسیرهای محافظت‌شده
-  const isAdminDashboard = pathname.startsWith("/dashboard");
-  const isUserDashboard = pathname.startsWith("/userDashboard");
+  // 3. چک کردن دسترسی‌ها (RBAC)
+  const isAdminDashboard = purePathname.startsWith("/dashboard");
+  const isUserDashboard = purePathname.startsWith("/userDashboard");
 
-  // کاربر لاگین نکرده
+  // اگر لاگین نکرده و می‌خواهد به داشبورد برود
   if ((isAdminDashboard || isUserDashboard) && !token) {
-    url.pathname = "/login";
+    url.pathname = `/${localePrefix}/login`;
     return NextResponse.redirect(url);
   }
 
-  // 4️⃣ جلوگیری از ورود دوباره به لاگین
-  if (token && pathname === "/login") {
-    url.pathname =
-      token.userRoleCaption === "adminRole"
-        ? "/dashboard"
-        : "/userDashboard";
+  // اگر لاگین کرده و می‌خواهد به صفحه لاگین برود
+  if (token && purePathname === "/login") {
+    url.pathname = token.userRoleCaption === "adminRole" 
+      ? `/${localePrefix}/dashboard` 
+      : `/${localePrefix}/userDashboard`;
     return NextResponse.redirect(url);
   }
 
-  // 5️⃣ RBAC (کنترل نقش)
+  // کنترل نقش‌ها
   if (token) {
-    if (
-      token.userRoleCaption === "adminRole" &&
-      isUserDashboard
-    ) {
-      url.pathname = "/dashboard";
+    if (token.userRoleCaption === "adminRole" && isUserDashboard) {
+      url.pathname = `/${localePrefix}/dashboard`;
       return NextResponse.redirect(url);
     }
-
-    if (
-      token.userRoleCaption === "userRole" &&
-      isAdminDashboard
-    ) {
-      url.pathname = "/userDashboard";
+    if (token.userRoleCaption === "userRole" && isAdminDashboard) {
+      url.pathname = `/${localePrefix}/userDashboard`;
       return NextResponse.redirect(url);
     }
   }
 
-  return NextResponse.next();
+  // 4. در نهایت اجرای میدلور زبان برای بقیه مسیرها
+  return intlMiddleware(req);
 }
 
-// 6️⃣ matcher تمیز
 export const config = {
-  matcher: ["/((?!api|_next|favicon.ico).*)"],
+  // این matcher استاندارد برای ترکیب هر دو حالت است
+  matcher: ['/((?!api|_next|.*\\..*).*)']
 };
