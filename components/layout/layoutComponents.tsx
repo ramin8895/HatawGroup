@@ -108,14 +108,13 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
           </ul>
 
           {/* Logo */}
-          <div className="flex items-center gap-4!">
-            <div className="relative group cursor-pointer" onClick={() => router.push(`/${locale}`)}>
+          <div className="flex items-center justify-center gap-4!">
+            <div className="relative  group cursor-pointer" onClick={() => router.push(`/${locale}`)}>
               <img
-                src="/Hataw-Logo-01.png"
+                src="/Hataw-Logo-01.svg"
                 alt="Hataw Group"
-                className="w-28! h-12! transition-all"
+                className="w-full! h-16!   transition-all"
               />
-              <div className="absolute inset-0! rounded-2xl! border border-[#D4AF37]/20 animate-pulse"></div>
             </div>
           </div>
 
