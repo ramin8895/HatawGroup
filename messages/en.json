@@ -1,0 +1,163 @@
+{
+  "Hero": {
+    "title": "Transform Your Business into a Legendary Brand",
+    "title1": "Strategic brand identity and positioning that makes you unforgettable.",
+    "title2": "We build digital empires.",
+    "btn1": "Join Hataw Awards",
+    "btn2": "Services"
+  },
+  "Layout": {
+    "menu": {
+      "home": "Home",
+      "services": "Services",
+      "portfolio": "Portfolio",
+      "blog": "Blog",
+      "award": "Hataw Award",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "joinAward": "Join Awards"
+    },
+    "footer": {
+      "description": "Transforming businesses into legendary brands with strategic positioning and professional innovation.",
+      "servicesTitle": "Services",
+      "companyTitle": "Company",
+      "contactTitle": "Contact",
+      "location": "Erbil, Kurdistan Region",
+      "copyright": "© 2025 Hataw Group. All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "About": {
+    "badge": "About Hataw Group",
+    "title": "Creating Brands That  <br/> Endure Forever",
+    "description": "At <bold>Hataw Group</bold>, we believe every business deserves to be a powerful brand. Our strategic approach combines deep market research with professional innovation.",
+    "feat1": "Modern Brand Strategy",
+    "feat2": "Unique Identity Design",
+    "feat3": "Deep Market Research",
+    "feat4": "Business Development",
+    "cta": "Start Your Journey",
+    "yearsExp": "Years of Experience"
+  },
+  "Services": {
+    "badge": "Our Expertise",
+    "title": "Our Services",
+    "description": "Comprehensive strategic brand solutions designed to elevate your business to a global level.",
+    "more": "View More",
+    "items": {
+      "branding": {
+        "title": "Brand Identity Design",
+        "desc": "Complete visual identity systems including logo design, colors, and typography that ensure consistency."
+      },
+      "strategy": {
+        "title": "Brand Strategy",
+        "desc": "Deep market research and strategic positioning to differentiate your brand and create leadership."
+      },
+      "consultancy": {
+        "title": "Brand Consultancy",
+        "desc": "Expert guidance on brand growth and expansion to help you in every step of your development."
+      },
+      "digital": {
+        "title": "Digital Branding",
+        "desc": "Comprehensive digital presence including website design and social media strategies."
+      },
+      "experience": {
+        "title": "Brand Experience",
+        "desc": "Creating memorable experiences through storytelling and customer engagement strategies."
+      },
+      "refresh": {
+        "title": "Brand Refresh",
+        "desc": "Full brand transformation services for businesses ready for major evolution."
+      }
+    }
+  },
+  "Dashboard": {
+    "title": "User Dashboard",
+    "welcome": "Welcome,",
+    "userPlaceholder": "User",
+    "goBack": "Go Back",
+    "logout": "Sign Out",
+    "menuOverview": "Overview",
+    "menuEvents": "My Events",
+    "menuEdit": "Edit Profile",
+    "statsTotalPoints": "Total Points",
+    "statsEvents": "Activities",
+    "statsRank": "Ranking",
+    "statsRole": "User Role",
+    "eventListTitle": "Participated Events List",
+    "eventPlaceholder": "Event Name",
+    "completedStatus": "Completed",
+    "pointsSuffix": "Pts",
+    "noEvents": "No activities found",
+    "editTitle": "Personal Information",
+    "labelFirstname": "First Name",
+    "labelLastname": "Last Name",
+    "labelEmail": "Email (Username)",
+    "labelRoleId": "Role ID",
+    "saveBtn": "Save Changes"
+  },
+  "Blog": {
+    "badge": "Insights & News",
+    "title": "Latest Beats of",
+    "titleAccent": "Branding World",
+    "viewAll": "View All Posts",
+    "readMore": "Click to Read More",
+    "category": "Branding"
+  },
+  "Portfolio": {
+    "title": "Featured",
+    "titleAccent": "Projects",
+    "subtitle": "The stories of brands we reinvented together",
+    "item1Title": "Modern Startup",
+    "item1Desc": "Modern Visual Identity Redesign",
+    "item2Title": "Luxury Fashion Brand",
+    "item2Desc": "Global Market Entry Strategy",
+    "item3Title": "Future Fintech",
+    "item3Desc": "Custom UX/UI Design"
+  },
+  "Stats": {
+    "successfulProjects": "Successful Projects",
+    "happyClients": "Happy Clients",
+    "yearsExperience": "Years of Experience",
+    "satisfaction": "Total Satisfaction"
+  },
+  "Contact": {
+    "title": "Ready for Change?",
+    "subtitle": "Leave your email so we can map out your branding journey.",
+    "placeholder": "Email Address",
+    "button": "Subscribe"
+  },
+  "Lottery": {
+    "title": "Rewards",
+    "brandName": "HATAW",
+    "prizePool": "$900 Total Prize Pool",
+    "description": "Learn, find the codes, and be a winner. 180 exclusive branding videos are waiting for you on YouTube.",
+    "checkingAccess": "Checking access...",
+    "inputPlaceholder": "Enter your participation code...",
+    "submitButton": "Submit Code",
+    "joinButton": "Join the Challenge",
+    "countdown": "New round starts in 12 days"
+  },
+  "Auth": {
+    "loginTitle": "Welcome Back",
+    "signupTitle": "Create Account",
+    "loginDesc": "Enter your details to sign in",
+    "signupDesc": "Join the Hataw Group family",
+    "username": "Username",
+    "email": "Email",
+    "phone": "Phone Number",
+    "password": "Password",
+    "loginBtn": "Sign In",
+    "signupBtn": "Sign Up",
+    "googleBtn": "Continue with Google",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "createAction": "Create One",
+    "loginAction": "Sign In",
+    "back": "Go Back",
+    "loading": "Authenticating..."
+  }
+}
