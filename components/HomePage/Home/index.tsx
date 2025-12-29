@@ -2,7 +2,6 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import { ArrowUpLeft, ArrowUpRight, Trophy } from "lucide-react";
-import Typewriter from "typewriter-effect";
 
 const HomeSection = ({ locale, translations }: any) => {
   const isRtl = locale === "ku";
@@ -161,6 +160,7 @@ const HomeSection = ({ locale, translations }: any) => {
           font-size: 1.1em;
           line-height: 1;
         }
+
       `}</style>
     </div>
   );
