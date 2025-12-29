@@ -85,7 +85,7 @@ export function HomeContent({ locale, translations }: any) {
       {/* --- Blog Section --- */}
       <motion.section
         id="blog"
-        className="relative! py-32! bg-[#121212] overflow-hidden!"
+        className="relative! py-32!  bg-[#121212] overflow-hidden!"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -93,7 +93,7 @@ export function HomeContent({ locale, translations }: any) {
         <div
           className={`absolute! top-0! ${
             isRtl ? "-right-20!" : "-left-20!"
-          } w-[600px]! h-[600px]! bg-[#D4AF37]/5! blur-[140px]! rounded-full! pointer-events-none!`}
+          } w-[600px]! h-[600px]!  bg-[#D4AF37]/5! blur-[140px]! rounded-full! pointer-events-none!`}
         ></div>
 
         <div className="max-w-7xl! mx-auto! px-6! relative! z-10!">
@@ -108,14 +108,14 @@ export function HomeContent({ locale, translations }: any) {
                   isRtl ? "justify-end!" : "justify-start!"
                 }`}
               >
-                <span className="text-[#D4AF37]! text-xs! font-black! tracking-[0.4em]! uppercase!">
+                <span className="text-[#D4AF37]! text-xl! font-black! tracking-[0.4em]! uppercase!">
                   {Blog.badge}
                 </span>
                 <div className="w-12! h-[1px]! bg-[#D4AF37]/50!"></div>
               </div>
               <h2 className="text-5xl! md:text-7xl! font-black! text-[#FFFFFF]! mb-6! tracking-tighter!">
                 {Blog.title}{" "}
-                <span className="text-transparent! bg-clip-text! bg-gradient-to-l! from-[#F5E1A4]! via-[#D4AF37]! to-[#F5E1A4]! animate-gradient-x!">
+                <span className="text-transparent! bg-clip-text! bg-gradient-to-l! text-5xl! md:text-7xl! from-[#F5E1A4]! via-[#D4AF37]! to-[#F5E1A4]! animate-gradient-x!">
                   {Blog.titleAccent}
                 </span>
               </h2>
@@ -204,7 +204,7 @@ export function HomeContent({ locale, translations }: any) {
           <div className="text-center! mb-20!">
             <h2 className="text-4xl! md:text-5xl! font-black! text-[#FFFFFF]! mb-6!">
               {Portfolio.title}{" "}
-              <span className="text-[#D4AF37]!">{Portfolio.titleAccent}</span>
+              <span className="text-[#D4AF37]! text-5xl!">{Portfolio.titleAccent}</span>
             </h2>
             <p className="text-[#E0E0E0]/50!">{Portfolio.subtitle}</p>
           </div>

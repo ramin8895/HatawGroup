@@ -9,3 +9,11 @@ export const useGetEventUser = (id: any) =>
     refetchOnWindowFocus: false,
     enabled: !!id,
   });
+
+
+export const useAddEventUser = () => {
+  return useMutation({
+    mutationFn: (data: { codeEvent: string }) => services.AddEventUser(data),
+    // onSuccess: () => { ... }
+  });
+};

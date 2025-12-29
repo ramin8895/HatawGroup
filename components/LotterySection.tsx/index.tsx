@@ -6,35 +6,60 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, ExternalLink, Zap } from "lucide-react";
-
-// دریافت پروپ‌های ترجمه و لوکال
+import { useAddEventUser } from "@/api/EventUserService/useRequest";
 const LotterySection = ({ translations, locale }: any) => {
   const [lotteryCode, setLotteryCode] = useState("");
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // استفاده از هوک میوتیشن
+  const { mutate: addEvent, isPending: isSubmitting } = useAddEventUser();
+
   const isRtl = locale === "fa" || locale === "ku";
   const { Lottery = {} } = translations;
 
+  // تابع هندل کردن کلیک دکمه
+  const handleSubmit = () => {
+    if (!lotteryCode) return; // ولیدیشن ساده برای خالی نبودن
+
+    addEvent(
+      { codeEvent: lotteryCode },
+      {
+        onSuccess: (response: any) => {
+          console.log("Success:", response);
+          setLotteryCode("");
+        },
+        onError: (error: any) => {
+          console.error("Error:", error);
+        },
+      }
+    );
+  };
+
   return (
-    <section id="award" className="py-32! relative!" dir={isRtl ? "rtl" : "ltr"}>
+    <section
+      id="award"
+      className="py-32! relative!"
+      dir={isRtl ? "rtl" : "ltr"}
+    >
       <div className="max-w-5xl! mx-auto! px-6!">
         {/* باکس اصلی */}
         <div className="bg-gradient-to-br! from-[#B8860B]/20! to-black/60! border! border-[#D4AF37]/20! rounded-[3rem]! p-12! md:p-20! relative! overflow-hidden! backdrop-blur-xl! text-center! shadow-[0_20px_50px_-20px_rgba(212,175,55,0.2)]">
-          
-          {/* آیکون کاپ در پس‌زمینه - جابجایی بر اساس جهت */}
-          <div className={`absolute! top-0! ${isRtl ? 'right-0!' : 'left-0!'} p-8! text-[#D4AF37]! opacity-10! pointer-events-none!`}>
+          <div
+            className={`absolute! top-0! ${
+              isRtl ? "right-0!" : "left-0!"
+            } p-8! text-[#D4AF37]! opacity-10! pointer-events-none!`}
+          >
             <Trophy size={200} />
           </div>
 
           <h2 className="text-4xl! md:text-6xl! font-black! text-white! mb-8!">
-             {Lottery.title}{" "}
-            <span className="text-transparent! bg-clip-text! bg-gradient-to-r! from-[#F5E1A4]! via-[#D4AF37]! to-[#B8860B]!">
+            {Lottery.title}{" "}
+            <span className="text-transparent! text-4xl! md:text-6xl! bg-clip-text! bg-gradient-to-r! from-[#F5E1A4]! via-[#D4AF37]! to-[#B8860B]!">
               {Lottery.brandName}
             </span>
           </h2>
 
-          {/* نشان مبلغ جایزه */}
           <div className="inline-block! px-10! py-4! bg-gradient-to-r! from-[#D4AF37]! to-[#B8860B]! text-black! rounded-full! font-black! text-2xl! mb-10! shadow-[0_10px_30px_-5px_rgba(212,175,55,0.4)]!">
             {Lottery.prizePool}
           </div>
@@ -68,15 +93,31 @@ const LotterySection = ({ translations, locale }: any) => {
                     value={lotteryCode}
                     onChange={(e) => setLotteryCode(e.target.value)}
                     placeholder={Lottery.inputPlaceholder}
-                    className="w-full! bg-white/5! border-2! border-white/10! rounded-2xl! py-5! px-8! text-center! text-white! text-xl! font-bold! tracking-widest! outline-none! focus:border-[#D4AF37]! focus:bg-[#D4AF37]/5! transition-all! placeholder:text-slate-600! placeholder:text-sm! placeholder:tracking-normal!"
+                    disabled={isSubmitting} // غیرفعال کردن هنگام ارسال
+                    className="w-full! bg-white/5! border-2! border-white/10! rounded-2xl! py-5! px-8! text-center! text-white! text-xl! font-bold! tracking-widest! outline-none! focus:border-[#D4AF37]! focus:bg-[#D4AF37]/5! transition-all! placeholder:text-slate-600! placeholder:text-sm! placeholder:tracking-normal! disabled:opacity-50!"
                   />
                   <Zap
-                    className={`absolute! ${isRtl ? 'right-5!' : 'left-5!'} top-1/2! -translate-y-1/2! text-[#D4AF37]! group-focus-within:animate-pulse!`}
+                    className={`absolute! ${
+                      isRtl ? "right-5!" : "left-5!"
+                    } top-1/2! -translate-y-1/2! text-[#D4AF37]! group-focus-within:animate-pulse!`}
                     size={24}
                   />
 
-                  <button className="mt-6! w-full! py-4! bg-[#D4AF37]! hover:bg-[#C19A2E]! text-black! rounded-2xl! font-black! transition-all! shadow-lg! shadow-[#D4AF37]/20! flex! items-center! justify-center! gap-2!">
-                    {Lottery.submitButton} <ExternalLink size={18} />
+                  <button
+                    onClick={handleSubmit} // اتصال تابع هندل
+                    disabled={isSubmitting || !lotteryCode} // غیرفعال کردن دکمه
+                    className="mt-6! w-full! py-4! bg-[#D4AF37]! hover:bg-[#C19A2E]! text-black! rounded-2xl! font-black! transition-all! shadow-lg! shadow-[#D4AF37]/20! flex! items-center! justify-center! gap-2! disabled:opacity-70! disabled:cursor-not-allowed!"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="animate-spin" size={18} />
+                        در حال ثبت...
+                      </>
+                    ) : (
+                      <>
+                        {Lottery.submitButton} <ExternalLink size={18} />
+                      </>
+                    )}
                   </button>
                 </motion.div>
               ) : (

@@ -39,3 +39,14 @@ export const UpdateUserRoleEdit = async (data) => {
     }
   );
 };
+export const UpdateUser = async (data) => {
+  return await http.post(
+    `${process.env.NEXT_PUBLIC_BASE_URL_DIST_PROD}/Account/UserUpdate`,
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};

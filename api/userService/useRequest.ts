@@ -16,7 +16,7 @@ export const useGetuserDetail = (Id?: string) =>
     queryFn: () => GetuserDetail(Id!),
     enabled: !!Id, // فقط وقتی Id موجوده اجرا شه
     refetchOnWindowFocus: false,
-  });;
+  });
 
 export const useGetRoleList = () =>
   useQuery({
@@ -34,5 +34,11 @@ export const useUpdateUserRoleEdit = () =>
   useMutation({
     mutationKey: [cashKey.updateUpdateUserRoleEdit],
     mutationFn: (data: any) => services.UpdateUserRoleEdit(data),
+    retry: false,
+  });
+export const useUpdateUser = () =>
+  useMutation({
+    mutationKey: [cashKey.updateuser],
+    mutationFn: (data: any) => services.UpdateUser(data),
     retry: false,
   });

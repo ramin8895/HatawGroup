@@ -89,15 +89,15 @@ const EventList: React.FC = () => {
         <div className="max-w-[1600px]! mx-auto! animate-in fade-in duration-700">
           
           {/* Header Section */}
-          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-8! mb-10! p-8! bg-white border! border-gray-100 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4AF37]/5 blur-[100px] rounded-full pointer-events-none" />
+          <div className="flex! flex-col! lg:flex-row! justify-between! items-center! gap-8! mb-4! p-2! bg-white border! border-gray-100 rounded-[1rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-56 h-56 bg-[#D4AF37]/5 blur-[100px] rounded-full pointer-events-none" />
             
             <div className="flex! items-center! gap-6! relative z-10">
-              <div className="p-5! bg-[#D4AF37]/10 rounded-[1.5rem] border! border-[#D4AF37]/20 shadow-sm text-[#D4AF37]">
+              <div className="p-5! bg-[#D4AF37]/10 rounded-3xl border! border-[#D4AF37]/20 shadow-sm text-[#D4AF37]">
                 <CalendarDays size={36} />
               </div>
               <div>
-                <h1 className="text-3xl! font-black! text-[#1A1A1A] flex! items-center! gap-3! m-0! tracking-tight">
+                <h1 className="text-2xl! font-black! text-[#1A1A1A] flex! items-center! gap-3! m-0! tracking-tight">
                   بەڕێوەبردنی چالاکیەکان
                   <Sparkles className="text-[#D4AF37]" size={22} />
                 </h1>
@@ -115,7 +115,7 @@ const EventList: React.FC = () => {
                   setItemSelect(undefined); 
                   setOpen(true); 
                 }}
-                className="h-16! px-10! rounded-2xl! bg-[#D4AF37]! hover:bg-[#B8860B]! border-none! shadow-[0_10px_25px_rgba(212,175,55,0.3)] text-white! font-black! text-lg! flex! items-center! transition-all! hover:scale-[1.03]!"
+                className="h-14! px-5! rounded-2xl! bg-[#D4AF37]! hover:bg-[#B8860B]! border-none! shadow-[0_10px_25px_rgba(212,175,55,0.3)] text-white! font-black! text-lg! flex! items-center! transition-all! hover:scale-[1.03]!"
               >
                 زیادکردنی چالاکی نوێ
               </Button>

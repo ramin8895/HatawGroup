@@ -4,5 +4,6 @@ export enum cashKey {
   createnewcustomer = "create-usercustomer",
   deletenewcustomer = "delete-usercustomer",
   updatenewcustomer = "update-usercustomer",
+  updateuser = "update-user",
   updateUpdateUserRoleEdit = "update-UpdateUserRoleEdit",
 }

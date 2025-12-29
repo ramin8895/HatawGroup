@@ -37,11 +37,11 @@ const HomeSection = ({ locale, translations }: any) => {
       id="home"
     >
       {/* Background Effects */}
-      <div className="absolute top-[-20%]! left-[-10%]! w-[800px]! h-[700px]! bg-[#D4AF37]/10! blur-[160px]! rounded-full! pointer-events-none"></div>
+      <div className="absolute top-[-20%]! left-[-10%]!  w-[800px]! h-[700px]! bg-[#D4AF37]/10! blur-[160px]! rounded-full! pointer-events-none"></div>
       <div className="absolute bottom-[-15%]! left-1/2! -translate-x-1/2! w-[600px]! h-[400px]! bg-[#D4AF37]/5! blur-[120px]! rounded-full! pointer-events-none"></div>
 
       <motion.div
-        className="max-w-7xl! mx-auto! px-6! relative mt-12! z-10! text-center"
+        className="max-w-7xl! mx-auto! px-6! relative mt-22! z-10! text-center"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -52,23 +52,11 @@ const HomeSection = ({ locale, translations }: any) => {
           className="mb-10! flex justify-center items-center"
         >
           <h1
-            className="text-5xl! md:text-[120px]! font-black leading-[1]! tracking-tighter! drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+            className="text-5xl! md:text-[120px]! font-black leading-[1]! tracking-tighter! drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] inline-block animate-wave-text bg-gradient-to-r from-white via-[#D4AF37] to-white bg-size-[200%_auto]! bg-clip-text text-transparent"
+            style={{ animationDuration: "10s" }}
             dir={isRtl ? "rtl" : "ltr"}
           >
-            <Typewriter
-              options={{
-                strings: [Hero.title],
-                autoStart: true,
-                loop: true,
-                delay: 80,
-                deleteSpeed: 40,
-                /* کلاس انیمیشن موجی به wrapper اضافه شد */
-                wrapperClassName:
-                  "inline-block animate-wave-text bg-gradient-to-r text-5xl! md:text-[100px]! from-white via-[#D4AF37] to-white bg-[length:200%_auto] bg-clip-text text-transparent",
-                cursorClassName: "text-[#D4AF37] opacity-100 ml-2 font-light",
-                cursor: "|",
-              }}
-            />
+            {Hero.title}
           </h1>
         </motion.div>
 
@@ -162,7 +150,10 @@ const HomeSection = ({ locale, translations }: any) => {
           }
         }
         .animate-wave-text {
-          animation: wave 5s linear infinite;
+          animation-name: wave;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          animation-duration: 0.4s;
         }
 
         .Typewriter__cursor {
