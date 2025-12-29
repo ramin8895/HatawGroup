@@ -2,10 +2,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { services, cashKey } from ".";
 
-export const useGetEventUser = (id: any) =>
+export const useGetEventUser = (id: any ,data:any) =>
   useQuery({
     queryKey: [cashKey.getevent],
-    queryFn: () => services.GetEventUser(id),
+    queryFn: () => services.GetEventUser(id, data),
     refetchOnWindowFocus: false,
     enabled: !!id,
   });

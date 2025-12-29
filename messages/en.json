@@ -97,6 +97,11 @@
     "labelLastname": "Last Name",
     "labelEmail": "Email (Username)",
     "labelRoleId": "Role ID",
+    "statusVerified": "successfully verified",
+    "filterByDate": "Filter by Date",
+    "eventsCountText": "Total Events: ",
+    "eventsTitle": "Events Participated In",
+
     "saveBtn": "Save Changes"
   },
   "Blog": {

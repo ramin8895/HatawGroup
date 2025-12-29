@@ -102,6 +102,11 @@
     "labelLastname": "ناوی کۆتایی (Lastname)",
     "labelEmail": "ئیمەیڵ (Username)",
     "labelRoleId": "کۆدی ڕۆڵ (Role ID)",
+    "filterByDate": "پێشکەش بە ڕۆژ",
+    "eventsCountText": "کۆی چالاکییەکان: ",
+    "eventsTitle": "چالاکییە بەشداربووەکان",
+
+    "statusVerified": "بە سەرکەوتوویی پشکنینی کرا",
     "saveBtn": "پاشەکەوتکردنی گۆڕانکارییەکان"
   },
   "Blog": {
