@@ -2,6 +2,7 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import { ArrowUpLeft, ArrowUpRight, Trophy } from "lucide-react";
+import ButtonComponents from "@/components/ButtonComponents";
 
 const HomeSection = ({ locale, translations }: any) => {
   const isRtl = locale === "ku";
@@ -76,18 +77,24 @@ const HomeSection = ({ locale, translations }: any) => {
             isRtl ? "sm:flex-row-reverse" : ""
           }`}
         >
-          <motion.a
+          {/* <motion.a
             href="#award"
             className="group relative px-12! py-6! bg-[#D4AF37] rounded-2xl! overflow-hidden flex items-center gap-3! transition-all duration-300 shadow-[0_20px_40px_rgba(212,175,55,0.2)]"
             whileHover={{ y: -8, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-          >
-            <div className="absolute inset-0! bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer transition-transform duration-1000"></div>
+          > */}
+          {/* <div className="absolute inset-0! bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer transition-transform duration-1000"></div>
             <Trophy size={24} className="text-[#121212]" />
             <span className="text-[#121212] font-black text-xl! uppercase tracking-tight">
               {Hero.btn1}
-            </span>
-          </motion.a>
+            </span> */}
+
+          <ButtonComponents
+            Title={Hero.btn1}
+            Onclic={() => ""}
+            Icon={<Trophy size={24} className="text-[#121212]" />}
+          />
+          {/* </motion.a> */}
 
           <motion.a
             href="#services"
@@ -160,7 +167,6 @@ const HomeSection = ({ locale, translations }: any) => {
           font-size: 1.1em;
           line-height: 1;
         }
-
       `}</style>
     </div>
   );

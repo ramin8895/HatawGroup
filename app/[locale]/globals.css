@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+
+@theme Color {
+  --color-primary: #121212;
+  --color-gray: #b2b2b2;
+  --color-white: #ffffff;
+  --color-darkGray: #666666;
+  --color-gold: #e8cc54;
+}
+
 @font-face {
   font-family: IRANSans;
   font-style: normal;
@@ -27,49 +36,53 @@
       url("../../public/IRANSans/IRANSans\(Small\)_Bold.ttf");
 }
 
-
 @font-face {
-    font-family: IRANSans;
-    font-style: normal;
-    font-weight: 500;
-    src: url('../../public/IRANSans/IRANSans\(Small\)_Medium.ttf');
-    src: url('../../public/IRANSans/IRANSans\(Small\)_Medium.ttf') format('embedded-opentype'),
-    /* IE6-8 */
-    url('../../public/IRANSans/IRANSans\(Small\)_Medium.ttf') format('ttf'),
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../../public/IRANSans/IRANSans\(Small\)_Medium.ttf");
+  src: url("../../public/IRANSans/IRANSans\(Small\)_Medium.ttf")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../../public/IRANSans/IRANSans\(Small\)_Medium.ttf")
+      format("ttf"),
     /* FF39+,Chrome36+, Opera24+*/
-    url('../../public/IRANSans/IRANSans\(Small\)_Medium.ttf') format('ttf'),
+      url("../../public/IRANSans/IRANSans\(Small\)_Medium.ttf") format("ttf"),
     /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
-    url('../../public/IRANSans/IRANSans\(Small\)_Medium.ttf') format('truetype');
+      url("../../public/IRANSans/IRANSans\(Small\)_Medium.ttf")
+      format("truetype");
 }
 
 @font-face {
-    font-family: IRANSans;
-    font-style: normal;
-    font-weight: 300;
-    src: url('../../public/IRANSans/IRANSans\(Small\)_Light.ttf');
-    src: url('../../public/IRANSans/IRANSans\(Small\)_Light.ttf') format('embedded-opentype'),
-    /* IE6-8 */
-    url('../../public/IRANSans/IRANSans\(Small\)_Light.ttf') format('ttf'),
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../../public/IRANSans/IRANSans\(Small\)_Light.ttf");
+  src: url("../../public/IRANSans/IRANSans\(Small\)_Light.ttf")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../../public/IRANSans/IRANSans\(Small\)_Light.ttf")
+      format("ttf"),
     /* FF39+,Chrome36+, Opera24+*/
-    url('../../public/IRANSans/IRANSans\(Small\)_Light.ttf') format('ttf'),
+      url("../../public/IRANSans/IRANSans\(Small\)_Light.ttf") format("ttf"),
     /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
-    url('../../public/IRANSans/IRANSans\(Small\)_Light.ttf') format('truetype');
+      url("../../public/IRANSans/IRANSans\(Small\)_Light.ttf")
+      format("truetype");
 }
 
 @font-face {
-    font-family: IRANSans;
-    font-style: normal;
-    font-weight: 200;
-    src: url('../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf');
-    src: url('../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf') format('embedded-opentype'),
-    /* IE6-8 */
-    url('../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf') format('ttf'),
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf");
+  src: url("../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf")
+      format("ttf"),
     /* FF39+,Chrome36+, Opera24+*/
-    url('../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf') format('ttf'),
+      url("../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf")
+      format("ttf"),
     /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
-    url('../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf') format('truetype');
-
-  
+      url("../../public/IRANSans/IRANSans\(Small\)_UltraLight.ttf")
+      format("truetype");
 }
 
 /*@font-face {
@@ -83,7 +96,6 @@
   box-sizing: border-box;
   font-family: IRANSans, tahoma, arial !important;
   font-size: 18px !important;
-
 }
 
 :root {
@@ -107,15 +119,13 @@ div {
   font-family: IRANSans, tahoma, arial;
   margin: 0;
   padding: 0;
-    font-size: 18px !important;
-
+  font-size: 18px !important;
 }
 body {
   font-family: IRANSans, tahoma, arial;
   background: var(--primary-black);
   color: var(--primary-silver);
   line-height: 1.6;
-
 }
 
 /* Header & Navigation */
