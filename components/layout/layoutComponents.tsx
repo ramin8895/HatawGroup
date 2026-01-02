@@ -18,6 +18,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher";
+import ButtonComponents from "../ButtonComponents";
 
 const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
   const t = useTranslations("Layout");
@@ -29,12 +30,13 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isActive = (href: string) => pathname === href || pathname === `/${locale}${href}`;
+  const isActive = (href: string) =>
+    pathname === href || pathname === `/${locale}${href}`;
 
-  const isDashboardOrAuth = 
-    pathname.includes("/dashboard") || 
-    pathname.includes("/userDashboard") || 
-    pathname.includes("/login") || 
+  const isDashboardOrAuth =
+    pathname.includes("/dashboard") ||
+    pathname.includes("/userDashboard") ||
+    pathname.includes("/login") ||
     pathname.includes("/register");
 
   useEffect(() => {
@@ -69,84 +71,107 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <nav
-  dir="ltr"
-  className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-    isScrolled
-      ? "py-4! bg-black/95 border-b border-[#D4AF37]/30 backdrop-blur-md"
-      : "py-8! bg-transparent"
-  }`}
->
-  <div className=" mx-auto px-8! lg:px-20! flex items-center justify-between">
-    
-    {/* --- LEFT: Desktop Buttons & Mobile Menu Toggle --- */}
-    <div className="flex-1 flex items-center justify-start gap-4">
-      {/* دکمه منو در موبایل (سمت چپ قرار گرفت تا لوگو وسط بماند) */}
-      <button
-        className="lg:hidden p-2! text-[#D4AF37] bg-white/5 rounded-lg"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        dir="ltr"
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+          isScrolled
+            ? "py-4! bg-black/95 border-b border-[#D4AF37]/30 backdrop-blur-md"
+            : "py-8! bg-transparent"
+        }`}
       >
-        {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-      </button>
+        <div className=" mx-auto px-8! lg:px-20! flex items-center justify-between">
+          {/* --- LEFT: Desktop Buttons & Mobile Menu Toggle --- */}
+          <div className="flex-1 flex items-center justify-start gap-4">
+            {/* دکمه منو در موبایل (سمت چپ قرار گرفت تا لوگو وسط بماند) */}
+            <button
+              className="lg:hidden p-2! text-[#D4AF37] bg-white/5 rounded-lg"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
 
-      {/* محتوای سمت چپ دسکتاپ */}
-      <div className="hidden lg:flex items-center gap-4">
-        <LanguageSwitcher />
-        <button
-          onClick={handleDashboardClick}
-          className="px-6! py-2.5! bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#FFD700] rounded-xl font-black text-sm text-black hover:scale-105 transition-all flex items-center gap-2"
-        >
-          {session?.backendToken ? t("nav.dashboard") : t("nav.joinAward")}
-          <ChevronLeft size={16} />
-        </button>
-      </div>
-    </div>
+            {/* محتوای سمت چپ دسکتاپ */}
+            <div className="hidden lg:flex items-center gap-4">
+              <LanguageSwitcher />
+              <ButtonComponents
+                Onclic={handleDashboardClick}
+                Title={
+                  session?.backendToken
+                    ? t("nav.dashboard")
+                    : t("nav.joinAward")
+                }
+                variant="silver"
+                className="px-6! py-2.5!  rounded-lg font-black text-sm  border-gray text-gray hover:scale-105 transition-all flex items-center gap-2"
+              >
+              </ButtonComponents>
+            </div>
+          </div>
 
-    {/* --- CENTER: Main Menu (Desktop) & Logo (Mobile) --- */}
- <div className="flex-[2] lg:flex-1 flex items-center justify-center">
-  {/* منوی دسکتاپ */}
-  <ul className="hidden lg:flex flex-row-reverse items-center justify-center gap-6 xl:gap-8 text-sm font-bold text-gray-300">
-    <li className="whitespace-nowrap">
-      <a 
-        href={`/${locale}`} 
-        className={`transition-colors pb-1! ${isActive('/') ? "text-[#D4AF37] border-b-2 border-[#D4AF37]" : "hover:text-[#D4AF37]"}`}
-      >
-        {t("menu.home")}
-      </a>
-    </li>
-    {[...menuItems].reverse().map((link) => (
-      <li key={link.href} className="whitespace-nowrap"> {/* اضافه شدن کلاس برای جلوگیری از شکستن متن */}
-        <a 
-          href={`/${locale}${link.href}`} 
-          className={`relative group transition-colors pb-1! ${pathname.includes(link.href) ? "text-[#D4AF37] border-b-2 border-[#D4AF37]" : "hover:text-[#D4AF37]"}`}
-        >
-          {link.name}
- 
-        </a>
-      </li>
-    ))}
-  </ul>
+          {/* --- CENTER: Main Menu (Desktop) & Logo (Mobile) --- */}
+          <div className="flex-[2] lg:flex-1 flex items-center justify-center">
+            {/* منوی دسکتاپ */}
+            <ul className="hidden lg:flex flex-row-reverse items-center justify-center gap-6 xl:gap-8 text-sm font-bold text-gray-300">
+              <li className="whitespace-nowrap">
+                <a
+                  href={`/${locale}`}
+                  className={`transition-colors pb-1! ${
+                    isActive("/")
+                      ? "text-[#D4AF37] border-b-2 border-[#D4AF37]"
+                      : "hover:text-[#D4AF37]"
+                  }`}
+                >
+                  {t("menu.home")}
+                </a>
+              </li>
+              {[...menuItems].reverse().map((link) => (
+                <li key={link.href} className="whitespace-nowrap">
+                  {" "}
+                  {/* اضافه شدن کلاس برای جلوگیری از شکستن متن */}
+                  <a
+                    href={`/${locale}${link.href}`}
+                    className={`relative group transition-colors pb-1! ${
+                      pathname.includes(link.href)
+                        ? "text-[#D4AF37] border-b-2 border-[#D4AF37]"
+                        : "hover:text-[#D4AF37]"
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
 
-  {/* لوگو در حالت موبایل */}
-  <div className="lg:hidden relative cursor-pointer" onClick={() => router.push(`/${locale}`)}>
-    <img src="/Hataw-Logo-01.svg" alt="Logo" className="h-10! w-auto" />
-  </div>
-</div>
+            {/* لوگو در حالت موبایل */}
+            <div
+              className="lg:hidden relative cursor-pointer"
+              onClick={() => router.push(`/${locale}`)}
+            >
+              <img
+                src="/Hataw-Logo-01.svg"
+                alt="Logo"
+                className="h-10! w-auto"
+              />
+            </div>
+          </div>
 
-    {/* --- RIGHT: Logo (Desktop) & LanguageSwitcher (Mobile) --- */}
-    <div className="flex-1 flex items-center justify-end">
-      {/* لوگوی دسکتاپ */}
-      <div className="hidden lg:block relative group cursor-pointer" onClick={() => router.push(`/${locale}`)}>
-        <img src="/Hataw-Logo-01.svg" alt="Logo" className="h-16! w-auto" />
-      </div>
+          {/* --- RIGHT: Logo (Desktop) & LanguageSwitcher (Mobile) --- */}
+          <div className="flex-1 flex items-center justify-end">
+            {/* لوگوی دسکتاپ */}
+            <div
+              className="hidden lg:block relative group cursor-pointer"
+              onClick={() => router.push(`/${locale}`)}
+            >
+              <img
+                src="/Hataw-Logo-01.svg"
+                alt="Logo"
+                className="h-16! w-auto"
+              />
+            </div>
 
-      {/* نمایش LanguageSwitcher در سمت راست موبایل برای حفظ تقارن */}
-      <div className="hidden md:flex">
-        {/* <LanguageSwitcher /> */}
-      </div>
-    </div>
-    
-  </div>
-</nav>
+            {/* نمایش LanguageSwitcher در سمت راست موبایل برای حفظ تقارن */}
+            <div className="hidden md:flex">{/* <LanguageSwitcher /> */}</div>
+          </div>
+        </div>
+      </nav>
       {/* --- MOBILE SIDEBAR --- */}
       <AnimatePresence>
         {mobileMenuOpen && (
@@ -165,8 +190,14 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
               <ChevronLeft size={20} />
             </button>
 
-            <a href={`/${locale}`} className="text-2xl font-bold text-white hover:text-[#D4AF37]" onClick={() => setMobileMenuOpen(false)}>{t("menu.home")}</a>
-            
+            <a
+              href={`/${locale}`}
+              className="text-2xl font-bold text-white hover:text-[#D4AF37]"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t("menu.home")}
+            </a>
+
             {menuItems.map((item) => (
               <a
                 key={item.href}
@@ -177,7 +208,7 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
                 {item.name}
               </a>
             ))}
-            
+
             <div className="mt-10! pt-10! border-t  border-white/10 w-full flex justify-center">
               <LanguageSwitcher />
             </div>
@@ -197,28 +228,55 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
               </h3>
               <ul className="space-y-4! text-gray-400 text-sm">
                 <li className="flex items-center gap-3 justify-end hover:text-[#D4AF37] cursor-pointer">
-                  info@hatawgroup.com <Mail size={16} className="text-[#D4AF37]" />
+                  info@hatawgroup.com{" "}
+                  <Mail size={16} className="text-[#D4AF37]" />
                 </li>
                 <li className="flex items-center gap-3 justify-end" dir="ltr">
-                  +1 (234) 567-890 <Phone size={16} className="text-[#D4AF37]" />
+                  +1 (234) 567-890{" "}
+                  <Phone size={16} className="text-[#D4AF37]" />
                 </li>
               </ul>
             </div>
 
             <div className="flex flex-col items-end text-right">
-              <h3 className="text-white font-black text-lg mb-6!">{t("footer.companyTitle")}</h3>
+              <h3 className="text-white font-black text-lg mb-6!">
+                {t("footer.companyTitle")}
+              </h3>
               <ul className="space-y-4! text-gray-400 text-sm">
-                {menuItems.map(item => (
-                  <li key={item.href}><a href={`/${locale}${item.href}`} className="hover:text-[#D4AF37]">{item.name}</a></li>
+                {menuItems.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={`/${locale}${item.href}`}
+                      className="hover:text-[#D4AF37]"
+                    >
+                      {item.name}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
 
             <div className="flex flex-col items-end text-right">
-              <h3 className="text-white font-black text-lg mb-6!">{t("footer.servicesTitle")}</h3>
+              <h3 className="text-white font-black text-lg mb-6!">
+                {t("footer.servicesTitle")}
+              </h3>
               <ul className="space-y-4! text-gray-400 text-sm">
-                <li><a href={`/${locale}/#services`} className="hover:text-[#D4AF37]">{t("footer.service1")}</a></li>
-                <li><a href={`/${locale}/#services`} className="hover:text-[#D4AF37]">{t("footer.service2")}</a></li>
+                <li>
+                  <a
+                    href={`/${locale}/#services`}
+                    className="hover:text-[#D4AF37]"
+                  >
+                    {t("footer.service1")}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`/${locale}/#services`}
+                    className="hover:text-[#D4AF37]"
+                  >
+                    {t("footer.service2")}
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -231,7 +289,11 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
               </p>
               <div className="flex items-center gap-4!">
                 {[Instagram, Twitter, Linkedin, Facebook].map((Icon, idx) => (
-                  <a key={idx} href="#" className="w-10! h-10! rounded-full bg-[#D4AF37]/5 border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all">
+                  <a
+                    key={idx}
+                    href="#"
+                    className="w-10! h-10! rounded-full bg-[#D4AF37]/5 border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all"
+                  >
                     <Icon size={18} />
                   </a>
                 ))}
@@ -243,8 +305,12 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
             <p>{t("footer.copyright")}</p>
             <div className="flex items-center gap-6!">
               <LanguageSwitcher />
-              <a href="#" className="hover:text-[#D4AF37]">{t("footer.privacy")}</a>
-              <a href="#" className="hover:text-[#D4AF37]">{t("footer.terms")}</a>
+              <a href="#" className="hover:text-[#D4AF37]">
+                {t("footer.privacy")}
+              </a>
+              <a href="#" className="hover:text-[#D4AF37]">
+                {t("footer.terms")}
+              </a>
             </div>
           </div>
         </div>

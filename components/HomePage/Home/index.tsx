@@ -1,173 +1,124 @@
 "use client";
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { ArrowUpLeft, ArrowUpRight, Trophy } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl"; // اضافه شد
 import ButtonComponents from "@/components/ButtonComponents";
 
-const HomeSection = ({ locale, translations }: any) => {
-  const isRtl = locale === "ku";
-  const { Hero = {} } = translations;
+const ProgressBar = ({ label, percentage }: { label: string; percentage: number }) => (
+  <div className="mb-6 last:mb-0">
+    <div className="flex justify-between items-end mb-2">
+      <span className="text-gray text-sm font-medium">{label}</span>
+      <span className="text-white text-sm font-bold">{percentage}%</span>
+    </div>
+    <div className="h-0.5 w-full bg-[#333333] relative">
+      <motion.div
+        initial={{ width: 0 }}
+        whileInView={{ width: `${percentage}%` }}
+        transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
+        className="absolute top-0 left-0 h-full bg-white"
+      />
+    </div>
+  </div>
+);
+
+const HomeSection = () => {
+  // استفاده مستقیم از هوک‌ها برای اطمینان از دریافت متن‌ها
+  const t = useTranslations("Hero");
+  const locale = useLocale();
+  const isRtl = locale === "ku" || locale === "fa";
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
+      transition: { staggerChildren: 0.2, delayChildren: 0.3 },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   };
 
   return (
     <div
-      className="relative min-h-screen! flex items-center justify-center overflow-hidden bg-[#121212]"
+      className="relative min-h-screen! flex items-center justify-center overflow-hidden bg-primary px-4! py-12!"
       id="home"
+      dir={isRtl ? "rtl" : "ltr"}
     >
-      {/* Background Effects */}
-      <div className="absolute top-[-20%]! left-[-10%]!  w-[800px]! h-[700px]! bg-[#D4AF37]/10! blur-[160px]! rounded-full! pointer-events-none"></div>
-      <div className="absolute bottom-[-15%]! left-1/2! -translate-x-1/2! w-[600px]! h-[400px]! bg-[#D4AF37]/5! blur-[120px]! rounded-full! pointer-events-none"></div>
-
-      <motion.div
-        className="max-w-7xl! mx-auto! px-6! relative mt-22! z-10! text-center"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        {/* Animated Title - Massive 120px Font with Wave Gradient */}
+      <div className="max-w-7xl! w-full! mx-auto! px-6! relative z-10!">
         <motion.div
-          variants={itemVariants}
-          className="mb-10! flex justify-center items-center"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
         >
-          <h1
-            className="text-5xl! md:text-[120px]! font-black leading-[1]! tracking-tighter! drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] inline-block animate-wave-text bg-gradient-to-r from-white via-[#D4AF37] to-white bg-size-[200%_auto]! bg-clip-text text-transparent"
-            style={{ animationDuration: "10s" }}
-            dir={isRtl ? "rtl" : "ltr"}
-          >
-            {Hero.title}
-          </h1>
-        </motion.div>
+          {/* سمت چپ: متون و دکمه‌ها */}
+          <div className="flex flex-col items-start text-start">
+            <motion.h1
+              variants={itemVariants}
+              className="text-5xl! md:text-7xl! font-bold leading-[1.1]! tracking-tight text-darkGray mb-6!"
+            >
+              {t("titlePart1")} <span className="text-white text-5xl! md:text-7xl!">{t("titleBold1")}</span> <br />
+              {t("titlePart2")} <span className="text-white text-5xl! md:text-7xl!">{t("titleBold2")}</span>
+            </motion.h1>
 
-        <motion.p
-          variants={itemVariants}
-          className="text-[#b2b2b2] text-lg! md:text-2xl! max-w-3xl! mx-auto! leading-relaxed! mb-14! font-medium"
-        >
-          {Hero.title1}
-          <span className="block text-[24px]! text-[#D4AF37] font-black tracking-[0.2em] mt-4! uppercase">
-            {Hero.title2}
-          </span>
-        </motion.p>
+            <motion.p
+              variants={itemVariants}
+              className="text-gray text-lg! leading-relaxed! max-w-xl! mb-10!"
+            >
+              {t("description")}
+            </motion.p>
 
-        {/* Buttons */}
-        <motion.div
-          variants={itemVariants}
-          className={`flex flex-col sm:flex-row items-center justify-center gap-6! ${
-            isRtl ? "sm:flex-row-reverse" : ""
-          }`}
-        >
-          {/* <motion.a
-            href="#award"
-            className="group relative px-12! py-6! bg-[#D4AF37] rounded-2xl! overflow-hidden flex items-center gap-3! transition-all duration-300 shadow-[0_20px_40px_rgba(212,175,55,0.2)]"
-            whileHover={{ y: -8, scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          > */}
-          {/* <div className="absolute inset-0! bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer transition-transform duration-1000"></div>
-            <Trophy size={24} className="text-[#121212]" />
-            <span className="text-[#121212] font-black text-xl! uppercase tracking-tight">
-              {Hero.btn1}
-            </span> */}
-
-          <ButtonComponents
-            Title={Hero.btn1}
-            Onclic={() => ""}
-            Icon={<Trophy size={24} className="text-[#121212]" />}
-          />
-          {/* </motion.a> */}
-
-          <motion.a
-            href="#services"
-            className="group px-12! py-6! bg-transparent border border-[#E0E0E0]/20 rounded-2xl! flex items-center gap-3! hover:bg-white/5 hover:border-[#D4AF37]/50 transition-all duration-300 backdrop-blur-md"
-            whileHover={{ y: -8 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="text-white font-bold text-lg!">{Hero.btn2}</span>
-            {isRtl ? (
-              <ArrowUpLeft
-                size={22}
-                className="text-[#D4AF37] group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-              />
-            ) : (
-              <ArrowUpRight
-                size={22}
-                className="text-[#D4AF37] group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform"
-              />
-            )}
-          </motion.a>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          variants={itemVariants}
-          className="mt-24! flex flex-col items-center gap-4!"
-        >
-          <p className="text-[10px]! font-black uppercase tracking-[0.8em] text-[#E0E0E0]/20">
-            {isRtl ? "بگەڕێ بۆ خوارەوە" : "Scroll to Explore"}
-          </p>
-          <div className="h-24! w-[1px]! bg-gradient-to-b from-[#D4AF37] via-[#D4AF37]/10 to-transparent relative">
             <motion.div
-              animate={{ y: [0, 60, 0], opacity: [0, 1, 0] }}
-              transition={{
-                repeat: Infinity,
-                duration: 2.5,
-                ease: "easeInOut",
-              }}
-              className="absolute top-0! left-[-1.5px]! w-[4px]! h-[4px]! bg-[#D4AF37] rounded-full shadow-[0_0_15px_#D4AF37]"
-            />
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row gap-4! w-full sm:w-auto"
+            >
+              <ButtonComponents
+                Title={t("btn1")}
+                Onclic={() => console.log("Assessment clicked")}
+                className="bg-transparent! border border-[#D4AF37]! text-[#D4AF37]! hover:bg-[#D4AF37]! hover:text-primary!"
+              />
+
+              <ButtonComponents
+                Title={t("btn2")}
+                Onclic={() => console.log("Suitability clicked")}
+                className="bg-[#1A1A1A]! text-darkGray! border border-[#333333]! hover:text-white! hover:border-white!"
+              />
+            </motion.div>
           </div>
+
+          <motion.div variants={itemVariants} className="w-full relative">
+            <div className="rounded-3xl! border border-gray bg-[#0f0f0f] p-8! md:p-12!">
+              <div className="text-center mb-12!">
+                <motion.div
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 100 }}
+                  className="text-7xl! md:text-8xl! font-bold text-white mb-2!"
+                >
+                  75
+                </motion.div>
+                <p className="text-gray text-sm! font-medium">
+                  {t("scoreTitle")}
+                </p>
+              </div>
+
+              <div className="space-y-8!">
+                <ProgressBar label={t("stat1")} percentage={75} />
+                <ProgressBar label={t("stat2")} percentage={60} />
+                <ProgressBar label={t("stat3")} percentage={45} />
+              </div>
+            </div>
+
+            <div className="absolute -inset-1  from-[#D4AF37]/10 to-transparent blur-3xl -z-10 rounded-[3rem]" />
+          </motion.div>
         </motion.div>
-      </motion.div>
-
-      <style jsx global>{`
-        @keyframes shimmer {
-          100% {
-            transform: translateX(100%);
-          }
-        }
-        .animate-shimmer {
-          animation: shimmer 2s infinite;
-        }
-
-        /* انیمیشن موجی روان برای پس‌زمینه متن */
-        @keyframes wave {
-          to {
-            background-position: 200% center;
-          }
-        }
-        .animate-wave-text {
-          animation-name: wave;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
-          animation-duration: 0.4s;
-        }
-
-        .Typewriter__cursor {
-          font-weight: 200;
-          font-size: 1.1em;
-          line-height: 1;
-        }
-      `}</style>
+      </div>
     </div>
   );
 };

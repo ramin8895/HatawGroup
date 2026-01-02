@@ -1,21 +1,45 @@
 import React from "react";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+// تعریف مقادیر مجاز برای Variant
+type ButtonVariant = "default" | "silver" | "outline";
 
 interface ButtonProps {
   Title: string;
-  Icon: React.ReactNode;
+  Icon?: React.ReactNode;
   Onclic: () => void;
+  className?: string;
+  variant?: ButtonVariant; // اضافه شدن فیلد variant به صورت اختیاری
 }
 
-const ButtonComponents = ({ Title, Icon, Onclic }: ButtonProps) => {
+const variants: Record<ButtonVariant, string> = {
+  default: "bg-primary text-gold border-gold hover:bg-gold hover:text-primary",
+  silver:
+    "bg-primary text-darkGray border-darkGray hover:bg-gold hover:text-primary",
+  outline: "bg-transparent text-gray-500 border-gray-500",
+};
+
+const ButtonComponents = ({
+  Title,
+  Icon,
+  Onclic,
+  className,
+  variant = "default", // مقدار پیش‌فرض
+}: ButtonProps) => {
   return (
     <motion.a
-      className="group relative px-12! py-6! bg-color-primary text-color-gold rounded-2xl! overflow-hidden flex items-center gap-3! transition-all duration-300 shadow-[0_20px_40px_rgba(212,175,55,0.2)]"
+      onClick={Onclic}
+      className={cn(
+        "group relative px-12! py-4! flex items-center justify-center gap-3 border rounded-md transition-all duration-300 cursor-pointer",
+        variants[variant], // انتخاب استایل بر اساس variant
+        className // اجازه بازنویسی استایل از بیرون
+      )}
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      {Icon}
-      <span className="text-[#121212] font-black text-xl! uppercase tracking-tight">
+      {Icon && Icon}
+      <span className="font-black text-xl uppercase tracking-tight">
         {Title}
       </span>
     </motion.a>

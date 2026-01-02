@@ -62,7 +62,6 @@ export default function AuthPage() {
 
     setLoading(false);
   };
-
   return (
     <div
       className="min-h-screen! flex! items-center! justify-center! bg-[#121212]! px-4! py-12! relative! overflow-hidden!"
@@ -74,9 +73,8 @@ export default function AuthPage() {
           isRtl ? "-left-10!" : "-right-10!"
         } w-3/5! h-3/5! bg-[#D4AF37]/10! blur-[120px]! rounded-full!`}
       />
-
       <div className="w-full! max-w-[460px]! z-10!">
-        <motion.div className="bg-white/[0.02]! border! border-white/10! backdrop-blur-3xl! rounded-[3rem]! p-6! md:p-10! shadow-2xl!">
+        <motion.div className="bg-white/2! border! border-white/10! backdrop-blur-3xl! rounded-[3rem]! p-6! md:p-10! shadow-2xl!">
           {/* Header */}
           <div className="text-center! mb-8!">
             <motion.div

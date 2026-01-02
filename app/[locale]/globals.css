@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 
-@theme Color {
+@theme  {
   --color-primary: #121212;
   --color-gray: #b2b2b2;
   --color-white: #ffffff;
@@ -123,7 +123,7 @@ div {
 }
 body {
   font-family: IRANSans, tahoma, arial;
-  background: var(--primary-black);
+  background: var(--color-primary);
   color: var(--primary-silver);
   line-height: 1.6;
 }

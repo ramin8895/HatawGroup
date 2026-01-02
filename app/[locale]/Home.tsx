@@ -19,6 +19,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LotterySection from "@/components/LotterySection.tsx";
+import Evaluating from "@/components/Evaluating";
+import Assessment from "@/components/Assessment";
+import AfterEvaluation from "@/components/AfterEvaluation";
+import AssessmentForm from "@/components/AssessmentForm";
 
 export function HomeContent({ locale, translations }: any) {
   const isRtl = locale === "fa" || locale === "ku";
@@ -78,12 +82,15 @@ export function HomeContent({ locale, translations }: any) {
       className="bg-[#121212]! text-[#E0E0E0]! overflow-x-hidden! selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]"
       dir={isRtl ? "rtl" : "ltr"}
     >
-      <HomeSection translations={translations} locale={locale} />
+      <HomeSection  />
       <AboutComponents />
-      <ServiceComponents />
+<Evaluating/>
+
+<Assessment/>
+      {/* <ServiceComponents /> */}
 
       {/* --- Blog Section --- */}
-      <motion.section
+      {/* <motion.section
         id="blog"
         className="relative! py-32!  bg-[#121212] overflow-hidden!"
         initial="hidden"
@@ -193,10 +200,10 @@ export function HomeContent({ locale, translations }: any) {
             ))}
           </div>
         </div>
-      </motion.section>
-
+      </motion.section> */}
+  <AfterEvaluation/>
       {/* --- Portfolio Section --- */}
-      <section
+      {/* <section
         id="portfolio"
         className="py-32! bg-[#121212]! border-t! border-[#E0E0E0]/5!"
       >
@@ -237,10 +244,10 @@ export function HomeContent({ locale, translations }: any) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* --- Stats Section --- */}
-      <section className="py-24! border-y! border-[#E0E0E0]/5! bg-[#FFFFFF]/[0.01]!">
+      {/* <section className="py-24! border-y! border-[#E0E0E0]/5! bg-[#FFFFFF]/[0.01]!">
         <div className="max-w-7xl! mx-auto! px-6!">
           <div className="grid! grid-cols-2! lg:grid-cols-4! gap-12!">
             {statItems.map((stat, i) => (
@@ -260,12 +267,12 @@ export function HomeContent({ locale, translations }: any) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <LotterySection  translations={translations} locale={locale}/>
+      {/* <LotterySection  translations={translations} locale={locale}/> */}
 
       {/* --- Contact Section --- */}
-      <section id="contact" className="py-32!">
+      {/* <section id="contact" className="py-32!">
         <div className="max-w-4xl! mx-auto! px-6! text-center!">
           <h2 className="text-5xl! font-black! text-[#FFFFFF]! mb-6!">
             {Contact.title}
@@ -293,8 +300,8 @@ export function HomeContent({ locale, translations }: any) {
             </button>
           </form>
         </div>
-      </section>
-
+      </section> */}
+<AssessmentForm/>
       <style jsx global>{`
         @keyframes gradient-x {
           0%,
