@@ -1,5 +1,5 @@
 {
-"Hero": {
+  "Hero": {
     "titlePart1": "Become a",
     "titleBold1": "Brand",
     "titlePart2": "from a",
@@ -37,7 +37,7 @@
       "terms": "Terms of Service"
     }
   },
-"About": {
+  "About": {
     "badge": "Who Is This Assessment For?",
     "subtitle": "Check if our brand assessment is suitable for your current business situation",
     "suitable": {
@@ -201,58 +201,58 @@
     "share": "Share"
   },
   "Evaluating": {
-  "title": "What Exactly Are We",
-  "titleAccent": "Evaluating?",
-  "subtitle": "This assessment covers 4 key areas parallel to our service offerings",
-  "scoreLabel": "Category Score:",
-  "summaryTitle": "Your Assessment Summary",
-  "totalLabel": "Total Score (out of 60)",
-  "btnOutcomes": "View Outcomes",
-  "btnPathways": "See Pathways",
-  "categories": [
-    {
-      "id": 1,
-      "title": "Brand Establishment",
-      "desc": "Evaluating your brand message clarity, differentiation, and visual identity",
-      "questions": [
-        "Is your current business message clear or not?",
-        "Does your business have limits or does it look like everyone else?",
-        "Does your business have a visual identity or fragmented designs?"
-      ]
-    },
-    {
-      "id": 2,
-      "title": "Centralized Digital Infrastructure",
-      "desc": "Assessing your customer journey, decision centers, and unified approach",
-      "questions": [
-        "Where is your audience coming from and where do they need to get to?",
-        "Do you have a decision center (website/service page/specific route)?",
-        "Do your pages and channels have a unified approach?"
-      ]
-    },
-    {
-      "id": 3,
-      "title": "Content and Campaign Engines",
-      "desc": "Reviewing content consistency, campaign purpose, and decision-based structure",
-      "questions": [
-        "Does your content have a consistent message?",
-        "Are your campaigns purposeful or emotional?",
-        "Is your content structure based on 'decision making' or interaction?"
-      ]
-    },
-    {
-      "id": 4,
-      "title": "Monitoring and Support",
-      "desc": "Assessing data-driven decisions, quality control, and managed growth path",
-      "questions": [
-        "Are decisions based on data and assessment or on suspicion?",
-        "Is there something for quality control of message and design?",
-        "Managed growth path or a new path every month?"
-      ]
-    }
-  ]
-},
-"Assessment": {
+    "title": "What Exactly Are We",
+    "titleAccent": "Evaluating?",
+    "subtitle": "This assessment covers 4 key areas parallel to our service offerings",
+    "scoreLabel": "Category Score:",
+    "summaryTitle": "Your Assessment Summary",
+    "totalLabel": "Total Score (out of 60)",
+    "btnOutcomes": "View Outcomes",
+    "btnPathways": "See Pathways",
+    "categories": [
+      {
+        "id": 1,
+        "title": "Brand Establishment",
+        "desc": "Evaluating your brand message clarity, differentiation, and visual identity",
+        "questions": [
+          "Is your current business message clear or not?",
+          "Does your business have limits or does it look like everyone else?",
+          "Does your business have a visual identity or fragmented designs?"
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Centralized Digital Infrastructure",
+        "desc": "Assessing your customer journey, decision centers, and unified approach",
+        "questions": [
+          "Where is your audience coming from and where do they need to get to?",
+          "Do you have a decision center (website/service page/specific route)?",
+          "Do your pages and channels have a unified approach?"
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Content and Campaign Engines",
+        "desc": "Reviewing content consistency, campaign purpose, and decision-based structure",
+        "questions": [
+          "Does your content have a consistent message?",
+          "Are your campaigns purposeful or emotional?",
+          "Is your content structure based on 'decision making' or interaction?"
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Monitoring and Support",
+        "desc": "Assessing data-driven decisions, quality control, and managed growth path",
+        "questions": [
+          "Are decisions based on data and assessment or on suspicion?",
+          "Is there something for quality control of message and design?",
+          "Managed growth path or a new path every month?"
+        ]
+      }
+    ]
+  },
+  "Assessment": {
     "title": "What Are the Outcomes of This Assessment?",
     "subtitle": "After completing the assessment, you'll receive comprehensive insights and actionable recommendations",
     "outcomes": [
@@ -279,74 +279,100 @@
     ]
   },
   "AfterEvaluation": {
-  "title": "Pathway After Evaluation",
-  "subtitle": "Based on your assessment results, one of these three approaches will be recommended",
-  "pathways": [
-    {
-      "id": 1,
-      "title": "Brand Establishment",
-      "subtitle": "Start with brand foundation",
-      "features": [
-        "Clarify brand message and positioning",
-        "Develop visual identity system",
-        "Define brand differentiation"
-      ],
-      "recommendedWhen": "Message and identity are not clear"
+    "title": "Pathway After Evaluation",
+    "subtitle": "Based on your assessment results, one of these three approaches will be recommended",
+    "pathways": [
+      {
+        "id": 1,
+        "title": "Brand Establishment",
+        "subtitle": "Start with brand foundation",
+        "features": [
+          "Clarify brand message and positioning",
+          "Develop visual identity system",
+          "Define brand differentiation"
+        ],
+        "recommendedWhen": "Message and identity are not clear"
+      },
+      {
+        "id": 2,
+        "title": "Central Digital Infrastructure",
+        "subtitle": "Build decision pathways",
+        "features": [
+          "Map customer journey",
+          "Create decision centers",
+          "Unify digital channels"
+        ],
+        "recommendedWhen": "Brand is clear but no decision path exists"
+      },
+      {
+        "id": 3,
+        "title": "Content & Campaign Engines",
+        "subtitle": "Optimize execution",
+        "features": [
+          "Structure content strategy",
+          "Build campaign systems",
+          "Create decision funnels"
+        ],
+        "recommendedWhen": "Brand and infrastructure exist but execution is fragmented"
+      }
+    ],
+    "recommendedLabel": "Recommended when:"
+  },
+  "AssessmentForm": {
+    "title": "Request Your Brand",
+    "titleAccent": "Assessment",
+    "subtitle": "Fill out the form below to receive your personalized brand assessment and roadmap",
+    "labels": {
+      "businessName": "Business Name *",
+      "businessField": "Business Field *",
+      "address": "Address",
+      "whatsapp": "WhatsApp Contact *",
+      "phone": "Phone Number",
+      "problem": "Most Important Current Problem (One Sentence) *",
+      "goal": "What is your primary goal in being a brand? (Optional)",
+      "isActive": "Is your business active? *",
+      "hasMarketing": "Have you ever spent on marketing your business? *"
     },
-    {
-      "id": 2,
-      "title": "Central Digital Infrastructure",
-      "subtitle": "Build decision pathways",
-      "features": [
-        "Map customer journey",
-        "Create decision centers",
-        "Unify digital channels"
-      ],
-      "recommendedWhen": "Brand is clear but no decision path exists"
+    "placeholders": {
+      "businessName": "Enter your business name",
+      "businessField": "e.g., Retail, Services, Technology",
+      "address": "Business location",
+      "problem": "Describe your biggest challenge in one sentence...",
+      "goal": "What do you want to achieve with your brand?"
     },
-    {
-      "id": 3,
-      "title": "Content & Campaign Engines",
-      "subtitle": "Optimize execution",
-      "features": [
-        "Structure content strategy",
-        "Build campaign systems",
-        "Create decision funnels"
-      ],
-      "recommendedWhen": "Brand and infrastructure exist but execution is fragmented"
-    }
-  ],
-  "recommendedLabel": "Recommended when:"
-},
-"AssessmentForm": {
-  "title": "Request Your Brand",
-  "titleAccent": "Assessment",
-  "subtitle": "Fill out the form below to receive your personalized brand assessment and roadmap",
-  "labels": {
-    "businessName": "Business Name *",
-    "businessField": "Business Field *",
-    "address": "Address",
-    "whatsapp": "WhatsApp Contact *",
-    "phone": "Phone Number",
-    "problem": "Most Important Current Problem (One Sentence) *",
-    "goal": "What is your primary goal in being a brand? (Optional)",
-    "isActive": "Is your business active? *",
-    "hasMarketing": "Have you ever spent on marketing your business? *"
+    "options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "submitBtn": "Submit Assessment Request",
+    "footerNote": "We'll contact you within 24 hours with your personalized assessment results",
+    "bottomTitle": "Become a Brand from Business",
+    "bottomDesc": "Being a brand means getting a business out of fragmentation. His image is determined. His message becomes clear. His decision path is created."
   },
-  "placeholders": {
-    "businessName": "Enter your business name",
-    "businessField": "e.g., Retail, Services, Technology",
-    "address": "Business location",
-    "problem": "Describe your biggest challenge in one sentence...",
-    "goal": "What do you want to achieve with your brand?"
-  },
-  "options": {
-    "yes": "Yes",
-    "no": "No"
-  },
-  "submitBtn": "Submit Assessment Request",
-  "footerNote": "We'll contact you within 24 hours with your personalized assessment results",
-  "bottomTitle": "Become a Brand from Business",
-  "bottomDesc": "Being a brand means getting a business out of fragmentation. His image is determined. His message becomes clear. His decision path is created."
-}
+  "ServicePage": {
+    "mainTitle": "Hataw Group Main Services",
+    "mainSubtitle": "Turning a Business into a Brand, Step by Step",
+    "topNote": "We don't sell individual services. We build a complete system — from identity and messaging to execution and monitoring.",
+    "whyTitle": "Why do most businesses, despite their efforts, fail to become brands?",
+    "whyBox": "Because usually only one part is done: design, content, or advertising. But a brand is not built with a single action. A brand is a system. Hataw Group designs this system in an integrated and executable way.",
+    "stagesTitle": "The 4 Core Service Stages of Hataw Group",
+    "importantRule": "Important Rule: Every business enters this path from a different point. The correct starting stage is defined after the Brand Review.",
+    "differenceTitle": "What is the difference with Hataw Group?",
+    "diffSubtitle": "Clear differentiation, no slogans — just results.",
+    "costTitle": "How is the service cost determined?",
+    "costNote": "Pricing is not fixed because businesses do not start from the same point.",
+    "costSteps": [
+      "Which stage has priority",
+      "What is not needed now",
+      "Correct collaboration path"
+    ],
+    "collabTitle": "Where does collaboration begin?",
+    "collabSubtitle": "All collaborations start from one point: Business-to-Brand Review",
+    "collabItems": [
+      "Where the main issue lies",
+      "Which stage should start first",
+      "What is not needed right now"
+    ],
+    "footerNote": "If you have an active business and want to move beyond scattered execution, these services are designed specifically to turn a business into a brand."
+  }
 }
