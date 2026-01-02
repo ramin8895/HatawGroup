@@ -54,7 +54,7 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
     { name: t("menu.contact"), href: "/#contact" },
     { name: t("menu.blog"), href: "/#blog" },
     { name: t("menu.portfolio"), href: "/#portfolio" },
-    { name: t("menu.services"), href: "/#services" },
+    { name: t("menu.services"), href: "/service" },
     { name: t("menu.award"), href: "/#award", isNew: true },
   ];
 
