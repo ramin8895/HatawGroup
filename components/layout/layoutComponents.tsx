@@ -51,6 +51,7 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
 
   const menuItems = [
     { name: t("menu.about"), href: "/#about" },
+    { name: t("menu.brand"), href: "/brand" },
     { name: t("menu.contact"), href: "/#contact" },
     { name: t("menu.blog"), href: "/#blog" },
     { name: t("menu.portfolio"), href: "/#portfolio" },
@@ -69,12 +70,12 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-primary text-white flex flex-col">
       <nav
         dir="ltr"
         className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
           isScrolled
-            ? "py-4! bg-black/95 border-b border-[#D4AF37]/30 backdrop-blur-md"
+            ? "py-4! bg-primary border-b border-[#D4AF37]/30 backdrop-blur-md"
             : "py-8! bg-transparent"
         }`}
       >
@@ -219,7 +220,7 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
       <main className="grow">{children}</main>
 
       {/* Footer (Same as before) */}
-      <footer className="bg-[#050505] border-t border-[#D4AF37]/20 pt-20! pb-10!">
+      <footer className="bg-primary border-t border-[#D4AF37]/20 pt-20! pb-10!">
         <div className="  mx-auto px-28!">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12! mb-20!">
             <div className="flex flex-col items-end text-right">

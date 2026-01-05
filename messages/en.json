@@ -12,13 +12,41 @@
     "stat2": "Infrastructure",
     "stat3": "Content Strategy"
   },
+  "Home": {
+    "Hero": {
+      "titlePart1": "Running a business?",
+      "titlePart2": "It's time to become a brand",
+      "description": "We turn active businesses into brands with clear identity, message, and structure.  A brand isn't just activity — it's the foundation of success.",
+      "mainBtn": "From Business to Brand"
+    },
+    "WhyBrand": {
+      "title": "Why do most businesses fail to become brands?",
+      "desc1": "Most businesses are active, they have sales, and they create content.",
+      "desc2": "But when you look closely, one thing is clear: they lack a defined brand image. Not just for the audience, but even for the owner. ",
+      "problemsTitle": "Four Common Problems:",
+      "problems": [
+        { "title": "1) Message Ambiguity", "desc": "The business speaks, but it's not clear what it's saying." },
+        { "title": "2) Similarity", "desc": "Look, voice, and content resemble competitors too closely." },
+        { "title": "3) Scattered Execution", "desc": "Marketing, website, and ads all follow different paths." },
+        { "title": "4) Emotional Decisions", "desc": "Steps are based on trends, doubts, or fragmented advice." }
+      ],
+      "footerTitle": "Becoming a brand doesn't start with a logo or content.",
+      "footerDesc": "It starts with a proper understanding of problems and building a business structure.",
+      "ctaBtn": "Start Brand Assessment"
+    },
+    "Services": {
+      "title": "Our Services",
+      "moreBtn": "View More"
+    }
+  },
+
   "Layout": {
     "menu": {
       "home": "Home",
       "services": "Services",
       "portfolio": "Portfolio",
       "blog": "Blog",
-      "award": "Hataw Award",
+      "award": "Hataw Khalat",
       "about": "About Us",
       "contact": "Contact"
     },
