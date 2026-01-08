@@ -50,13 +50,12 @@ const LayoutComponents = ({ children }: { children: React.ReactNode }) => {
   }
 
   const menuItems = [
-    { name: t("menu.about"), href: "/#about" },
+    { name: t("menu.about"), href: "/about" },
     { name: t("menu.brand"), href: "/brand" },
-    { name: t("menu.contact"), href: "/#contact" },
-    { name: t("menu.blog"), href: "/#blog" },
-    { name: t("menu.portfolio"), href: "/#portfolio" },
+    { name: t("menu.contact"), href: "/contact" },
+    { name: t("menu.blog"), href: "/blogs" },
+    { name: t("menu.portfolio"), href: "/portfolio" },
     { name: t("menu.services"), href: "/service" },
-    { name: t("menu.award"), href: "/#award", isNew: true },
   ];
 
   // تابع مشترک برای هندل کردن کلیک دکمه داشبورد

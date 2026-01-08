@@ -19,7 +19,7 @@ const ServicePage = () => {
   ];
 
   return (
-    <main className="bg-[#0a0a0a]! text-white! py-20! px-6!" dir={isRTL ? "rtl" : "ltr"}>
+    <main className="bg-[#0a0a0a]! text-white! py-40! px-6!" dir={isRTL ? "rtl" : "ltr"}>
       <div className="max-w-5xl! mx-auto!">
         
         {/* Header Section */}

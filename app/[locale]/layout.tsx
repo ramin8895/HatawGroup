@@ -7,7 +7,7 @@ import { ToastProvider } from "@/components/Dashbord/TostComponents";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-
+import { GoogleAnalytics } from '@next/third-parties/google'
 // --- بخش متا تگ‌های داینامیک ---
 export async function generateMetadata({
   params,
@@ -104,6 +104,7 @@ export default async function RootLayout({
           </QueryProvider>
         </NextIntlClientProvider>
       </body>
+      <GoogleAnalytics gaId="G-Y6EH88QJEX" />
     </html>
   );
 }
